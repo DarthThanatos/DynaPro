@@ -1,0 +1,42 @@
+<panel id="mainMenuPanel" layout="GridBagLayout" backgroundcolor="red">
+    <imagepanel initclass="java.lang.String(resources/icon.png)" background="black" border="EtchedBorder">
+
+        <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="3" weightx="2"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                            insets="0,50,0,75" ipadx="0" ipady="50"/>
+                           <!-- ^ top, left, bottom, right-->
+    </imagepanel>
+
+
+    <imagepanel initclass="java.lang.String(resources/icon.png)" background="red" border="EtchedBorder">
+        <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="1"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                            insets="50,0,0,150" ipadx="0" ipady="50"/>
+    </imagepanel>
+
+
+    <button text= "New Game" Action="moveToMap" border="EtchedBorder" >
+        <gridbagconstraints gridx="1" gridy="1" gridheight="1" gridwidth="1" weighty="10"
+                           anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,150" ipadx="0" ipady="50"/>
+    </button>
+
+    <button text= "Cube" Action="moveToCube" border="EtchedBorder" >
+        <gridbagconstraints gridx="1" gridy="2" gridheight="1" gridwidth="1" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,150" ipadx="0" ipady="50"/>
+    </button>
+
+    <button text= "HeroCreator" Action="moveToCreator" border="EtchedBorder" >
+        <gridbagconstraints gridx="1" gridy="3" gridheight="1" weightx="0.0" weighty="0" gridwidth="1"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,150" ipadx="0" ipady="50"/>
+    </button>
+
+    <button text= "Exit" Action="exitAction" border="EtchedBorder" >
+        <gridbagconstraints gridx="1" gridy="4" gridheight="1" weightx="0.0" weighty="10" gridwidth="1"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,150" ipadx="0" ipady="50"/>
+    </button>
+
+</panel>

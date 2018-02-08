@@ -1,0 +1,36 @@
+<panel id="bottomModulePanel" layout="GridBagLayout">
+    <panel>
+        <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="1" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,0" ipadx="0" ipady="50"/>
+        <label text="Wysokość: "/>
+        <button text="Choose Your Name" Action="playerNamePickedAction"/>
+    </panel>
+
+    <button icon = "icons/LeftArrow.png" Action="avatarChangedAction">
+        <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,0" ipadx="0" ipady="50"/>
+    </button>
+
+    <panel layout="CardLayout" id="avatarHolder2">
+        <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="1" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,0" ipadx="0" ipady="50"/>
+        <imagepanel initclass="java.lang.String(icons/mage.jpg)" constraints="mageavatar" />
+        <imagepanel initclass="java.lang.String(icons/warrior.png)" constraints="warrioravatar" />
+    </panel>
+
+    <button icon = "icons/RightArrow.png" Action="avatarChangedAction">
+        <gridbagconstraints gridx="2" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,0" ipadx="0" ipady="50"/>
+    </button>
+
+
+    <button text= "Back to Menu" Action="moveToMainMenu" >
+        <gridbagconstraints gridx="1" gridy="2" gridwidth="1" gridheight="1" weightx="1" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,0" ipadx="0" ipady="50"/>
+    </button>
+</panel>

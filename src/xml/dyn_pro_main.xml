@@ -1,0 +1,14 @@
+<frame id="frame"
+       title="DynaPro"
+       undecorated="false"
+       extendedstate="JFrame.MAXIMIZED_BOTH"
+       iconimage="icons/icon.png"
+       defaultcloseoperation="WindowConstants.EXIT_ON_CLOSE"
+       plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
+
+    <panel id="cardLayoutPanel" Layout="CardLayout" >
+        <panel include="xml/input/input_main_panel.xml#inputMainPanel" constraints="input_main_panel" layout="BorderLayout" background="white"/>
+        <!--<panel include="xml/main_menu.xml#mainMenuPanel" constraints="mainmenu" layout="GridBagLayout" background="red"/>-->
+        <!--<panel include="xml/output_furniture_panel.xml#outputFurniturePanel" id="outputFurniturePanel" constraints="outputfurniturepanel" Layout="CardLayout"/>-->
+    </panel>
+</frame>

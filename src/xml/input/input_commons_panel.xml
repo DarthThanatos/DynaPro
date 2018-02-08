@@ -1,0 +1,76 @@
+<panel id="inputCommonsPanel" layout="GridBagLayout">
+
+    <panel
+            border="EtchedBorder"
+            include="xml/input/input_whole_project_panel.xml#inputWholeProjectPanel" layout="GridBagLayout" background="white">
+        <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="1" weighty="1"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+    </panel>
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="1" gridwidth="1" gridheight="1" weightx="1" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Typ szafki: "/>
+        <combobox preferredsize="100,25" id="furnitureTypeDisplay" />
+    </panel>
+
+    <imagepanel initclass="java.lang.String(icons/module.png)" background="white" preferredsize="500,350" border="EtchedBorder">
+
+        <gridbagconstraints gridx="3" gridy="1" gridwidth="1" gridheight="7" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+    </imagepanel>
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="2" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Nazwa szafki: "/>
+        <textfield preferredsize="100,25" id="furnitureNameDisplay"/>
+    </panel>
+
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="3" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Wysokość szafki: "/>
+        <spinner preferredsize="100,25" id="furnitureHeightDisplay"/>
+    </panel>
+
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="4" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Szerokość szafki: "/>
+        <spinner preferredsize="100,25" id="furnitureWidthDisplay"/>
+    </panel>
+
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="5" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Głębokość szafki: "/>
+        <spinner preferredsize="100,25" id="furnitureDepthDisplay"/>
+    </panel>
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="6" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Cena 1 m2 frontu: "/>
+        <spinner preferredsize="100,25" id="furnitureFrontPriceDisplay"/>
+    </panel>
+
+    <panel background="white">
+        <gridbagconstraints gridx="2" gridy="7" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Cena 1 m2 korpusu: "/>
+        <spinner preferredsize="100,25" id="furnitureModuleUnitPriceDisplay"/>
+    </panel>
+</panel>
