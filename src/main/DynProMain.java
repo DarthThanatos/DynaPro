@@ -13,7 +13,7 @@ public class DynProMain implements DynProContract.View {
 
     private static DynProMain dynProMain = new DynProMain();
     private static DynProSwingEngine renderer = new DynProSwingEngine(dynProMain);
-    private static DynProContract.Presenter presenter = new DynProPresenter();
+    private static DynProContract.Presenter presenter = new DynProPresenter(dynProMain);
 
     static ProjectTree projectTree;
     static JPopupMenu projectPopup, furniturePopup;
@@ -33,7 +33,7 @@ public class DynProMain implements DynProContract.View {
     public static void main(String args[]) throws Exception {
         renderer.render("xml/dyn_pro_main.xml").setVisible(true);
         renderer.inject();
-        presenter.attachView(dynProMain);
+        presenter.attachView();
     }
 
     public DynProContract.Presenter getPresenter() {

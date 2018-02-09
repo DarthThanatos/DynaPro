@@ -2,23 +2,67 @@ package presenter
 
 import contract.DynProContract
 import model.DynProModel
-class DynProPresenter: DynProContract.Presenter {
+import model.Furniture
 
-    override fun onDisplayFurnitureMetadata(furnitureProperty: FurnitureProperty) {
-        metadataPresenter.onDisplayFurnitureMetadata(furnitureProperty)
-    }
+class DynProPresenter(private var dynProView: DynProContract.View): DynProContract.Presenter {
 
-    private val dynProModel: DynProContract.Model = DynProModel()
-    private val projectTreePresenter: DynProTreePresenter = DynProTreePresenter(dynProModel)
-    private val metadataPresenter: MetadataPresenter = DynProMetadataPresenter(dynProModel)
-    private var dynProView: DynProContract.View? = null
+    private val dynProModel: DynProContract.Model = DynProModel(this)
+    private val projectTreePresenter: DynProTreePresenter = DynProTreePresenter(dynProModel, dynProView)
+    private val metadataPresenter: MetadataPresenter = DynProMetadataPresenter(dynProModel, dynProView)
 
-    override fun attachView(view: DynProContract.View) {
-        dynProView = view
+    override fun attachView() {
         dynProModel.createNewProject()
-        metadataPresenter.attachView(view)
-        projectTreePresenter.attachView(view)
+        metadataPresenter.attachView()
+        projectTreePresenter.attachView()
     }
+
+    override fun onFurnituresListChange() {
+        projectTreePresenter?.onFurnitureListChanged()
+        metadataPresenter?.onFurnitureListChanged()
+    }
+
+    override fun onProjectChanged() {
+        projectTreePresenter.onNewProject()
+        metadataPresenter.onNewProject()
+    }
+
+    override fun onProjectNameChanged() {
+//        projectTreePresenter.onRenameProject()
+    }
+
+    override fun onFurnitureNameChanged(oldFurnitureName: String, newValue: String) {
+        metadataPresenter.onFurnitureNameChanged(newValue)
+        projectTreePresenter.onFurnitureNameChanged()
+    }
+
+    override fun onFurnitureTypeChanged(newValue: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onFrontUnitPriceChanged(newValue: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onElementUnitPriceChanged(newValue: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onFurnitureHeightChanged(newValue: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onFurnitureWidthChanged(newValue: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onFurnitureDepthChanged(newValue: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onDisplayFurnitureMetadata(furniture: Furniture) {
+        metadataPresenter.onDisplayFurnitureMetadata(furniture)
+    }
+
 
     override fun onProjectTreePopupSelection(name: String?) { projectTreePresenter.onProjectTreePopupSelection(name)  }
 

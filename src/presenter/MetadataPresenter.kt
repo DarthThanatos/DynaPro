@@ -3,42 +3,54 @@ package presenter
 import contract.DynProContract
 import main.Binder
 import main.furnitureNameJTABinder
-import javax.swing.event.ChangeListener
+import model.Furniture
 
 
 interface MetadataPresenter{
     fun onMetadataSetSelected(furnitureName: String?)
-    fun attachView(dynProView: DynProContract.View)
-    fun onDisplayFurnitureMetadata(furnitureProperty: FurnitureProperty)
+    fun attachView()
+    fun onDisplayFurnitureMetadata(furniture: Furniture)
+    fun onFurnitureNameChanged(name: String)
+    fun onNewProject()
+    fun onFurnitureListChanged()
 }
 
-class DynProMetadataPresenter(private val dynProModel: DynProContract.Model) : MetadataPresenter{
+class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, private var dynProView: DynProContract.View) : MetadataPresenter{
 
-    lateinit private var dynProView : DynProContract.View
+    override fun onFurnitureListChanged() {
+        onDisplayFurnitureMetadata(dynProModel.defaultFurniture)
+    }
 
-    override fun onDisplayFurnitureMetadata(furnitureProperty: FurnitureProperty) {
+    override fun onNewProject() {
+//        onDisplayFurnitureMetadata(dynProModel.defaultFurniture)
+        onMetadataSetSelected(Config.NEW_UPPER_MODULE_PL)
+    }
+
+    override fun onFurnitureNameChanged(name: String) {
+        onDisplayFurnitureMetadata(dynProModel.getFurnitureByName(name))
+    }
+
+    override fun onDisplayFurnitureMetadata(furniture: Furniture) {
         dynProView.displayMetadata(
-                furnitureProperty.type.get(),
-                furnitureProperty.name.get(),
-                furnitureProperty.height.get(),
-                furnitureProperty.width.get(),
-                furnitureProperty.depth.get(),
-                furnitureProperty.frontUnitPrice.get(),
-                furnitureProperty.elementUnitPrice.get()
+                furniture.type,
+                furniture.name,
+                furniture.height,
+                furniture.width,
+                furniture.depth,
+                furniture.frontUnitPrice,
+                furniture.elementUnitPrice
         )
     }
 
-    override fun attachView(dynProView: DynProContract.View) {
-        this.dynProView = dynProView
-        onDisplayFurnitureMetadata(dynProModel.defaultFurniture)
-        dynProModel.currentProject.addChangeListener(Config.META_PRESENTER_SUB, ChangeListener { onDisplayFurnitureMetadata(dynProModel.defaultFurniture) })
+    override fun attachView() {
+        onMetadataSetSelected(Config.NEW_UPPER_MODULE_PL)
     }
 
     override fun onMetadataSetSelected(furnitureName: String?) {
         if(dynProModel.isProject(furnitureName)) return
-        val furniture : FurnitureProperty = dynProModel.getFurnitureByName(furnitureName)
+        val furniture : Furniture = dynProModel.getFurnitureByName(furnitureName)
         onDisplayFurnitureMetadata(furniture)
-        furnitureNameJTABinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{override fun onChange(value:Any){ furniture.name.set(value.toString()); System.out.println("meta")}})
+        furnitureNameJTABinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{override fun onChange(value:Any){ furniture.name = value.toString()}})
 //        furnitureWidthSpinnerBinder.registerSubscriber()
 
     }

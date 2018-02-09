@@ -2,8 +2,7 @@ package contract;
 
 import model.Furniture;
 import model.Project;
-import presenter.FurnitureProperty;
-import presenter.ProjectProperty;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.tree.TreeModel;
 
@@ -19,7 +18,7 @@ public interface DynProContract {
     }
 
     public interface Presenter{
-        public void attachView(View view);
+        public void attachView();
         public void onProjectTreePopupSelection(String name);
         public void onNewProject();
         public void onNewFurnitureAdd();
@@ -27,12 +26,22 @@ public interface DynProContract {
         public void onRenameFurniture(String furnitureName);
         public void onRemoveFurniture(String furnitureName);
         void onMetadataSetSelected(String furnitureName);
-        void onDisplayFurnitureMetadata(FurnitureProperty furnitureProperty);
+        void onDisplayFurnitureMetadata(Furniture furniture);
+        void onFurnituresListChange();
+        void onProjectChanged();
+        void onProjectNameChanged();
+        void onFurnitureNameChanged(String oldValue, @NotNull String newValue);
+        void onFurnitureTypeChanged(@NotNull String newValue);
+        void onFrontUnitPriceChanged(int newValue);
+        void onElementUnitPriceChanged(int newValue);
+        void onFurnitureHeightChanged(int newValue);
+        void onFurnitureWidthChanged(int newValue);
+        void onFurnitureDepthChanged(int newValue);
     }
 
     public interface Model{
-        public ProjectProperty getCurrentProject();
-        public FurnitureProperty getFurnitureByName(String name);
+        public Project getCurrentProject();
+        public Furniture getFurnitureByName(String name);
         public Project createNewProject();
         public Boolean isProject(String name);
         public void renameProject(String name);
@@ -40,6 +49,6 @@ public interface DynProContract {
         public Boolean addFurniture(String name, String type);
         public Boolean renameFurniture(String oldName, String newName);
         public void removeFurniture(String name);
-        FurnitureProperty getDefaultFurniture();
+        Furniture getDefaultFurniture();
     }
 }

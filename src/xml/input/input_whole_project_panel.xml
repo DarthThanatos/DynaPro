@@ -1,19 +1,19 @@
 <panel id="inputWholeProjectPanel" layout="GridBagLayout">
 
-    <menubar name="menubar">
+    <menubar projectName="menubar">
         <gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="1" weightx="1" weighty="0"
                             anchor="GridBagConstraints.FIRST_LINE_START" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
-        <menu name="file_menu" text="Plik">
-            <menuitem name="mi_new" text="New" icon="icons/new.gif" mnemonic="VK_N" accelerator="control N" Action="newProjectAction"/>
-            <menuitem name="mi_open" text="Open" icon="icons/open.gif" mnemonic="VK_O" Accelerator="control O" ActionCommand="open"/>
-            <menuitem name="mi_save" text="Save" icon="icons/save.gif" mnemonic="VK_S" ActionCommand="save"/>
-            <menuitem name="mi_save_as" text="Save as,," icon="icons/save.gif" mnemonic="VK_S" ActionCommand="saveAs"/>
+        <menu projectName="file_menu" text="Plik">
+            <menuitem projectName="mi_new" text="New" icon="icons/new.gif" mnemonic="VK_N" accelerator="control N" Action="newProjectAction"/>
+            <menuitem projectName="mi_open" text="Open" icon="icons/open.gif" mnemonic="VK_O" Accelerator="control O" ActionCommand="open"/>
+            <menuitem projectName="mi_save" text="Save" icon="icons/save.gif" mnemonic="VK_S" ActionCommand="save"/>
+            <menuitem projectName="mi_save_as" text="Save as,," icon="icons/save.gif" mnemonic="VK_S" ActionCommand="saveAs"/>
             <separator/>
-            <menuitem name="mi_exit" text="Exit" icon="icons/exit.gif" mnemonic="VK_X" Accelerator="control X" ActionCommand="exit"/>
+            <menuitem projectName="mi_exit" text="Exit" icon="icons/exit.gif" mnemonic="VK_X" Accelerator="control X" ActionCommand="exit"/>
         </menu>
         <menu text="Pomoc">
-            <menuitem name="mi_about" text="O DynaPro" enabled="true" icon="icons/info.gif" Accelerator="alt A" Action="aboutAction" />
+            <menuitem projectName="mi_about" text="O DynaPro" enabled="true" icon="icons/info.gif" Accelerator="alt A" Action="aboutAction" />
         </menu>
     </menubar>
 

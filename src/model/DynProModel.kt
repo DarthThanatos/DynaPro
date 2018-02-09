@@ -1,35 +1,32 @@
 package model
 
 import contract.DynProContract
-import presenter.FurnitureProperty
-import presenter.GenericProperty
-import presenter.ProjectProperty
+import kotlin.properties.Delegates
 
-class DynProModel : DynProContract.Model{
+class DynProModel(private val presenter: DynProContract.Presenter) : DynProContract.Model{
 
-    private var projectProperty: ProjectProperty = ProjectProperty(DynProject())
+    private var project: DynProject by Delegates.observable(DynProject(presenter) ){property, oldValue, newValue -> presenter.onProjectChanged() }
 
     override fun createNewProject() : Project{
-        projectProperty.set(DynProject())
-        return projectProperty
+        project = DynProject(presenter)
+        return project
     }
 
-    override fun getDefaultFurniture(): FurnitureProperty = projectProperty.getDefaultFurniture()
+    override fun getDefaultFurniture(): Furniture = project.getDefaultFurniture()
 
-    override fun getCurrentProject(): ProjectProperty = projectProperty
+    override fun getCurrentProject(): Project = project
 
-    override fun renameProject(name: String) { projectProperty.get().rename(name)  }
+    override fun renameProject(name: String) { project.rename(name)  }
 
-    override fun addFurniture(name: String, type: String) = projectProperty.addChildFurniture(name, type)
+    override fun addFurniture(name: String, type: String) = project.addChildFurniture(name, type)
 
-    override fun renameFurniture(oldName: String, newName: String) = projectProperty.renameChildFurniture(oldName, newName)
+    override fun renameFurniture(oldName: String, newName: String) = project.renameChildFurniture(oldName, newName)
 
-    override fun removeFurniture(name: String) { projectProperty.removeChildFurniture(name)  }
+    override fun removeFurniture(name: String) { project.removeChildFurniture(name)  }
 
-    override fun addDefaultFurniture() = projectProperty.addDefaultFurniture()
+    override fun addDefaultFurniture() = project.addDefaultFurniture()
 
-    override fun isProject(name: String) = projectProperty.isNameMine(name)
+    override fun isProject(name: String) = project.isNameMine(name)
 
-    override fun getFurnitureByName(name: String): FurnitureProperty? = projectProperty.getFurnitureByName(name)
+    override fun getFurnitureByName(name: String): Furniture? = project.getFurnitureByName(name)
 }
-

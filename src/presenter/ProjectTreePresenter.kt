@@ -1,26 +1,32 @@
 package presenter
 
 import contract.DynProContract
-import main.Binder
-import main.furnitureNameJTABinder
 import model.Furniture
 import model.Project
-import javax.swing.event.ChangeListener
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
 interface ProjectTreePresenter {
-    fun attachView(view: DynProContract.View)
+    fun attachView()
     fun onProjectTreePopupSelection(name: String?)
     fun onNewFurnitureAdd()
     fun onRenameProject()
+    fun onFurnitureNameChanged()
     fun onRenameFurniture(oldFurnitureName: String)
     fun onRemoveFurniture(furnitureName: String?)
     fun onNewProject()
+    fun onFurnitureListChanged()
 }
-class DynProTreePresenter(private var dynProModel: DynProContract.Model): ProjectTreePresenter {
+class DynProTreePresenter(private var dynProModel: DynProContract.Model, private var dynProView: DynProContract.View): ProjectTreePresenter {
 
-    lateinit private var dynProView: DynProContract.View
+    override fun onFurnitureListChanged() {
+        changeTree(dynProModel.currentProject)
+    }
+
+    override fun onFurnitureNameChanged() {
+        changeTree(dynProModel.currentProject)
+    }
+
 
     private fun changeTree(project: Project){
         dynProView.setupProjectTreeModel(
@@ -29,24 +35,17 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
     }
 
     private fun transformProjectModelForTree(project: Project): DefaultTreeModel {
-        val root = DefaultMutableTreeNode(project.getName().get())
+        val root = DefaultMutableTreeNode(project.getName())
         for(furniture: Furniture in project.furnituresList){
-            root.add(DefaultMutableTreeNode(furniture.name.get()))
+            root.add(DefaultMutableTreeNode(furniture.name))
         }
         return DefaultTreeModel(root)
     }
 
-    override fun attachView(view: DynProContract.View) {
-        dynProView = view
+    override fun attachView() {
         changeTree(dynProModel.currentProject)
-        listenToAllFurnitureNames()
     }
 
-
-    private fun listenToAllFurnitureNames(){
-        dynProModel.currentProject.furnituresList.forEach{ it.name.addChangeListener(Config.PROJECT_TREE_SUB, ChangeListener { changeTree(dynProModel.currentProject)})}
-
-    }
 
     override fun onProjectTreePopupSelection(name: String?) {
         if(dynProModel.isProject(name)) dynProView.displayProjectPopup()
@@ -56,7 +55,6 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
 
     override fun onNewFurnitureAdd() {
         dynProModel.addDefaultFurniture()
-        listenToAllFurnitureNames()
         changeTree(dynProModel.currentProject)
     }
 
@@ -79,6 +77,5 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
 
     override fun onNewProject() {
         changeTree(dynProModel.currentProject)
-        listenToAllFurnitureNames()
     }
 }

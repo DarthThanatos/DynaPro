@@ -1,66 +1,49 @@
 package model
 
-import javafx.beans.property.SimpleListProperty
-import javafx.beans.value.ChangeListener
-import javafx.collections.ObservableList
-import javafx.collections.ObservableListBase
-import javafx.collections.transformation.SortedList
-import presenter.ElementProperty
-import presenter.FurnitureProperty
-import presenter.GenericListProperty
-import presenter.GenericProperty
+import contract.DynProContract
 import kotlin.properties.Delegates
 
-interface Project{
-    fun getName(): GenericProperty<String>
+interface Project {
+    fun getName(): String
     fun rename(newProjectName: String) : Boolean
     val factoriesChain: FactoriesChain
-    val furnituresList: GenericListProperty<FurnitureProperty, MutableList<FurnitureProperty>>
+    val furnituresList: MutableList<Furniture>
     fun addDefaultFurniture() : Boolean
     fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean
     fun removeChildFurniture(oldChildName: String) : Boolean
     fun renameChildFurniture(oldChildName: String, newChildName: String) : Boolean
-    fun getFurnitureByName(name: String) : FurnitureProperty?
+    fun getFurnitureByName(name: String) : Furniture?
     fun isNameMine(potentialName: String): Boolean
-    fun getDefaultFurniture(): FurnitureProperty
+    fun getDefaultFurniture(): Furniture
 }
 
-class DynProject(private var name: GenericProperty<String> = GenericProperty(Config.NEW_PROJECT_PL)) : Project {
+class DynProject(private val presenter: DynProContract.Presenter,  initialName: String = Config.NEW_PROJECT_PL) : Project{
 
-    override fun getDefaultFurniture(): FurnitureProperty =  furnituresList.get(0)
+    private var projectName: String by Delegates.observable(initialName){property, oldValue, newValue -> presenter.onProjectNameChanged() }
 
-    override fun isNameMine(potentialName: String): Boolean = name.get() == potentialName
+    override fun getDefaultFurniture(): Furniture =  furnituresList.get(0)
 
-    override fun getName(): GenericProperty<String> = name
+    override fun isNameMine(potentialName: String): Boolean = projectName == potentialName
+
+    override fun getName(): String = projectName
 
     override fun rename(newProjectName: String) : Boolean {
-        val oldProjectName = name
+        val oldProjectName = projectName
         val newNameCorrect = (newProjectName != "") and (getFurnitureByName(newProjectName)  == null)
-        name = if(newNameCorrect) GenericProperty(newProjectName) else oldProjectName
+        projectName = if(newNameCorrect) newProjectName else oldProjectName
         return newNameCorrect
     }
-
-    val l = SimpleListProperty<Furniture>()
-    var d = Delegates.observable(""){
-        property, oldValue, newValue ->
-    }
-    var s: String by d
     
-//    Delegates.observable("<not set>") {
-//               prop, old, new -> println("Old value: $old, New value: $new")
-//            }
-    
-    override val furnituresList: GenericListProperty<FurnitureProperty, MutableList<FurnitureProperty>> = GenericListProperty(mutableListOf())
+    override val furnituresList = mutableListOf<Furniture>()
+//    init{
+//        furnituresList.addListener { observable, oldValue, newValue -> presenter.onFurnituresListChange() }
+//    }
 
-    override val factoriesChain: FactoriesChain = AllFurnitureTypesChain()
+    override val factoriesChain: FactoriesChain = AllFurnitureTypesChain(presenter)
 
-    override fun getFurnitureByName(name: String) :FurnitureProperty? = furnituresList.singleOrNull() { it.name.get() == name }
-    
+    override fun getFurnitureByName(name: String) : Furniture? = furnituresList.singleOrNull() { it.name == name }
+
     private fun pickDefaultName(): String{
-        l.addListener(ChangeListener{observable, oldValue, newValue ->  })
-        d = Delegates.observable(""){
-            property, oldValue, newValue ->
-        }
         for (i in 1..Config.MAX_DEFAULT_FURNITURE_NAMES_NUMBER){
             if (furnitureNotExist(Config.DEFAULT_FURNITURE_NAME_PREFIX_PL + i))
                 return Config.DEFAULT_FURNITURE_NAME_PREFIX_PL + i
@@ -86,23 +69,28 @@ class DynProject(private var name: GenericProperty<String> = GenericProperty(Con
                 if (factory.typeCorrect(childFurnitureType))
                     furnituresList.add(factory.createFurnitureChild(childName))
             }
+            presenter.onFurnituresListChange()
             return true
         }
         return false
     }
 
     override fun removeChildFurniture(oldChildName: String) : Boolean{
-        val success = furnituresList.removeIf { it.name.get() == oldChildName }
-        if(success) keepAtLeastOneFurniture()
+        val success = furnituresList.removeIf { it.name == oldChildName }
+        if(success) {
+            keepAtLeastOneFurniture()
+            presenter.onFurnituresListChange()
+        }
         return success
     }
 
 
-    private fun furnitureNotExist(furnitureName: String) : Boolean = furnituresList.count { it.name.get() == furnitureName } == 0
+    private fun furnitureNotExist(furnitureName: String) : Boolean = furnituresList.count { it.name == furnitureName } == 0
 
     override fun renameChildFurniture(oldChildName: String, newChildName: String) :Boolean{
-        if (furnitureNotExist(newChildName) and (newChildName != name.get()) and (newChildName != "")){
-            furnituresList.single { it.name.get() == oldChildName }.name.set(newChildName)
+        if (furnitureNotExist(newChildName) and (newChildName != projectName) and (newChildName != "")){
+            furnituresList.single { it.name == oldChildName }.name=newChildName
+            presenter.onFurnituresListChange()
             return true
         }
         return false
@@ -119,81 +107,82 @@ interface FactoriesChain{
     fun getChain():List<FurnitureFactory>
 }
 
-class AllFurnitureTypesChain: FactoriesChain{
-    override fun getChain(): List<FurnitureFactory> = listOf(UpperModulesFactory(), BottomModulesFactory())
+class AllFurnitureTypesChain(private val presenter: DynProContract.Presenter): FactoriesChain{
+    override fun getChain(): List<FurnitureFactory> = listOf(UpperModulesFactory(presenter), BottomModulesFactory(presenter))
 
 }
 
 interface FurnitureFactory{
     fun typeCorrect(type: String): Boolean
-    fun  createFurnitureChild(name:String): FurnitureProperty
+    fun  createFurnitureChild(name:String): Furniture
 }
 
-class UpperModulesFactory: FurnitureFactory{
+class UpperModulesFactory(private val presenter: DynProContract.Presenter): FurnitureFactory{
     override fun typeCorrect(type: String): Boolean = type == Config.UPPER_MODULE
 
-    override fun createFurnitureChild(name: String): FurnitureProperty = FurnitureProperty(UpperModule(GenericProperty(name)))
+    override fun createFurnitureChild(name: String): Furniture = UpperModule(name, presenter)
 
 }
 
-class BottomModulesFactory: FurnitureFactory {
+class BottomModulesFactory(private val presenter: DynProContract.Presenter): FurnitureFactory {
     override fun typeCorrect(type: String): Boolean = type == Config.BOTTOM_MODULE
 
-    override fun createFurnitureChild(name: String): FurnitureProperty = FurnitureProperty(BottomModule(GenericProperty(name)))
+    override fun createFurnitureChild(name: String): Furniture = BottomModule(name, presenter)
 
 }
 
 interface Furniture{
-    var type: GenericProperty<String>
-    var name: GenericProperty<String>
-    var height: GenericProperty<Int>
-    var width: GenericProperty<Int>
-    var depth: GenericProperty<Int>
-    var frontUnitPrice: GenericProperty<Int>
-    var elementUnitPrice: GenericProperty<Int>
-    fun getElements(): GenericListProperty<ElementProperty, MutableList<ElementProperty>>
+    var type: String
+    var name: String
+    var height: Int
+    var width: Int
+    var depth: Int
+    var frontUnitPrice: Int
+    var elementUnitPrice: Int
+    fun getElements(): List<Element>
 }
 
 
-class UpperModule(override var name: GenericProperty<String>): Furniture {
+class UpperModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture {
 
-    override var type: GenericProperty<String> = GenericProperty(Config.UPPER_MODULE)
+    override var name: String by Delegates.observable(initialName){property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureNameChanged(oldValue, newValue)}
 
-    override var frontUnitPrice: GenericProperty<Int> = GenericProperty(100)
+    override var type: String by Delegates.observable(Config.UPPER_MODULE){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureTypeChanged(newValue) }
 
-    override var elementUnitPrice: GenericProperty<Int> = GenericProperty(115)
+    override var frontUnitPrice: Int by Delegates.observable(100){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFrontUnitPriceChanged(newValue) }
+
+    override var elementUnitPrice: Int  by Delegates.observable( 115) {property, oldValue, newValue -> if(oldValue != newValue) presenter.onElementUnitPriceChanged(newValue) }
+
+    override var height: Int by Delegates.observable(200){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureHeightChanged(newValue) }
+
+    override var width: Int by Delegates.observable(50) {property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureWidthChanged(newValue) }
+
+    override var depth: Int by Delegates.observable(75){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureDepthChanged(newValue) }
 
 
-    override var height: GenericProperty<Int> = GenericProperty(200)
-
-    override var width: GenericProperty<Int> = GenericProperty(50)
-
-    override var depth: GenericProperty<Int> = GenericProperty(75)
-
-
-    override fun getElements(): GenericListProperty<ElementProperty, MutableList<ElementProperty>> {
+    override fun getElements(): List<Element> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
-class BottomModule(override var name: GenericProperty<String>): Furniture{
+class BottomModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture{
+
+    override var name: String by Delegates.observable(initialName){property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureNameChanged(oldValue, newValue)}
+
+    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureTypeChanged(newValue) }
+
+    override var frontUnitPrice : Int by Delegates.observable(10){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFrontUnitPriceChanged(newValue) }
+
+    override var elementUnitPrice : Int  by Delegates.observable( 10) {property, oldValue, newValue -> if(oldValue != newValue) presenter.onElementUnitPriceChanged(newValue) }
+
+    override var height : Int by Delegates.observable(10){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureHeightChanged(newValue) }
+
+    override var width : Int by Delegates.observable(10) {property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureWidthChanged(newValue) }
+
+    override var depth : Int by Delegates.observable(10){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureDepthChanged(newValue) }
 
 
-    override var type:  GenericProperty<String> = GenericProperty(Config.BOTTOM_MODULE)
-
-    override var frontUnitPrice: GenericProperty<Int> = GenericProperty(10)
-
-    override var elementUnitPrice: GenericProperty<Int> = GenericProperty(10)
-
-
-    override var height: GenericProperty<Int> = GenericProperty(10)
-
-    override var width: GenericProperty<Int> = GenericProperty(10)
-
-    override var depth: GenericProperty<Int> = GenericProperty(10)
-
-
-    override fun getElements(): GenericListProperty<ElementProperty, MutableList<ElementProperty>> {
+    override fun getElements(): List<Element> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
