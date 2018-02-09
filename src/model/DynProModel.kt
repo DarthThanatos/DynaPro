@@ -1,30 +1,35 @@
 package model
 
 import contract.DynProContract
+import presenter.FurnitureProperty
+import presenter.GenericProperty
+import presenter.ProjectProperty
 
 class DynProModel : DynProContract.Model{
 
-    lateinit var project :DynProject
+    private var projectProperty: ProjectProperty = ProjectProperty(DynProject())
 
     override fun createNewProject() : Project{
-        project = DynProject()
-        return project
+        projectProperty.set(DynProject())
+        return projectProperty
     }
 
-    override fun getCurrentProject(): DynProject = project
+    override fun getDefaultFurniture(): FurnitureProperty = projectProperty.getDefaultFurniture()
 
-    override fun renameProject(name: String) { project.rename(name)  }
+    override fun getCurrentProject(): ProjectProperty = projectProperty
 
-    override fun addFurniture(name: String, type: String) = project.addChildFurniture(name, type)
+    override fun renameProject(name: String) { projectProperty.get().rename(name)  }
 
-    override fun renameFurniture(oldName: String, newName: String) = project.renameChildFurniture(oldName, newName)
+    override fun addFurniture(name: String, type: String) = projectProperty.addChildFurniture(name, type)
 
-    override fun removeFurniture(name: String) { project.removeChildFurniture(name)  }
+    override fun renameFurniture(oldName: String, newName: String) = projectProperty.renameChildFurniture(oldName, newName)
 
-    override fun addDefaultFurniture() = project.addDefaultFurniture()
+    override fun removeFurniture(name: String) { projectProperty.removeChildFurniture(name)  }
 
-    override fun isProject(name: String) = project.isNameMine(name)
+    override fun addDefaultFurniture() = projectProperty.addDefaultFurniture()
 
-    override fun getFurnitureByName(name: String): Furniture? = project.getFurnitureByName(name)
+    override fun isProject(name: String) = projectProperty.isNameMine(name)
+
+    override fun getFurnitureByName(name: String): FurnitureProperty? = projectProperty.getFurnitureByName(name)
 }
 

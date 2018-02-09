@@ -13,4 +13,5 @@ public class Config {
 
     public final static String CURRENT_FURNITURE = "current furniture";
     public final static String PROJECT_TREE_SUB = "project tree sub";
+    public final static String META_PRESENTER_SUB = "meta presenter sub";
 }

@@ -3,37 +3,42 @@ package presenter
 import contract.DynProContract
 import main.Binder
 import main.furnitureNameJTABinder
-import main.furnitureWidthSpinnerBinder
-import model.Furniture
+import javax.swing.event.ChangeListener
 
 
 interface MetadataPresenter{
     fun onMetadataSetSelected(furnitureName: String?)
     fun attachView(dynProView: DynProContract.View)
+    fun onDisplayFurnitureMetadata(furnitureProperty: FurnitureProperty)
 }
 
 class DynProMetadataPresenter(private val dynProModel: DynProContract.Model) : MetadataPresenter{
 
     lateinit private var dynProView : DynProContract.View
 
+    override fun onDisplayFurnitureMetadata(furnitureProperty: FurnitureProperty) {
+        dynProView.displayMetadata(
+                furnitureProperty.type.get(),
+                furnitureProperty.name.get(),
+                furnitureProperty.height.get(),
+                furnitureProperty.width.get(),
+                furnitureProperty.depth.get(),
+                furnitureProperty.frontUnitPrice.get(),
+                furnitureProperty.elementUnitPrice.get()
+        )
+    }
+
     override fun attachView(dynProView: DynProContract.View) {
         this.dynProView = dynProView
-        onMetadataSetSelected(Config.NEW_UPPER_MODULE_PL)
+        onDisplayFurnitureMetadata(dynProModel.defaultFurniture)
+        dynProModel.currentProject.addChangeListener(Config.META_PRESENTER_SUB, ChangeListener { onDisplayFurnitureMetadata(dynProModel.defaultFurniture) })
     }
 
     override fun onMetadataSetSelected(furnitureName: String?) {
         if(dynProModel.isProject(furnitureName)) return
-        val furniture : Furniture = dynProModel.getFurnitureByName(furnitureName)
-        dynProView.displayMetadata(
-                furniture.type,
-                furniture.name,
-                furniture.height,
-                furniture.width,
-                furniture.depth,
-                furniture.frontUnitPrice,
-                furniture.elementUnitPrice
-        )
-        furnitureNameJTABinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{override fun onChange(value:Any){ furniture.name = value.toString(); System.out.println("meta")}})
+        val furniture : FurnitureProperty = dynProModel.getFurnitureByName(furnitureName)
+        onDisplayFurnitureMetadata(furniture)
+        furnitureNameJTABinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{override fun onChange(value:Any){ furniture.name.set(value.toString()); System.out.println("meta")}})
 //        furnitureWidthSpinnerBinder.registerSubscriber()
 
     }

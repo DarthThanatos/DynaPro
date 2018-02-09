@@ -4,6 +4,10 @@ import contract.DynProContract
 import model.DynProModel
 class DynProPresenter: DynProContract.Presenter {
 
+    override fun onDisplayFurnitureMetadata(furnitureProperty: FurnitureProperty) {
+        metadataPresenter.onDisplayFurnitureMetadata(furnitureProperty)
+    }
+
     private val dynProModel: DynProContract.Model = DynProModel()
     private val projectTreePresenter: DynProTreePresenter = DynProTreePresenter(dynProModel)
     private val metadataPresenter: MetadataPresenter = DynProMetadataPresenter(dynProModel)

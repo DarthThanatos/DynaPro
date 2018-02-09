@@ -17,7 +17,7 @@ abstract class Binder {
         orderedRegistrars.remove(id)
     }
 
-    fun notifyViewChanged(value: Any) {
+    fun notifyChange(value: Any) {
         orderedRegistrars.forEach{registrars.get(it)?.onChange(value)}
     }
 }

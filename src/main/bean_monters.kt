@@ -11,15 +11,15 @@ class JTFBinder(private val jtf: JTextField): Binder() {
     init{
         jtf.addKeyListener(object : KeyListener{
             override fun keyTyped(e: KeyEvent?) {
-//                notifyViewChanged(jtf.text)
+//                notifyChange(jtf.text)
             }
 
             override fun keyPressed(e: KeyEvent?) {
-//                notifyViewChanged(jtf.text)
+//                notifyChange(jtf.text)
             }
 
             override fun keyReleased(e: KeyEvent?) {
-                notifyViewChanged(jtf.text)
+                notifyChange(jtf.text)
             }
 
         })
@@ -31,7 +31,7 @@ class JTFBinder(private val jtf: JTextField): Binder() {
 class JSpinnerBinder(private val spinner: JSpinner): Binder() {
 
     init{
-        spinner.addChangeListener { e -> notifyViewChanged(spinner.value)  }
+        spinner.addChangeListener { e -> notifyChange(spinner.value)  }
     }
 
 }

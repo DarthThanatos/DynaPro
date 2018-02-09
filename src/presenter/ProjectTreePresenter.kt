@@ -5,6 +5,7 @@ import main.Binder
 import main.furnitureNameJTABinder
 import model.Furniture
 import model.Project
+import javax.swing.event.ChangeListener
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
@@ -28,9 +29,9 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
     }
 
     private fun transformProjectModelForTree(project: Project): DefaultTreeModel {
-        val root = DefaultMutableTreeNode(project.getName())
+        val root = DefaultMutableTreeNode(project.getName().get())
         for(furniture: Furniture in project.furnituresList){
-            root.add(DefaultMutableTreeNode(furniture.name))
+            root.add(DefaultMutableTreeNode(furniture.name.get()))
         }
         return DefaultTreeModel(root)
     }
@@ -38,9 +39,14 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
     override fun attachView(view: DynProContract.View) {
         dynProView = view
         changeTree(dynProModel.currentProject)
-        furnitureNameJTABinder.registerSubscriber(Config.PROJECT_TREE_SUB, object: Binder.OnChange{override fun onChange(value: Any) {changeTree(dynProModel.currentProject);System.out.println("tree") } })
+        listenToAllFurnitureNames()
     }
 
+
+    private fun listenToAllFurnitureNames(){
+        dynProModel.currentProject.furnituresList.forEach{ it.name.addChangeListener(Config.PROJECT_TREE_SUB, ChangeListener { changeTree(dynProModel.currentProject)})}
+
+    }
 
     override fun onProjectTreePopupSelection(name: String?) {
         if(dynProModel.isProject(name)) dynProView.displayProjectPopup()
@@ -50,6 +56,7 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
 
     override fun onNewFurnitureAdd() {
         dynProModel.addDefaultFurniture()
+        listenToAllFurnitureNames()
         changeTree(dynProModel.currentProject)
     }
 
@@ -72,5 +79,6 @@ class DynProTreePresenter(private var dynProModel: DynProContract.Model): Projec
 
     override fun onNewProject() {
         changeTree(dynProModel.currentProject)
+        listenToAllFurnitureNames()
     }
 }

@@ -2,6 +2,8 @@ package contract;
 
 import model.Furniture;
 import model.Project;
+import presenter.FurnitureProperty;
+import presenter.ProjectProperty;
 
 import javax.swing.tree.TreeModel;
 
@@ -25,11 +27,12 @@ public interface DynProContract {
         public void onRenameFurniture(String furnitureName);
         public void onRemoveFurniture(String furnitureName);
         void onMetadataSetSelected(String furnitureName);
+        void onDisplayFurnitureMetadata(FurnitureProperty furnitureProperty);
     }
 
     public interface Model{
-        public Project getCurrentProject();
-        public Furniture getFurnitureByName(String name);
+        public ProjectProperty getCurrentProject();
+        public FurnitureProperty getFurnitureByName(String name);
         public Project createNewProject();
         public Boolean isProject(String name);
         public void renameProject(String name);
@@ -37,5 +40,6 @@ public interface DynProContract {
         public Boolean addFurniture(String name, String type);
         public Boolean renameFurniture(String oldName, String newName);
         public void removeFurniture(String name);
+        FurnitureProperty getDefaultFurniture();
     }
 }
