@@ -28,7 +28,6 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
     override fun onFurnitureNameChanged(name: String) {
         onDisplayFurnitureMetadata(dynProModel.getFurnitureByName(name))
-        System.out.println("")
     }
 
     override fun onDisplayFurnitureMetadata(furniture: Furniture) {
