@@ -106,7 +106,6 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
         var newFurniture : Furniture? = null
         for (factory: FurnitureFactory in factoriesChain.getChain()){
             if (factory.typeCorrect(type)){
-                System.out.println("Creating ${type}")
                 newFurniture = factory.createFurnitureChild(oldFurniture)
             }
         }
