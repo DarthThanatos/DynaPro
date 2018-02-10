@@ -33,7 +33,9 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
         projectTreePresenter?.onProjectRenamed()
     }
 
-    override fun onAddNewFurniture() { dynProModel.addDefaultFurniture() }
+    override fun onAddNewFurniture() {
+        dynProModel.addDefaultFurniture()
+    }
 
     override fun onFurnitureAdded(addedFurnitureName: String) {
         projectTreePresenter?.onFurnitureAdded()

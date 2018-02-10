@@ -1,6 +1,5 @@
 package main
 
-import java.awt.event.ActionListener
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 import javax.swing.JComboBox
@@ -31,11 +30,9 @@ class JSpinnerBinder(private val spinner: JSpinner): Binder() {
         spinner.addChangeListener { e -> notifyChange(spinner.value)  }
 
         (spinner.editor as DefaultEditor).textField.addKeyListener(object : KeyListener{
-            override fun keyTyped(e: KeyEvent?) {
-            }
+            override fun keyTyped(e: KeyEvent?) {}
 
-            override fun keyPressed(e: KeyEvent?) {
-            }
+            override fun keyPressed(e: KeyEvent?) {}
 
             override fun keyReleased(e: KeyEvent?) {
                 try{
@@ -43,8 +40,6 @@ class JSpinnerBinder(private val spinner: JSpinner): Binder() {
                 }catch (e: Exception){
                     e.printStackTrace()
                 }
-
-
             }
         })
     }
@@ -56,6 +51,7 @@ class JComboboxBinder(private val combobox: JComboBox<Any>): Binder(){
         combobox.addActionListener({notifyChange(combobox.selectedItem.toString())})
     }
 }
+
 
 val furnitureNameJTABinder = JTFBinder(DynProMain.furnitureNameDisplay)
 val furnitureWidthSpinnerBinder = JSpinnerBinder(DynProMain.furnitureWidthDisplay)

@@ -10,12 +10,14 @@ interface Project {
     val factoriesChain: FactoriesChain
     val furnituresList: MutableList<Furniture>
     fun addDefaultFurniture() : Boolean
+    fun addChildFurniture(type: String): Boolean
     fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean
     fun removeChildFurniture(oldChildName: String) : Boolean
     fun renameChildFurniture(oldChildName: String, newChildName: String) : Boolean
     fun getFurnitureByName(name: String) : Furniture?
     fun isNameMine(potentialName: String): Boolean
     fun getDefaultFurniture(): Furniture
+    fun getFurnitureWithChangedType(name: String, type: String) : Furniture
 }
 
 class DynProject(private val presenter: DynProContract.Presenter,  initialName: String = Config.NEW_PROJECT_PL) : Project{
@@ -63,6 +65,7 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
                 childFurnitureType = Config.UPPER_MODULE
         )
 
+    override fun addChildFurniture(type: String): Boolean = addChildFurniture(pickDefaultName(), type)
 
     override fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean{
         if(furnitureNotExist( childName)){
@@ -97,6 +100,19 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
         return false
     }
 
+    override fun getFurnitureWithChangedType(name: String, type: String) : Furniture{
+        val furnitureIndex = furnituresList.indexOf(furnituresList.filter { it.name == name }.single())
+        val oldFurniture = furnituresList.removeAt(furnitureIndex)
+        var newFurniture : Furniture? = null
+        for (factory: FurnitureFactory in factoriesChain.getChain()){
+            if (factory.typeCorrect(type)){
+                System.out.println("Creating ${type}")
+                newFurniture = factory.createFurnitureChild(oldFurniture)
+            }
+        }
+        furnituresList.add(furnitureIndex, newFurniture!!)
+        return newFurniture
+    }
 
     init {
         addChildFurniture(childName = Config.NEW_UPPER_MODULE_PL, childFurnitureType = Config.UPPER_MODULE)
@@ -117,16 +133,40 @@ class AllFurnitureTypesChain(private val presenter: DynProContract.Presenter): F
 interface FurnitureFactory{
     fun typeCorrect(type: String): Boolean
     fun  createFurnitureChild(name:String): Furniture
+    fun createFurnitureChild(furniture: Furniture): Furniture
 }
 
 class UpperModulesFactory(private val presenter: DynProContract.Presenter): FurnitureFactory{
+
+    override fun createFurnitureChild(furniture: Furniture): UpperModule {
+        val res = UpperModule(furniture.name, presenter)
+        res.depth = furniture.depth
+        res.height = furniture.height
+        res.width = furniture.width
+        res.frontUnitPrice = furniture.frontUnitPrice
+        res.elementUnitPrice = furniture.elementUnitPrice
+        return res
+    }
+
     override fun typeCorrect(type: String): Boolean = type == Config.UPPER_MODULE
 
     override fun createFurnitureChild(name: String): Furniture = UpperModule(name, presenter)
 
+
 }
 
 class BottomModulesFactory(private val presenter: DynProContract.Presenter): FurnitureFactory {
+
+    override fun createFurnitureChild(furniture: Furniture): BottomModule {
+        val res = BottomModule(furniture.name, presenter)
+        res.depth = furniture.depth
+        res.height = furniture.height
+        res.width = furniture.width
+        res.frontUnitPrice = furniture.frontUnitPrice
+        res.elementUnitPrice = furniture.elementUnitPrice
+        return res
+    }
+
     override fun typeCorrect(type: String): Boolean = type == Config.BOTTOM_MODULE
 
     override fun createFurnitureChild(name: String): Furniture = BottomModule(name, presenter)

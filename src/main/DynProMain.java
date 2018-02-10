@@ -1,6 +1,7 @@
 package main;
 
 import actions.*;
+import config.Config;
 import contract.DynProContract;
 import display.MetadataDisplayer;
 import display.ProjectTree;
@@ -70,4 +71,5 @@ public class DynProMain implements DynProContract.View {
     public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice) {
         metadataDisplayer.displayMetadata(type, name, height, width, depth, fronPrice, moduleUnitPrice);
     }
+
 }

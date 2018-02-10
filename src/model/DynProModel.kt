@@ -4,6 +4,9 @@ import contract.DynProContract
 import kotlin.properties.Delegates
 
 class DynProModel(private val presenter: DynProContract.Presenter) : DynProContract.Model{
+    override fun getFurnitureWithChangedType(name: String, newType: String): Furniture = project.getFurnitureWithChangedType(name, newType)
+
+    override fun addFurniture(type: String): Boolean = project.addChildFurniture(type)
 
     private var project: DynProject by Delegates.observable(DynProject(presenter) ){property, oldValue, newValue -> presenter.onNewProjectCreated() }
 

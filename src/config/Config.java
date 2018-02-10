@@ -12,6 +12,7 @@ public class Config {
 
     public final static String GIVE_NEW_PROJECT_NAME_MSG = "Podaj nową nazwę projektu (nie może być pusta)";
     public final static String GIVE_NEW_FURNITURE_NAME_MSG = "Podaj nową nazwę mebla (nie może być pusta)";
+    public final static String GIVE_FURNITURE_TYPE = "Podaj typ mebla";
 
     public final static String CURRENT_FURNITURE = "current furniture";
     public final static String PROJECT_TREE_SUB = "project tree sub";

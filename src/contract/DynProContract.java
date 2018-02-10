@@ -50,8 +50,10 @@ public interface DynProContract {
         public void renameProject(String name);
         public Boolean addDefaultFurniture();
         public Boolean addFurniture(String name, String type);
+        public Boolean addFurniture(String type);
         public Boolean renameFurniture(String oldName, String newName);
         public void removeFurniture(String name);
         Furniture getDefaultFurniture();
+        Furniture getFurnitureWithChangedType(String name, String newType);
     }
 }

@@ -39,7 +39,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
         furnitureDepthSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.depth = value as Int } })
         furnitureFrontPriceSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.frontUnitPrice = value as Int } })
         furnitureModuleUnitPriceSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.elementUnitPrice = value as Int } })
-        furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{ override fun onChange(value: Any) {furniture.type = value as String} })
+        furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{ override fun onChange(value: Any) {onMetadataSetSelected(dynProModel.getFurnitureWithChangedType(furniture.name, value as String).name)} })
     }
 
     override fun onDisplayFurnitureMetadata(furniture: Furniture) {
