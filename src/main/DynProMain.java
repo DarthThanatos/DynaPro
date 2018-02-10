@@ -70,6 +70,7 @@ public class DynProMain implements DynProContract.View {
     @Override
     public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice) {
         metadataDisplayer.displayMetadata(type, name, height, width, depth, fronPrice, moduleUnitPrice);
+
     }
 
 }

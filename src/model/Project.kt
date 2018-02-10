@@ -38,9 +38,6 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
     }
     
     override val furnituresList = mutableListOf<Furniture>()
-//    init{
-//        furnituresList.addListener { observable, oldValue, newValue -> presenter.onFurnituresListChanged() }
-//    }
 
     override val factoriesChain: FactoriesChain = AllFurnitureTypesChain(presenter)
 
