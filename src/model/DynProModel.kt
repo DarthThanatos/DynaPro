@@ -5,7 +5,7 @@ import kotlin.properties.Delegates
 
 class DynProModel(private val presenter: DynProContract.Presenter) : DynProContract.Model{
 
-    private var project: DynProject by Delegates.observable(DynProject(presenter) ){property, oldValue, newValue -> presenter.onProjectChanged() }
+    private var project: DynProject by Delegates.observable(DynProject(presenter) ){property, oldValue, newValue -> presenter.onNewProjectCreated() }
 
     override fun createNewProject() : Project{
         project = DynProject(presenter)

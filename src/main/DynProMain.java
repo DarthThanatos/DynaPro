@@ -7,7 +7,7 @@ import display.ProjectTree;
 import presenter.DynProPresenter;
 
 import javax.swing.*;
-import javax.swing.tree.TreeModel;
+import javax.swing.tree.*;
 
 public class DynProMain implements DynProContract.View {
 
@@ -25,8 +25,9 @@ public class DynProMain implements DynProContract.View {
 
     @SuppressWarnings("unused") public static NewProjectAction newProjectAction = new NewProjectAction(dynProMain);
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RemoveFurnitureAction removeFurnitureAction = new RemoveFurnitureAction(dynProMain);
-    @SuppressWarnings({"unused", "WeakerAccess"}) public static RenameFurnitureAction renameFurnitureAction = new RenameFurnitureAction(dynProMain);
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static RenameProjectTreeFurnitureAction renameFurnitureAction = new RenameProjectTreeFurnitureAction(dynProMain);
     @SuppressWarnings("unused") public static RenameProjectAction renameProjectAction = new RenameProjectAction(dynProMain);
+    @SuppressWarnings("unused")  public static RenameMetadataFurnitureAction renameMetadataFurnitureAction = new RenameMetadataFurnitureAction(dynProMain);
     @SuppressWarnings("unused") public static NewFurnitureAction newFurnitureAction = new NewFurnitureAction(dynProMain);
 
 
@@ -58,6 +59,11 @@ public class DynProMain implements DynProContract.View {
     @Override
     public String promptForUserInput(String message) {
         return JOptionPane.showInputDialog(message);
+    }
+
+    @Override
+    public String promptForUserInput(String message, String initialValue) {
+        return JOptionPane.showInputDialog(message, initialValue);
     }
 
     @Override

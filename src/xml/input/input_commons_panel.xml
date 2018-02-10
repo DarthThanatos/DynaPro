@@ -13,7 +13,7 @@
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Typ szafki: "/>
-        <combobox preferredsize="100,25" id="furnitureTypeDisplay" />
+        <combobox preferredsize="100,25" id="furnitureTypeDisplay" initclass="model.ComboTypeModel" />
     </panel>
 
     <imagepanel initclass="java.lang.String(icons/module.png)" background="white" preferredsize="500,350" border="EtchedBorder">
@@ -28,7 +28,9 @@
                             anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Nazwa szafki: "/>
-        <textfield preferredsize="100,25" id="furnitureNameDisplay"/>
+        <textfield preferredsize="100,25" id="furnitureNameDisplay" editable="false"/>
+        <button text="Zmień nazwę szafki" action="renameMetadataFurnitureAction"/>
+
     </panel>
 
 

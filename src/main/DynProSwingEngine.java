@@ -13,6 +13,7 @@ class DynProSwingEngine extends SwingEngine {
         dynProMain = (DynProMain) client;
         getTaglib().registerTag("imagepanel", ImagePanel.class);
         getTaglib().registerTag("projecttree", ProjectTree.class);
+        DEBUG_MODE = true;
     }
 
     void inject(){

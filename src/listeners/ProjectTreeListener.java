@@ -15,9 +15,6 @@ public class ProjectTreeListener implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Object lastSelectedPathComponent  = projectTree.getLastSelectedPathComponent();
-        if(lastSelectedPathComponent == null) return;
-        projectTree.getDynProMain().getPresenter().onMetadataSetSelected(lastSelectedPathComponent.toString());
     }
 
     @Override
@@ -41,6 +38,11 @@ public class ProjectTreeListener implements MouseListener{
                                 lastSelectedPathComponent.toString()
                         );
             }
+        }
+        else{
+            Object lastSelectedPathComponent  = projectTree.getLastSelectedPathComponent();
+            if(lastSelectedPathComponent == null) return;
+            projectTree.getDynProMain().getPresenter().onMetadataSetSelected(lastSelectedPathComponent.toString());
         }
     }
 

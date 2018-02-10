@@ -1,3 +1,5 @@
+package config;
+
 public class Config {
     public final static String UPPER_MODULE = "Upper Module";
     public final static String BOTTOM_MODULE = "Bottom Module";

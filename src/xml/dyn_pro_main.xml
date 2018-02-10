@@ -3,7 +3,7 @@
        undecorated="false"
        extendedstate="JFrame.MAXIMIZED_BOTH"
        iconimage="icons/icon.png"
-       defaultcloseoperation="WindowConstants.EXIT_ON_CLOSE"
+       defaultcloseoperation="JFrame.EXIT_ON_CLOSE"
        plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
 
     <panel id="cardLayoutPanel" Layout="CardLayout" >

@@ -1,5 +1,6 @@
 package model
 
+import config.Config
 import contract.DynProContract
 import kotlin.properties.Delegates
 
@@ -19,9 +20,9 @@ interface Project {
 
 class DynProject(private val presenter: DynProContract.Presenter,  initialName: String = Config.NEW_PROJECT_PL) : Project{
 
-    private var projectName: String by Delegates.observable(initialName){property, oldValue, newValue -> presenter.onProjectNameChanged() }
+    private var projectName: String by Delegates.observable(initialName){property, oldValue, newValue -> presenter.onProjectRenamed() }
 
-    override fun getDefaultFurniture(): Furniture =  furnituresList.get(0)
+    override fun getDefaultFurniture(): Furniture =  furnituresList.last()
 
     override fun isNameMine(potentialName: String): Boolean = projectName == potentialName
 
@@ -36,7 +37,7 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
     
     override val furnituresList = mutableListOf<Furniture>()
 //    init{
-//        furnituresList.addListener { observable, oldValue, newValue -> presenter.onFurnituresListChange() }
+//        furnituresList.addListener { observable, oldValue, newValue -> presenter.onFurnituresListChanged() }
 //    }
 
     override val factoriesChain: FactoriesChain = AllFurnitureTypesChain(presenter)
@@ -69,7 +70,7 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
                 if (factory.typeCorrect(childFurnitureType))
                     furnituresList.add(factory.createFurnitureChild(childName))
             }
-            presenter.onFurnituresListChange()
+            presenter.onFurnitureAdded(childName)
             return true
         }
         return false
@@ -79,7 +80,7 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
         val success = furnituresList.removeIf { it.name == oldChildName }
         if(success) {
             keepAtLeastOneFurniture()
-            presenter.onFurnituresListChange()
+            presenter.onFurnitureRemoved(oldChildName)
         }
         return success
     }
@@ -90,7 +91,7 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
     override fun renameChildFurniture(oldChildName: String, newChildName: String) :Boolean{
         if (furnitureNotExist(newChildName) and (newChildName != projectName) and (newChildName != "")){
             furnituresList.single { it.name == oldChildName }.name=newChildName
-            presenter.onFurnituresListChange()
+            presenter.onFurnitureRenamed(oldChildName, newChildName)
             return true
         }
         return false
@@ -99,6 +100,7 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
 
     init {
         addChildFurniture(childName = Config.NEW_UPPER_MODULE_PL, childFurnitureType = Config.UPPER_MODULE)
+        System.out.println("Added: ${Config.NEW_UPPER_MODULE_PL}")
     }
 
 }
@@ -145,9 +147,9 @@ interface Furniture{
 
 class UpperModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture {
 
-    override var name: String by Delegates.observable(initialName){property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureNameChanged(oldValue, newValue)}
+    override var name: String by Delegates.observable(initialName){property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureRenamed(oldValue, newValue)}
 
-    override var type: String by Delegates.observable(Config.UPPER_MODULE){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureTypeChanged(newValue) }
+    override var type: String by Delegates.observable(Config.UPPER_MODULE){ property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureTypeChanged(newValue) }
 
     override var frontUnitPrice: Int by Delegates.observable(100){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFrontUnitPriceChanged(newValue) }
 
@@ -167,9 +169,9 @@ class UpperModule(initialName: String, private val presenter: DynProContract.Pre
 
 class BottomModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture{
 
-    override var name: String by Delegates.observable(initialName){property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureNameChanged(oldValue, newValue)}
+    override var name: String by Delegates.observable(initialName){property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureRenamed(oldValue, newValue)}
 
-    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureTypeChanged(newValue) }
+    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){ property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureTypeChanged(newValue) }
 
     override var frontUnitPrice : Int by Delegates.observable(10){property, oldValue, newValue -> if(oldValue != newValue) presenter.onFrontUnitPriceChanged(newValue) }
 

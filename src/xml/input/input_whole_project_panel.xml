@@ -17,7 +17,7 @@
         </menu>
     </menubar>
 
-    <projecttree id="projectTree" initclass="listeners.ProjectTreeListener" action="projectTree">
+    <projecttree id="projectTree" initclass="listeners.ProjectTreeListener" editable="true">
         <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
                             insets="0,0,0,0" ipadx="0" ipady="50"/>
