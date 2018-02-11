@@ -23,50 +23,56 @@
                             <!--insets="0,0,0,0" ipadx="0" ipady="0"/>-->
     <!--</imagepanel>-->
 
-    <panel background="white" preferredsize="150,300"  layout="GridBagLayout">
+    <panel background="white"   layout="GridBagLayout">
 
-        <gridbagconstraints gridx="0" gridy="2" gridwidth="1" gridheight="1" weightx="0" weighty="0"
-                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+        <gridbagconstraints gridx="0" gridy="2" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
 
 
-        <imagepanel initclass="java.lang.String(icons/drzwiczki_klamka_prawo.png)">
+        <imagebutton initclass="java.lang.String(icons/drzwiczki_klamka_prawo.png)">
             <gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="4" weightx="0" weighty="0"
                                 anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
-                                insets="0,0,0,0" ipadx="0" ipady="0"/>
-        </imagepanel>
+                                insets="0,0,0,0" ipadx="150" ipady="75"/>
+        </imagebutton>
+
 
         <imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)" >
-            <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+            <gridbagconstraints gridx="0" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                                 anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
-                                insets="0,0,0,0" ipadx="0" ipady="0"/>
+                                insets="0,0,0,0" ipadx="0" ipady="75"/>
         </imagebutton>
-        <button text="półka">
-            <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="0"
-                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                            insets="0,0,0,0" ipadx="0" ipady="0"/>
-        </button>
-        <button text="półka">
-            <gridbagconstraints gridx="1" gridy="2" gridwidth="1" gridheight="1" weightx="0" weighty="0"
-                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                insets="0,0,0,0" ipadx="0" ipady="0"/>
-        </button>
-        <button text="półka">
-            <gridbagconstraints gridx="1" gridy="3" gridwidth="1" gridheight="1" weightx="0" weighty="0"
-                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                insets="0,0,0,0" ipadx="0" ipady="0"/>
-        </button>
-        <button text="półka">
-            <gridbagconstraints gridx="1" gridy="4" gridwidth="1" gridheight="1" weightx="0" weighty="0"
-                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                insets="0,0,0,0" ipadx="0" ipady="0"/>
-        </button>
 
-        <button text="półka">
-            <gridbagconstraints gridx="0" gridy="4" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+        <imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)" >
+            <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                                 anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                insets="0,0,0,0" ipadx="0" ipady="0"/>
-        </button>
+                                insets="0,0,0,0" ipadx="150" ipady="75"/>
+        </imagebutton>
+
+        <imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)">
+            <gridbagconstraints gridy="GridBagConstraints.RELATIVE" gridx="1"
+                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                                ipadx="0" ipady="75"/>
+        </imagebutton>
+
+        <imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)">
+            <gridbagconstraints gridx="1" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                                insets="0,0,0,0" ipadx="0" ipady="90"/>
+        </imagebutton>
+
+        <imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)" >
+            <gridbagconstraints gridx="1" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                                insets="0,0,0,0" ipadx="0" ipady="75"/>
+        </imagebutton>
+
+        <imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)" >
+            <gridbagconstraints gridx="1" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                                insets="0,0,0,0" ipadx="0" ipady="75"/>
+        </imagebutton>
+
 
 
     </panel>
