@@ -1,5 +1,6 @@
 package main;
 
+import display.ImageButton;
 import display.ImagePanel;
 import display.ProjectTree;
 import org.swixml.SwingEngine;
@@ -11,6 +12,7 @@ class DynProSwingEngine extends SwingEngine {
     DynProSwingEngine(Object client){
         super(client);
         dynProMain = (DynProMain) client;
+        getTaglib().registerTag("imagebutton", ImageButton.class);
         getTaglib().registerTag("imagepanel", ImagePanel.class);
         getTaglib().registerTag("projecttree", ProjectTree.class);
         DEBUG_MODE = true;

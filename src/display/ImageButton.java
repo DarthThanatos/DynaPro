@@ -3,17 +3,16 @@ package display;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class ImagePanel extends JPanel {
+public class ImageButton extends JButton {
+
 
     private BufferedImage image;
     private static final int BORDER_WIDTH = 3;
 
-    public ImagePanel(String imagePath){
+    public ImageButton(String imagePath){
         try{
             image = ImageIO.read(new File("src/" + imagePath));
 
