@@ -24,6 +24,7 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     override fun onNewProjectCreated() {
         projectTreePresenter?.onNewProjectCreated()
         metadataPresenter?.onNewProjectCreated()
+        furnitureSpecificsPresenter?.onNewProjectCreated()
     }
 
     override fun onRenameProject() {
@@ -41,6 +42,7 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     override fun onFurnitureAdded(addedFurnitureName: String) {
         projectTreePresenter?.onFurnitureAdded()
         metadataPresenter?.onFurnitureAdded(addedFurnitureName)
+        furnitureSpecificsPresenter?.onFurnitureAdded(addedFurnitureName)
     }
 
     override fun onRemoveFurniture(furnitureName: String?) {
@@ -50,6 +52,7 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     override fun onFurnitureRemoved(removedFurnitureName: String?) {
         projectTreePresenter?.onFurnitureRemoved()
         metadataPresenter?.onFurnitureRemoved(removedFurnitureName)
+        furnitureSpecificsPresenter?.onFurnitureRemoved(removedFurnitureName)
     }
 
     override fun onRenameProjectTreeFurniture(oldFurnitureName: String) {
@@ -66,11 +69,13 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     override fun onFurnitureRenamed(oldFurnitureName: String, newValue: String) {
         metadataPresenter?.onFurnitureNameChanged(newValue)
         projectTreePresenter?.onFurnitureNameChanged()
+        furnitureSpecificsPresenter?.onFurnitureNameChanged(newValue)
     }
 
 
-    override fun onMetadataSetSelected(furnitureName: String) {
-        metadataPresenter?.onMetadataSetSelected(furnitureName)
+    override fun onFurnitureSelected(furnitureName: String) {
+        metadataPresenter?.onFurnitureSelected(furnitureName)
+        furnitureSpecificsPresenter?.onFurnitureSelected(furnitureName)
     }
 
     override fun onProjectTreePopupSelection(name: String?) { projectTreePresenter?.onProjectTreePopupSelection(name)  }

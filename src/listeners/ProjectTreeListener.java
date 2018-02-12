@@ -42,7 +42,7 @@ public class ProjectTreeListener implements MouseListener{
         else{
             Object lastSelectedPathComponent  = projectTree.getLastSelectedPathComponent();
             if(lastSelectedPathComponent == null) return;
-            projectTree.getDynProMain().getPresenter().onMetadataSetSelected(lastSelectedPathComponent.toString());
+            projectTree.getDynProMain().getPresenter().onFurnitureSelected(lastSelectedPathComponent.toString());
         }
     }
 

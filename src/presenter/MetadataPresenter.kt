@@ -8,7 +8,7 @@ import model.Furniture
 
 interface MetadataPresenter{
     fun getCurrentDisplayedFurnitureName(): String
-    fun onMetadataSetSelected(furnitureName: String)
+    fun onFurnitureSelected(furnitureName: String)
     fun attachView()
     fun onFurnitureNameChanged(name: String)
     fun onNewProjectCreated()
@@ -23,7 +23,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
     override fun getCurrentDisplayedFurnitureName(): String = currentlyDisplayed?.name!!
 
-    override fun onMetadataSetSelected(furnitureName: String) {
+    override fun onFurnitureSelected(furnitureName: String) {
         if(dynProModel.isProject(furnitureName)) return
         currentlyDisplayed = dynProModel.getFurnitureByName(furnitureName)
         if(currentlyDisplayed == null) return
@@ -33,13 +33,41 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
     }
 
     private fun registerSubscribers(furniture: Furniture){
-        furnitureNameJTABinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{override fun onChange(value:Any){ furniture.name = value.toString()}})
-        furnitureWidthSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{ override fun onChange(value: Any) {furniture.width = value as Int}})
-        furnitureHeightSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.height = value as Int } })
-        furnitureDepthSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.depth = value as Int } })
-        furnitureFrontPriceSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.frontUnitPrice = value as Int } })
-        furnitureModuleUnitPriceSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{ override fun onChange(value: Any) { furniture.elementUnitPrice = value as Int } })
-        furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{ override fun onChange(value: Any) {onMetadataSetSelected(dynProModel.getFurnitureWithChangedType(furniture.name, value as String).name)} })
+        furnitureNameJTABinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{
+            override fun onChange(value:Any){
+                furniture.name = value.toString()
+            }
+        })
+        furnitureWidthSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.width = value as Int
+            }
+        })
+        furnitureHeightSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.height = value as Int }
+        })
+        furnitureDepthSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.depth = value as Int
+            }
+        })
+        furnitureFrontPriceSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.frontUnitPrice = value as Int
+            }
+        })
+        furnitureModuleUnitPriceSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.elementUnitPrice = value as Int
+            }
+        })
+        furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{
+            override fun onChange(value: Any) {
+                if(furniture.type != value)
+                    onFurnitureSelected(dynProModel.getFurnitureWithChangedType(furniture.name, value as String).name)
+            }
+        })
     }
 
     private fun onDisplayFurnitureMetadata(furniture: Furniture) {
@@ -60,23 +88,23 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
     }
 
     override fun onNewProjectCreated() {
-        onMetadataSetSelected( dynProModel.defaultFurniture.name) //default furniture is the first and the only one in model
+        onFurnitureSelected( dynProModel.defaultFurniture.name) //default furniture is the first and the only one in model
     }
 
 
     override fun onFurnitureAdded(addedFurnitureName: String) {
-        onMetadataSetSelected(addedFurnitureName)
+        onFurnitureSelected(addedFurnitureName)
     }
 
     override fun onFurnitureRemoved(removedFurnitureName: String?) {
         if(currentlyDisplayed?.name == removedFurnitureName){
-            onMetadataSetSelected(dynProModel.defaultFurniture.name)
+            onFurnitureSelected(dynProModel.defaultFurniture.name)
         }
     }
 
 
     override fun onFurnitureNameChanged(name: String) {
-        onMetadataSetSelected(name) //set focus on newly created furniture
+        onFurnitureSelected(name) //set focus on newly created furniture
     }
 
 }

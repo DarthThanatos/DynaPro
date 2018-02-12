@@ -112,7 +112,6 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
 
     init {
         addChildFurniture(childName = Config.NEW_UPPER_MODULE_PL, childFurnitureType = Config.UPPER_MODULE)
-        System.out.println("Added: ${Config.NEW_UPPER_MODULE_PL}")
     }
 
 }

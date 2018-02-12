@@ -1,5 +1,7 @@
 package config;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Config {
     public final static String UPPER_MODULE = "Upper Module";
     public final static String BOTTOM_MODULE = "Bottom Module";
@@ -21,4 +23,7 @@ public class Config {
     public final static String DRAWER_PL = "szuflada";
     public final static String DOOR_PL = "drzwiczki";
     public final static String SHELF_PL = "półka";
+
+    public static final String ROW_ORIENTED = "Zorientowany wierszami";
+    public static final String COLUMN_ORIENTED = "Zorientowany kolumnami";
 }

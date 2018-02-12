@@ -2,9 +2,11 @@ package main;
 
 import actions.*;
 import contract.DynProContract;
+import display.FrontConfigurationDisplayer;
 import display.ImagePanel;
 import display.MetadataDisplayer;
 import display.ProjectTree;
+import model.FrontConfigurationVM;
 import presenter.DynProPresenter;
 
 import javax.swing.*;
@@ -20,10 +22,11 @@ public class DynProMain implements DynProContract.View {
     static JPopupMenu projectPopup, furniturePopup;
 
     static ImagePanel furnitureAvatar;
-    static JComboBox furnitureTypeDisplay;
+    static JComboBox furnitureTypeDisplay, frontConfigurationOrientation;
     static JTextField furnitureNameDisplay;
     static JSpinner furnitureHeightDisplay, furnitureWidthDisplay, furnitureDepthDisplay, furnitureFrontPriceDisplay, furnitureModuleUnitPriceDisplay;
     static MetadataDisplayer metadataDisplayer = new MetadataDisplayer();
+    @SuppressWarnings("WeakerAccess")  static FrontConfigurationDisplayer frontConfigurationDisplayer;
 
     @SuppressWarnings("unused") public static NewProjectAction newProjectAction = new NewProjectAction(dynProMain);
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RemoveFurnitureAction removeFurnitureAction = new RemoveFurnitureAction(dynProMain);
@@ -72,6 +75,12 @@ public class DynProMain implements DynProContract.View {
     public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage) {
         metadataDisplayer.displayMetadata(type, name, height, width, depth, fronPrice, moduleUnitPrice, pathToImage);
 
+    }
+
+    @Override
+    public void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String orientationText) {
+        frontConfigurationDisplayer.display(frontConfigurationVM, true);
+        frontConfigurationOrientation.setSelectedItem(orientationText);
     }
 
 }

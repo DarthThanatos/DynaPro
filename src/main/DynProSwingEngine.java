@@ -1,5 +1,6 @@
 package main;
 
+import display.FrontConfigurationDisplayer;
 import display.ImageButton;
 import display.ImagePanel;
 import display.ProjectTree;
@@ -15,6 +16,7 @@ class DynProSwingEngine extends SwingEngine {
         getTaglib().registerTag("imagebutton", ImageButton.class);
         getTaglib().registerTag("imagepanel", ImagePanel.class);
         getTaglib().registerTag("projecttree", ProjectTree.class);
+        getTaglib().registerTag("frontconfigurationdisplayer", FrontConfigurationDisplayer.class);
         DEBUG_MODE = true;
     }
 

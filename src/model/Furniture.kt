@@ -40,6 +40,7 @@ class UpperModule(initialName: String, private val presenter: DynProContract.Pre
     override fun getElements(): List<Element> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 }
 
 class BottomModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture{
@@ -56,7 +57,8 @@ class BottomModule(initialName: String, private val presenter: DynProContract.Pr
 
     override var height : Int by Delegates.observable(10){ property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureHeightChanged(newValue) }
 
-    override var width : Int by Delegates.observable(10) { property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureWidthChanged(newValue) }
+    override var width : Int = 50
+//            by Delegates.observable(10) { property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureWidthChanged(newValue) }
 
     override var depth : Int by Delegates.observable(10){ property, oldValue, newValue -> if(oldValue != newValue) presenter.onFurnitureDepthChanged(newValue) }
 

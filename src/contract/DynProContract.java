@@ -1,5 +1,6 @@
 package contract;
 
+import model.FrontConfigurationVM;
 import model.Furniture;
 import model.Project;
 import org.jetbrains.annotations.NotNull;
@@ -16,10 +17,12 @@ public interface DynProContract {
          String promptForUserInput(String message, String initialValue);
          void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage);
 
+         void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String configOrientationText);
+
     }
 
      interface Presenter{
-        abstract void attachView();
+        void attachView();
 
         void onProjectTreePopupSelection(String name);
         void onCreateNewProject();
@@ -28,7 +31,7 @@ public interface DynProContract {
         void onRenameProjectTreeFurniture(String furnitureName);
         void onRenameMetadataFurniture();
         void onRemoveFurniture(String furnitureName);
-        void onMetadataSetSelected(String furnitureName);
+        void onFurnitureSelected(String furnitureName);
         void onNewProjectCreated();
         void onProjectRenamed();
         void onFurnitureAdded(String addedFurnitureName);
