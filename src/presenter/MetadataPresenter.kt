@@ -64,8 +64,11 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
         })
         furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{
             override fun onChange(value: Any) {
-                if(furniture.type != value)
-                    onFurnitureSelected(dynProModel.getFurnitureWithChangedType(furniture.name, value as String).name)
+                if(furniture.type != value) {
+                    val furnitureWithChangedType = dynProModel.getFurnitureWithChangedType(furniture.name, value as String)
+                    onFurnitureSelected(furnitureWithChangedType.name)
+                    furnitureWithChangedType.type = value   // must be here to activate the observer
+                }
             }
         })
     }

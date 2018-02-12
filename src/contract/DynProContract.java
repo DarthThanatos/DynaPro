@@ -16,7 +16,7 @@ public interface DynProContract {
          String promptForUserInput(String message);
          String promptForUserInput(String message, String initialValue);
          void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage);
-
+         void displaySpecificsPanel(String specificsPanelId);
          void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String configOrientationText);
 
     }
@@ -37,19 +37,15 @@ public interface DynProContract {
         void onFurnitureAdded(String addedFurnitureName);
         void onFurnitureRemoved(String removedFurnitureName);
         void onFurnitureRenamed(String oldValue, @NotNull String newValue);
-        void onFurnitureTypeChanged(@NotNull String newValue);
-        void onFrontUnitPriceChanged(int newValue);
-        void onElementUnitPriceChanged(int newValue);
-        void onFurnitureHeightChanged(int newValue);
-        void onFurnitureWidthChanged(int newValue);
-        void onFurnitureDepthChanged(int newValue);
+
 
         void onAddElementToFrontConfiguration(String furnitureName, int columnIndex);
         void onFrontConfigurationElementAdded(String furnitureName, int columnIndex, int newElementIndex);
         void onRemoveElementFromConfiguration(String furnitureName, int columnIndex, int elementIndex);
         void onFrontConfigurationElementRemoved(String furnitureName, int columnIndex);
 
-    }
+         void onFurnitureTypeChanged(@NotNull String newValue);
+     }
 
      interface Model{
         Project getCurrentProject();

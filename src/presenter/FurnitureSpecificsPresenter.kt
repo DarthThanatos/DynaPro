@@ -4,7 +4,6 @@ import config.Config
 import contract.DynProContract
 import main.Binder
 import main.frontConfigurationOrientationBinder
-import main.furnitureWidthSpinnerBinder
 import model.Furniture
 import model.FrontConfigurationVM
 
@@ -20,6 +19,7 @@ interface FurnitureSpecificsPresenter{
     fun onNewProjectCreated()
     fun onFurnitureAdded(addedFurnitureName: String)
     fun onFurnitureRemoved(removedFurnitureName: String?)
+    fun onFurnitureTypeChanged(furnitureName: String)
 
 }
 
@@ -35,21 +35,30 @@ class DynaProFurnitureSpecificsPresenter(private val dynaProModel: DynProContrac
         onNewProjectCreated()
     }
 
-    override fun onFurnitureSelected(furnitureName: String) {
-        if(dynaProModel.isProject(furnitureName)) return
-        currentlyDisplayed = dynaProModel.getFurnitureByName(furnitureName)
-        if(currentlyDisplayed==null) return
-
-        val frontConfiguration = fetchFrontConfigurationFromFurniture(currentlyDisplayed!!)
+    private fun registerSubscriber(furniture: Furniture){
+        val frontConfiguration = fetchFrontConfigurationFromFurniture(furniture)
         frontConfigurationOrientationBinder.registerSubscriber(Config.CURRENT_FURNITURE , object:Binder.OnChange{
             override fun onChange(value: Any) {
-                 frontConfiguration.columnOriented = value == Config.COLUMN_ORIENTED
+                frontConfiguration.columnOriented = value == Config.COLUMN_ORIENTED
             }
         })
+    }
+
+    private fun displayFrontInfo(furniture: Furniture){
+        val frontConfiguration = fetchFrontConfigurationFromFurniture(furniture)
         view.displayFrontConfiguration(
                 FrontConfigurationVM(frontConfiguration.getConfiguration(), typeToImgMapper),
                 if(frontConfiguration.columnOriented) Config.COLUMN_ORIENTED else Config.ROW_ORIENTED
         )
+        view.displaySpecificsPanel(furniture.type)
+    }
+
+    override fun onFurnitureSelected(furnitureName: String) {
+        if(dynaProModel.isProject(furnitureName)) return
+        currentlyDisplayed = dynaProModel.getFurnitureByName(furnitureName)
+        if(currentlyDisplayed==null) return
+        registerSubscriber(currentlyDisplayed!!)
+        displayFrontInfo(currentlyDisplayed!!)
     }
 
     override fun onNewProjectCreated() {
@@ -70,6 +79,10 @@ class DynaProFurnitureSpecificsPresenter(private val dynaProModel: DynProContrac
         }
     }
 
+    override fun onFurnitureTypeChanged(furnitureName: String) {
+        onFurnitureSelected(furnitureName)
+    }
+
     override fun onFrontConfigurationElementAdded(furnitureName: String?, newElementIndex: Int) {
 
     }
@@ -85,5 +98,6 @@ class DynaProFurnitureSpecificsPresenter(private val dynaProModel: DynProContrac
     override fun onAddElementToFrontConfiguration(furnitureName: String?, columnIndex: Int) {
 
     }
+
 
 }

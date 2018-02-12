@@ -6,8 +6,6 @@
             constraints="BorderLayout.NORTH"
             layout="GridBagLayout"/>
 
-    <!--<panel include="xml/input/input_whole_project_panel.xml#inputWholeProjectPanel" constraints="BorderLayout.WEST" layout="GridBagLayout" background="white"/>-->
-
     <panel constraints="BorderLayout.SOUTH" background="white">
         <button text="Rozrys tego mebla"/>
     </panel>
@@ -21,15 +19,9 @@
         <panel
                 background="white"
                 include="xml/input/furniture_specific_panels/upper_module_panel.xml#upperModulePanel"
-                constraints="upper_module_panel"
+                constraints="Upper Module"
                 layout="GridBagLayout"
                 border="EtchedBorder"/>
-
-        <panel
-                background="white"
-                include="xml/input/furniture_specific_panels/bottom_module_panel.xml#bottomModulePanel"
-                constraints="bottom_module_panel"
-                layout="GridBagLayout"/>
 
     </panel>
 

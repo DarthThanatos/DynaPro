@@ -72,6 +72,9 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
         furnitureSpecificsPresenter?.onFurnitureNameChanged(newValue)
     }
 
+    override fun onFurnitureTypeChanged(furnitureName: String) {
+        furnitureSpecificsPresenter?.onFurnitureTypeChanged(furnitureName)
+    }
 
     override fun onFurnitureSelected(furnitureName: String) {
         metadataPresenter?.onFurnitureSelected(furnitureName)
@@ -79,25 +82,6 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     }
 
     override fun onProjectTreePopupSelection(name: String?) { projectTreePresenter?.onProjectTreePopupSelection(name)  }
-
-    override fun onFurnitureTypeChanged(newValue: String) {
-    }
-
-    override fun onFrontUnitPriceChanged(newValue: Int) {
-    }
-
-    override fun onElementUnitPriceChanged(newValue: Int) {
-    }
-
-    override fun onFurnitureHeightChanged(newValue: Int) {
-    }
-
-    override fun onFurnitureWidthChanged(newValue: Int) {
-    }
-
-    override fun onFurnitureDepthChanged(newValue: Int) {
-    }
-
 
     override fun onAddElementToFrontConfiguration(furnitureName: String?, columnIndex: Int) {
         furnitureSpecificsPresenter?.onAddElementToFrontConfiguration(furnitureName, columnIndex)

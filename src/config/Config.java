@@ -26,4 +26,12 @@ public class Config {
 
     public static final String ROW_ORIENTED = "Zorientowany wierszami";
     public static final String COLUMN_ORIENTED = "Zorientowany kolumnami";
+
+    public static final String INSERTED = "Wkładane";
+    public static final String HPV = "Przybijane";
+
+    public static final String ROOF_NOT_INSERTED = "Nakładany";
+    public static final String ROOF_INSERTED = "Wkładany";
+    public static final String PEDESTAL_EXISTS = "Jest";
+    public static final String NO_PEDESTAL = "Brak";
 }

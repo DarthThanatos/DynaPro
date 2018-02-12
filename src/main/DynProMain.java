@@ -1,6 +1,7 @@
 package main;
 
 import actions.*;
+import config.Config;
 import contract.DynProContract;
 import display.FrontConfigurationDisplayer;
 import display.ImagePanel;
@@ -11,6 +12,7 @@ import presenter.DynProPresenter;
 
 import javax.swing.*;
 import javax.swing.tree.*;
+import java.awt.*;
 
 public class DynProMain implements DynProContract.View {
 
@@ -22,7 +24,7 @@ public class DynProMain implements DynProContract.View {
     static JPopupMenu projectPopup, furniturePopup;
 
     static ImagePanel furnitureAvatar;
-    static JComboBox furnitureTypeDisplay, frontConfigurationOrientation;
+    @SuppressWarnings("WeakerAccess") static JComboBox furnitureTypeDisplay, frontConfigurationOrientation, pedestalCB;
     static JTextField furnitureNameDisplay;
     static JSpinner furnitureHeightDisplay, furnitureWidthDisplay, furnitureDepthDisplay, furnitureFrontPriceDisplay, furnitureModuleUnitPriceDisplay;
     static MetadataDisplayer metadataDisplayer = new MetadataDisplayer();
@@ -75,6 +77,11 @@ public class DynProMain implements DynProContract.View {
     public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage) {
         metadataDisplayer.displayMetadata(type, name, height, width, depth, fronPrice, moduleUnitPrice, pathToImage);
 
+    }
+
+    @Override
+    public void displaySpecificsPanel(String specificsPanelId) {
+        pedestalCB.setSelectedItem(specificsPanelId.equals(Config.UPPER_MODULE) ? Config.NO_PEDESTAL : Config.PEDESTAL_EXISTS);
     }
 
     @Override

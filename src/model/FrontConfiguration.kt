@@ -38,16 +38,24 @@ abstract class DynProFrontConfiguration(protected val presenter: DynProContract.
     }
 
     override fun getConfiguration(): List<ArrangementColumn> = ArrayList<ArrangementColumn>(columns)
+
 }
 
 class UpperModuleFrontConfiguration(presenter: DynProContract.Presenter): DynProFrontConfiguration(presenter){
-    override val columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
+    override var columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
     override fun getDefaultConfiguration(): ArrayList<ArrangementColumn> = arrayListOf(Column(Drawer()), Column(Drawer()))
 
+    constructor(presenter: DynProContract.Presenter, frontConfiguration: FrontConfiguration) : this(presenter){
+        columns = getDefaultConfiguration()
+        columnOriented = frontConfiguration.columnOriented
+    }
 }
 
 class BottomModuleFrontConfiguration(presenter: DynProContract.Presenter): DynProFrontConfiguration(presenter){
-    override val columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
+    override var columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
     override fun getDefaultConfiguration(): ArrayList<ArrangementColumn> = arrayListOf(Column(Door()), Column(Door()))
-
+    constructor(presenter: DynProContract.Presenter, frontConfiguration: FrontConfiguration) : this(presenter){
+        columns = getDefaultConfiguration()
+        columnOriented = frontConfiguration.columnOriented
+    }
 }

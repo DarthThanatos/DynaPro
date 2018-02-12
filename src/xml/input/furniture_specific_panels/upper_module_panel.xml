@@ -4,7 +4,7 @@
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Plecy: "/>
-        <combobox preferredsize="100,25" id="playerNameHolder"/>
+        <combobox preferredsize="100,25" id="backBottomModuleCBr" initclass="model.ComboBackTypeModel"/>
     </panel>
 
 
@@ -13,7 +13,7 @@
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Dach: "/>
-        <combobox preferredsize="100,25" />
+        <combobox preferredsize="100,25" initclass="model.ComboRoofTypeModel"/>
     </panel>
 
     <combobox initclass="model.ComboFrontConfigurationModel" preferredsize="150,25" id="frontConfigurationOrientation">
@@ -30,57 +30,11 @@
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
     </frontconfigurationdisplayer>
 
-    <!--<panel background="white"   layout="GridBagLayout">-->
-
-        <!--<gridbagconstraints gridx="0" gridy="2" gridwidth="1" gridheight="1" weightx="0" weighty="1"-->
-                            <!--anchor="GridBagConstraints.LAST_LINE_START" fill="GridBagConstraints.BOTH"-->
-                            <!--insets="0,0,0,0" ipadx="0" ipady="0"/>-->
-
-
-        <!--<imagebutton initclass="java.lang.String(icons/plus.png)" text="s">-->
-            <!--<gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="4" weightx="0" weighty="0"-->
-                                <!--anchor="GridBagConstraints.LAST_LINE_START" fill="GridBagConstraints.NONE"-->
-                                <!--insets="0,0,0,0" ipadx="0" ipady="0"/>-->
-        <!--</imagebutton>-->
-
-        <!--<imagebutton initclass="java.lang.String(icons/drzwiczki_klamka_prawo.png)">-->
-            <!--<gridbagconstraints gridx="0" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="4" weightx="0" weighty="0"-->
-                                <!--anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"-->
-                                <!--insets="0,0,0,0" ipadx="150" ipady="75"/>-->
-        <!--</imagebutton>-->
-
-
-        <!--<imagebutton initclass="java.lang.String(icons/plus.png)" text="s">-->
-            <!--<gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="4" weightx="0" weighty="0"-->
-                                <!--anchor="GridBagConstraints.LAST_LINE_START" fill="GridBagConstraints.NONE"-->
-                                <!--insets="0,0,0,0" ipadx="0" ipady="0"/>-->
-        <!--</imagebutton>-->
-        <!--<imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)" >-->
-            <!--<gridbagconstraints gridx="1" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"-->
-                                <!--anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"-->
-                                <!--insets="0,0,0,0" ipadx="150" ipady="75"/>-->
-        <!--</imagebutton>-->
-
-        <!--<imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)">-->
-            <!--<gridbagconstraints gridy="GridBagConstraints.RELATIVE" gridx="1"-->
-                                <!--anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"-->
-                                <!--ipadx="0" ipady="75"/>-->
-        <!--</imagebutton>-->
-
-        <!--<imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)">-->
-            <!--<gridbagconstraints gridx="1" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"-->
-                                <!--anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"-->
-                                <!--insets="0,0,0,0" ipadx="0" ipady="90"/>-->
-        <!--</imagebutton>-->
-
-        <!--<imagebutton text="półka" initclass="java.lang.String(icons/szuflada_front.png)" >-->
-            <!--<gridbagconstraints gridx="1" gridy="GridBagConstraints.RELATIVE" gridwidth="1" gridheight="1" weightx="0" weighty="0"-->
-                                <!--anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"-->
-                                <!--insets="0,0,0,0" ipadx="0" ipady="75"/>-->
-        <!--</imagebutton>-->
-
-
-    <!--</panel>-->
-
-
+    <panel background="white">
+        <gridbagconstraints gridx="0" gridy="4" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                            anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                            insets="0,0,0,0" ipadx="0" ipady="0"/>
+        <label text="Cokół: "/>
+        <combobox preferredsize="100,25" id="pedestalCB" initclass="model.ComboPedestalModel" enabled="false"/>
+    </panel>
 </panel>

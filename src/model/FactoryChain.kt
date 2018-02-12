@@ -28,13 +28,13 @@ class UpperModulesFactory(private val presenter: DynProContract.Presenter): Furn
         res.width = furniture.width
         res.frontUnitPrice = furniture.frontUnitPrice
         res.elementUnitPrice = furniture.elementUnitPrice
+        res.frontConfiguration = UpperModuleFrontConfiguration(presenter, furniture.frontConfiguration)
         return res
     }
 
     override fun typeCorrect(type: String): Boolean = type == Config.UPPER_MODULE
 
     override fun createFurnitureChild(name: String): Furniture = UpperModule(name, presenter)
-
 
 }
 
@@ -47,6 +47,7 @@ class BottomModulesFactory(private val presenter: DynProContract.Presenter): Fur
         res.width = furniture.width
         res.frontUnitPrice = furniture.frontUnitPrice
         res.elementUnitPrice = furniture.elementUnitPrice
+        res.frontConfiguration = BottomModuleFrontConfiguration(presenter, furniture.frontConfiguration)
         return res
     }
 
