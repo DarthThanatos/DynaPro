@@ -40,6 +40,12 @@ public interface DynProContract {
         void onFurnitureHeightChanged(int newValue);
         void onFurnitureWidthChanged(int newValue);
         void onFurnitureDepthChanged(int newValue);
+
+        void onAddElementToFrontConfiguration(String furnitureName, int columnIndex);
+        void onFrontConfigurationElementAdded(String furnitureName, int columnIndex, int newElementIndex);
+        void onRemoveElementFromConfiguration(String furnitureName, int columnIndex, int elementIndex);
+        void onFrontConfigurationElementRemoved(String furnitureName, int columnIndex);
+
     }
 
     public interface Model{

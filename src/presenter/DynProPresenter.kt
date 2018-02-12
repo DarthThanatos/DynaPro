@@ -10,6 +10,7 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     private val dynProModel: DynProContract.Model = DynProModel(this)
     private val projectTreePresenter: DynProTreePresenter? = DynProTreePresenter(dynProModel, dynProView)
     private val metadataPresenter: MetadataPresenter? = DynProMetadataPresenter(dynProModel, dynProView)
+    private val furnitureSpecificsPresenter: FurnitureSpecificsPresenter? = DynaProFurnitureSpecificsPresenter(dynProModel, dynProView)
 
     override fun attachView() {
         metadataPresenter?.attachView()
@@ -94,5 +95,22 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     }
 
     override fun onFurnitureDepthChanged(newValue: Int) {
+    }
+
+
+    override fun onAddElementToFrontConfiguration(furnitureName: String?, columnIndex: Int) {
+        furnitureSpecificsPresenter?.onAddElementToFrontConfiguration(furnitureName, columnIndex)
+    }
+
+    override fun onFrontConfigurationElementAdded(furnitureName: String?, columnIndex: Int, newElementIndex: Int) {
+        furnitureSpecificsPresenter?.onFrontConfigurationElementAdded(furnitureName, newElementIndex)
+    }
+
+    override fun onRemoveElementFromConfiguration(furnitureName: String?, columnIndex: Int, elementIndex: Int) {
+        furnitureSpecificsPresenter?.onRemoveElementFromConfiguration(furnitureName, columnIndex, elementIndex)
+    }
+
+    override fun onFrontConfigurationElementRemoved(furnitureName: String?, columnIndex: Int) {
+        furnitureSpecificsPresenter?.onFrontConfigurationElementRemoved(furnitureName, columnIndex)
     }
 }
