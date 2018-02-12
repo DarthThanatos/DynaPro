@@ -8,27 +8,27 @@ import javax.swing.tree.TreeModel;
 
 public interface DynProContract {
 
-    public interface View {
-        public void displayProjectPopup();
-        public void displayFurniturePopup();
-        public void setupProjectTreeModel(TreeModel treeModel);
-        public String promptForUserInput(String message);
-        public String promptForUserInput(String message, String initialValue);
-        void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice);
+     interface View {
+         void displayProjectPopup();
+         void displayFurniturePopup();
+         void setupProjectTreeModel(TreeModel treeModel);
+         String promptForUserInput(String message);
+         String promptForUserInput(String message, String initialValue);
+         void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage);
 
     }
 
-    public interface Presenter{
-        public void attachView();
-        public void onProjectTreePopupSelection(String name);
-        public void onCreateNewProject();
-        public void onAddNewFurniture();
-        public void onRenameProject();
-        public void onRenameProjectTreeFurniture(String furnitureName);
+     interface Presenter{
+        abstract void attachView();
+
+        void onProjectTreePopupSelection(String name);
+        void onCreateNewProject();
+        void onAddNewFurniture();
+        void onRenameProject();
+        void onRenameProjectTreeFurniture(String furnitureName);
         void onRenameMetadataFurniture();
-        public void onRemoveFurniture(String furnitureName);
+        void onRemoveFurniture(String furnitureName);
         void onMetadataSetSelected(String furnitureName);
-        void onDisplayFurnitureMetadata(Furniture furniture);
         void onNewProjectCreated();
         void onProjectRenamed();
         void onFurnitureAdded(String addedFurnitureName);
@@ -48,17 +48,15 @@ public interface DynProContract {
 
     }
 
-    public interface Model{
-        public Project getCurrentProject();
-        public Furniture getFurnitureByName(String name);
-        public Project createNewProject();
-        public Boolean isProject(String name);
-        public void renameProject(String name);
-        public Boolean addDefaultFurniture();
-        public Boolean addFurniture(String name, String type);
-        public Boolean addFurniture(String type);
-        public Boolean renameFurniture(String oldName, String newName);
-        public void removeFurniture(String name);
+     interface Model{
+        Project getCurrentProject();
+        Furniture getFurnitureByName(String name);
+        Project createNewProject();
+        Boolean isProject(String name);
+        void renameProject(String name);
+        Boolean addDefaultFurniture();
+        Boolean renameFurniture(String oldName, String newName);
+        void removeFurniture(String name);
         Furniture getDefaultFurniture();
         Furniture getFurnitureWithChangedType(String name, String newType);
     }

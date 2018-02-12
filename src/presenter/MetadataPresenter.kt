@@ -10,7 +10,6 @@ interface MetadataPresenter{
     fun getCurrentDisplayedFurnitureName(): String
     fun onMetadataSetSelected(furnitureName: String)
     fun attachView()
-    fun onDisplayFurnitureMetadata(furniture: Furniture)
     fun onFurnitureNameChanged(name: String)
     fun onNewProjectCreated()
     fun onFurnitureAdded(addedFurnitureName: String)
@@ -20,6 +19,7 @@ interface MetadataPresenter{
 class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, private var dynProView: DynProContract.View) : MetadataPresenter{
 
     private var currentlyDisplayed: Furniture? = null
+    private val typeToImgPath : Map<String, String> = mapOf(Pair(Config.UPPER_MODULE,"icons/szafa_2d.jpg"), Pair(Config.BOTTOM_MODULE, "icons/module.png"))
 
     override fun getCurrentDisplayedFurnitureName(): String = currentlyDisplayed?.name!!
 
@@ -42,7 +42,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
         furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{ override fun onChange(value: Any) {onMetadataSetSelected(dynProModel.getFurnitureWithChangedType(furniture.name, value as String).name)} })
     }
 
-    override fun onDisplayFurnitureMetadata(furniture: Furniture) {
+    private fun onDisplayFurnitureMetadata(furniture: Furniture) {
         dynProView.displayMetadata(
                 furniture.type,
                 furniture.name,
@@ -50,7 +50,8 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
                 furniture.width,
                 furniture.depth,
                 furniture.frontUnitPrice,
-                furniture.elementUnitPrice
+                furniture.elementUnitPrice,
+                typeToImgPath[furniture.type]
         )
     }
 

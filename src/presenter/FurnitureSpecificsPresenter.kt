@@ -7,10 +7,15 @@ interface FurnitureSpecificsPresenter{
     fun onFrontConfigurationElementAdded(furnitureName: String?, newElementIndex: Int)
     fun onRemoveElementFromConfiguration(furnitureName: String?, columnIndex: Int, elementIndex: Int)
     fun onFrontConfigurationElementRemoved(furnitureName: String?, columnIndex: Int)
+    fun attachView()
 
 }
 
 class DynaProFurnitureSpecificsPresenter(private val model: DynProContract.Model, private val view: DynProContract.View): FurnitureSpecificsPresenter{
+
+    override fun attachView() {
+
+    }
 
     override fun onFrontConfigurationElementAdded(furnitureName: String?, newElementIndex: Int) {
 

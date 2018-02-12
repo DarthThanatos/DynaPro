@@ -1,8 +1,8 @@
 package main;
 
 import actions.*;
-import config.Config;
 import contract.DynProContract;
+import display.ImagePanel;
 import display.MetadataDisplayer;
 import display.ProjectTree;
 import presenter.DynProPresenter;
@@ -19,6 +19,7 @@ public class DynProMain implements DynProContract.View {
     static ProjectTree projectTree;
     static JPopupMenu projectPopup, furniturePopup;
 
+    static ImagePanel furnitureAvatar;
     static JComboBox furnitureTypeDisplay;
     static JTextField furnitureNameDisplay;
     static JSpinner furnitureHeightDisplay, furnitureWidthDisplay, furnitureDepthDisplay, furnitureFrontPriceDisplay, furnitureModuleUnitPriceDisplay;
@@ -68,8 +69,8 @@ public class DynProMain implements DynProContract.View {
     }
 
     @Override
-    public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice) {
-        metadataDisplayer.displayMetadata(type, name, height, width, depth, fronPrice, moduleUnitPrice);
+    public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage) {
+        metadataDisplayer.displayMetadata(type, name, height, width, depth, fronPrice, moduleUnitPrice, pathToImage);
 
     }
 

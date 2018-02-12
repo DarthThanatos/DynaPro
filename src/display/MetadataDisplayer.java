@@ -4,11 +4,12 @@ import javax.swing.*;
 
 public class MetadataDisplayer {
 
+    private ImagePanel furnitureAvatar;
     private JComboBox typeDisplay;
     private JTextField nameDisplay;
     private JSpinner heightDisplay, widthDisplay, depthDisplay, frontPriceDisplay, moduleUnitPriceDisplay;
 
-    public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice){
+    public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage){
         typeDisplay.setSelectedItem(type);
         nameDisplay.setText(name);
         heightDisplay.setValue(height);
@@ -16,6 +17,7 @@ public class MetadataDisplayer {
         depthDisplay.setValue(depth);
         frontPriceDisplay.setValue(fronPrice);
         moduleUnitPriceDisplay.setValue(moduleUnitPrice);
+        furnitureAvatar.setImage(pathToImage);
     }
 
     public void setHeightDisplay(JSpinner heightDisplay) {
@@ -44,5 +46,9 @@ public class MetadataDisplayer {
 
     public void setTypeDisplay(JComboBox typeDisplay) {
         this.typeDisplay = typeDisplay;
+    }
+
+    public void setFurnitureAvatar(ImagePanel furnitureAvatar) {
+        this.furnitureAvatar = furnitureAvatar;
     }
 }

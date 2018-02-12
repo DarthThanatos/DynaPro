@@ -6,7 +6,6 @@ import kotlin.properties.Delegates
 class DynProModel(private val presenter: DynProContract.Presenter) : DynProContract.Model{
     override fun getFurnitureWithChangedType(name: String, newType: String): Furniture = project.getFurnitureWithChangedType(name, newType)
 
-    override fun addFurniture(type: String): Boolean = project.addChildFurniture(type)
 
     private var project: DynProject by Delegates.observable(DynProject(presenter) ){property, oldValue, newValue -> presenter.onNewProjectCreated() }
 
@@ -21,7 +20,6 @@ class DynProModel(private val presenter: DynProContract.Presenter) : DynProContr
 
     override fun renameProject(name: String) { project.rename(name)  }
 
-    override fun addFurniture(name: String, type: String) = project.addChildFurniture(name, type)
 
     override fun renameFurniture(oldName: String, newName: String) = project.renameChildFurniture(oldName, newName)
 

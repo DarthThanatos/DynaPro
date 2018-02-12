@@ -37,6 +37,7 @@ class DynProSwingEngine extends SwingEngine {
         DynProMain.metadataDisplayer.setWidthDisplay(DynProMain.furnitureWidthDisplay);
         DynProMain.metadataDisplayer.setNameDisplay(DynProMain.furnitureNameDisplay);
         DynProMain.metadataDisplayer.setTypeDisplay(DynProMain.furnitureTypeDisplay);
+        DynProMain.metadataDisplayer.setFurnitureAvatar(DynProMain.furnitureAvatar);
     }
 
     private void setupProjectTree(){

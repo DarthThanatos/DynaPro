@@ -3,7 +3,6 @@ package presenter
 import config.Config
 import contract.DynProContract
 import model.DynProModel
-import model.Furniture
 
 class DynProPresenter(private var dynProView: DynProContract.View): DynProContract.Presenter {
 
@@ -15,6 +14,7 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     override fun attachView() {
         metadataPresenter?.attachView()
         projectTreePresenter?.attachView()
+        furnitureSpecificsPresenter?.attachView()
     }
 
     override fun onCreateNewProject() {
@@ -68,10 +68,6 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
         projectTreePresenter?.onFurnitureNameChanged()
     }
 
-
-    override fun onDisplayFurnitureMetadata(furniture: Furniture) {
-        metadataPresenter?.onDisplayFurnitureMetadata(furniture)
-    }
 
     override fun onMetadataSetSelected(furnitureName: String) {
         metadataPresenter?.onMetadataSetSelected(furnitureName)

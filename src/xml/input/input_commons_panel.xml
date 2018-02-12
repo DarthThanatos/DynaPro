@@ -16,7 +16,7 @@
         <combobox preferredsize="100,25" id="furnitureTypeDisplay" initclass="model.ComboTypeModel" />
     </panel>
 
-    <imagepanel initclass="java.lang.String(icons/module.png)" background="white" preferredsize="500,350" border="EtchedBorder">
+    <imagepanel initclass="java.lang.String(icons/module.png)" background="white" preferredsize="500,350"  id="furnitureAvatar">
 
         <gridbagconstraints gridx="3" gridy="1" gridwidth="1" gridheight="7" weightx="0" weighty="0"
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
