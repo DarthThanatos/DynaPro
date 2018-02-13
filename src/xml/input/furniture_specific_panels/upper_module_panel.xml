@@ -4,7 +4,7 @@
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Plecy: "/>
-        <combobox preferredsize="100,25" id="backBottomModuleCBr" initclass="model.ComboBackTypeModel"/>
+        <combobox preferredsize="100,25" id="furnitureBackOptions" initclass="model.ComboBackTypeModel"/>
     </panel>
 
 
@@ -13,7 +13,7 @@
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Dach: "/>
-        <combobox preferredsize="100,25" initclass="model.ComboRoofTypeModel"/>
+        <combobox preferredsize="100,25" initclass="model.ComboRoofTypeModel" id="furnitureRoofOptions"/>
     </panel>
 
     <combobox initclass="model.ComboFrontConfigurationModel" preferredsize="150,25" id="frontConfigurationOrientation">

@@ -16,7 +16,7 @@ public interface DynProContract {
          String promptForUserInput(String message);
          String promptForUserInput(String message, String initialValue);
          void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage);
-         void displaySpecificsPanel(String specificsPanelId);
+         void displaySpecifics(String pedestalOptionText, String backOptionText, String roofOptionText);
          void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String configOrientationText);
 
     }

@@ -24,7 +24,7 @@ public class DynProMain implements DynProContract.View {
     static JPopupMenu projectPopup, furniturePopup;
 
     static ImagePanel furnitureAvatar;
-    @SuppressWarnings("WeakerAccess") static JComboBox furnitureTypeDisplay, frontConfigurationOrientation, pedestalCB;
+    @SuppressWarnings("WeakerAccess") static JComboBox furnitureTypeDisplay, frontConfigurationOrientation, pedestalCB, furnitureBackOptions, furnitureRoofOptions;
     static JTextField furnitureNameDisplay;
     static JSpinner furnitureHeightDisplay, furnitureWidthDisplay, furnitureDepthDisplay, furnitureFrontPriceDisplay, furnitureModuleUnitPriceDisplay;
     static MetadataDisplayer metadataDisplayer = new MetadataDisplayer();
@@ -80,9 +80,12 @@ public class DynProMain implements DynProContract.View {
     }
 
     @Override
-    public void displaySpecificsPanel(String specificsPanelId) {
-        pedestalCB.setSelectedItem(specificsPanelId.equals(Config.UPPER_MODULE) ? Config.NO_PEDESTAL : Config.PEDESTAL_EXISTS);
+    public void displaySpecifics(String pedestalOptionText, String backOptionText, String roofOptionText) {
+        pedestalCB.setSelectedItem(pedestalOptionText);
+        furnitureBackOptions.setSelectedItem(backOptionText);
+        furnitureRoofOptions.setSelectedItem(roofOptionText);
     }
+
 
     @Override
     public void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String orientationText) {

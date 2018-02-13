@@ -14,11 +14,17 @@ interface Furniture{
     var frontUnitPrice: Int
     var elementUnitPrice: Int
     val frontConfiguration: FrontConfiguration
+    var roofInserted : Boolean
+    var backInserted: Boolean
     fun getElements(): List<Element>
 }
 
 
 class UpperModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture {
+
+    override var roofInserted: Boolean = false
+
+    override var backInserted: Boolean = false
 
     override var frontConfiguration: FrontConfiguration = UpperModuleFrontConfiguration(presenter)
 
@@ -44,6 +50,10 @@ class UpperModule(initialName: String, private val presenter: DynProContract.Pre
 }
 
 class BottomModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture{
+
+    override var roofInserted: Boolean = true
+
+    override var backInserted: Boolean = true
 
     override var frontConfiguration: FrontConfiguration = BottomModuleFrontConfiguration(presenter)
 

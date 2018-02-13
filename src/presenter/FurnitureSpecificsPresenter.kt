@@ -4,6 +4,8 @@ import config.Config
 import contract.DynProContract
 import main.Binder
 import main.frontConfigurationOrientationBinder
+import main.furnitureBackOptionsBinder
+import main.furnitureRoofOptionsBinder
 import model.Furniture
 import model.FrontConfigurationVM
 
@@ -35,52 +37,69 @@ class DynaProFurnitureSpecificsPresenter(private val dynaProModel: DynProContrac
         onNewProjectCreated()
     }
 
-    private fun registerSubscriber(furniture: Furniture){
-        val frontConfiguration = fetchFrontConfigurationFromFurniture(furniture)
+    private fun registerSubscribers(furniture: Furniture){
         frontConfigurationOrientationBinder.registerSubscriber(Config.CURRENT_FURNITURE , object:Binder.OnChange{
             override fun onChange(value: Any) {
-                frontConfiguration.columnOriented = value == Config.COLUMN_ORIENTED
+                fetchFrontConfigurationFromFurniture(furniture).columnOriented = value == Config.COLUMN_ORIENTED
+            }
+        })
+        furnitureRoofOptionsBinder.registerSubscriber(Config.CURRENT_FURNITURE, object:Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.roofInserted = value == Config.ROOF_INSERTED
+            }
+        })
+        furnitureBackOptionsBinder.registerSubscriber(Config.CURRENT_FURNITURE, object:Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.backInserted = value == Config.BACK_INSERTED
             }
         })
     }
 
-    private fun displayFrontInfo(furniture: Furniture){
+    private fun onDisplayModelInformation(furniture: Furniture){
         val frontConfiguration = fetchFrontConfigurationFromFurniture(furniture)
         view.displayFrontConfiguration(
                 FrontConfigurationVM(frontConfiguration.getConfiguration(), typeToImgMapper),
                 if(frontConfiguration.columnOriented) Config.COLUMN_ORIENTED else Config.ROW_ORIENTED
         )
-        view.displaySpecificsPanel(furniture.type)
+        view.displaySpecifics(
+                if(furniture.type == Config.UPPER_MODULE) Config.NO_PEDESTAL else Config.PEDESTAL_EXISTS,
+                if(furniture.backInserted) Config.BACK_INSERTED else Config.BACK_HPV,
+                if(furniture.roofInserted) Config.ROOF_INSERTED else Config.ROOF_NOT_INSERTED
+        )
     }
 
-    override fun onFurnitureSelected(furnitureName: String) {
+    private fun onRefreshView(furnitureName: String){
         if(dynaProModel.isProject(furnitureName)) return
         currentlyDisplayed = dynaProModel.getFurnitureByName(furnitureName)
         if(currentlyDisplayed==null) return
-        registerSubscriber(currentlyDisplayed!!)
-        displayFrontInfo(currentlyDisplayed!!)
+        registerSubscribers(currentlyDisplayed!!)
+        onDisplayModelInformation(currentlyDisplayed!!)
+    }
+
+    override fun onFurnitureSelected(furnitureName: String) {
+        onRefreshView(furnitureName)
     }
 
     override fun onNewProjectCreated() {
-        onFurnitureSelected( dynaProModel.defaultFurniture.name) //default furniture is the first and the only one in dynaProModel
+        onRefreshView( dynaProModel.defaultFurniture.name) //default furniture is the first and the only one in dynaProModel
     }
 
     override fun onFurnitureNameChanged(name: String) {
-        onFurnitureSelected(name) //set focus on newly created furniture
+        onRefreshView(name) //set focus on newly created furniture
     }
 
     override fun onFurnitureAdded(addedFurnitureName: String) {
-        onFurnitureSelected(addedFurnitureName)
+        onRefreshView(addedFurnitureName)
     }
 
     override fun onFurnitureRemoved(removedFurnitureName: String?) {
         if(currentlyDisplayed?.name == removedFurnitureName){
-            onFurnitureSelected(dynaProModel.defaultFurniture.name)
+            onRefreshView(dynaProModel.defaultFurniture.name)
         }
     }
 
     override fun onFurnitureTypeChanged(furnitureName: String) {
-        onFurnitureSelected(furnitureName)
+        onRefreshView(furnitureName)
     }
 
     override fun onFrontConfigurationElementAdded(furnitureName: String?, newElementIndex: Int) {

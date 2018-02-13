@@ -4,7 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class Config {
     public final static String UPPER_MODULE = "Upper Module";
+    public final static String UPPER_MODULE_PL = "Korpus Górny";
+
     public final static String BOTTOM_MODULE = "Bottom Module";
+    public final static String BOTTOM_MODULE_PL = "Korpus Dolny";
 
     public final static String NEW_PROJECT_PL = "Nowy Projekt";
     public final static String NEW_UPPER_MODULE_PL = "Nowy górny korpus";
@@ -27,11 +30,12 @@ public class Config {
     public static final String ROW_ORIENTED = "Zorientowany wierszami";
     public static final String COLUMN_ORIENTED = "Zorientowany kolumnami";
 
-    public static final String INSERTED = "Wkładane";
-    public static final String HPV = "Przybijane";
+    public static final String BACK_INSERTED = "Wkładane";
+    public static final String BACK_HPV = "Przybijane";
 
     public static final String ROOF_NOT_INSERTED = "Nakładany";
     public static final String ROOF_INSERTED = "Wkładany";
+
     public static final String PEDESTAL_EXISTS = "Jest";
     public static final String NO_PEDESTAL = "Brak";
 }

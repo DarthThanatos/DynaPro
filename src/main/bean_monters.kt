@@ -61,3 +61,5 @@ val furnitureModuleUnitPriceSpinnerBinder = JSpinnerBinder(DynProMain.furnitureM
 val furnitureFrontPriceSpinnerBinder = JSpinnerBinder(DynProMain.furnitureFrontPriceDisplay)
 val furnitureTypeComboBinder = JComboboxBinder(DynProMain.furnitureTypeDisplay)
 val frontConfigurationOrientationBinder = JComboboxBinder(DynProMain.frontConfigurationOrientation)
+val furnitureRoofOptionsBinder = JComboboxBinder(DynProMain.furnitureRoofOptions)
+val furnitureBackOptionsBinder = JComboboxBinder(DynProMain.furnitureBackOptions)

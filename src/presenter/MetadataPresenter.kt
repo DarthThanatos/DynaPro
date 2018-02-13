@@ -20,16 +20,20 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
     private var currentlyDisplayed: Furniture? = null
     private val typeToImgPath : Map<String, String> = mapOf(Pair(Config.UPPER_MODULE,"icons/szafa_2d.jpg"), Pair(Config.BOTTOM_MODULE, "icons/module.png"))
+    private val typeEngToPolMap: Map<String, String> = mapOf(Pair(Config.UPPER_MODULE, Config.UPPER_MODULE_PL), Pair(Config.BOTTOM_MODULE, Config.BOTTOM_MODULE_PL))
 
     override fun getCurrentDisplayedFurnitureName(): String = currentlyDisplayed?.name!!
 
-    override fun onFurnitureSelected(furnitureName: String) {
+    private fun onRefreshView(furnitureName: String){
         if(dynProModel.isProject(furnitureName)) return
         currentlyDisplayed = dynProModel.getFurnitureByName(furnitureName)
         if(currentlyDisplayed == null) return
         registerSubscribers(currentlyDisplayed!!)
         onDisplayFurnitureMetadata(currentlyDisplayed!!)
+    }
 
+    override fun onFurnitureSelected(furnitureName: String) {
+        onRefreshView(furnitureName)
     }
 
     private fun registerSubscribers(furniture: Furniture){
@@ -66,7 +70,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
             override fun onChange(value: Any) {
                 if(furniture.type != value) {
                     val furnitureWithChangedType = dynProModel.getFurnitureWithChangedType(furniture.name, value as String)
-                    onFurnitureSelected(furnitureWithChangedType.name)
+                    onRefreshView(furnitureWithChangedType.name)
                     furnitureWithChangedType.type = value   // must be here to activate the observer
                 }
             }
@@ -91,23 +95,23 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
     }
 
     override fun onNewProjectCreated() {
-        onFurnitureSelected( dynProModel.defaultFurniture.name) //default furniture is the first and the only one in model
+        onRefreshView( dynProModel.defaultFurniture.name) //default furniture is the first and the only one in model
     }
 
 
     override fun onFurnitureAdded(addedFurnitureName: String) {
-        onFurnitureSelected(addedFurnitureName)
+        onRefreshView(addedFurnitureName)
     }
 
     override fun onFurnitureRemoved(removedFurnitureName: String?) {
         if(currentlyDisplayed?.name == removedFurnitureName){
-            onFurnitureSelected(dynProModel.defaultFurniture.name)
+            onRefreshView(dynProModel.defaultFurniture.name)
         }
     }
 
 
     override fun onFurnitureNameChanged(name: String) {
-        onFurnitureSelected(name) //set focus on newly created furniture
+        onRefreshView(name) //set focus on newly created furniture
     }
 
 }

@@ -45,7 +45,6 @@ public class ProjectTree extends JTree {
 
     private Point getPopupPosition(){
         Rectangle nodeBounds = getPathBounds(getSelectionPath());
-        System.out.println(nodeBounds);
         assert nodeBounds != null;
         return new Point(nodeBounds.x + nodeBounds.width ,nodeBounds.y+nodeBounds.height);
     }

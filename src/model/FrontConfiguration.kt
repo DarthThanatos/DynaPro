@@ -9,9 +9,7 @@ interface FrontConfiguration{
     fun getConfiguration(): List<ArrangementColumn>
 }
 
-interface ArrangementColumn : MutableList<Element>{
-
-}
+interface ArrangementColumn : MutableList<Element>
 
 class Column(vararg elements: Element):ArrangementColumn, MutableList<Element> by ArrayList<Element>(){
     init{

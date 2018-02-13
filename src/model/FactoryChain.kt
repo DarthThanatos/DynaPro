@@ -28,6 +28,8 @@ class UpperModulesFactory(private val presenter: DynProContract.Presenter): Furn
         res.width = furniture.width
         res.frontUnitPrice = furniture.frontUnitPrice
         res.elementUnitPrice = furniture.elementUnitPrice
+        res.backInserted = furniture.backInserted
+        res.roofInserted = furniture.roofInserted
         res.frontConfiguration = UpperModuleFrontConfiguration(presenter, furniture.frontConfiguration)
         return res
     }
@@ -47,6 +49,8 @@ class BottomModulesFactory(private val presenter: DynProContract.Presenter): Fur
         res.width = furniture.width
         res.frontUnitPrice = furniture.frontUnitPrice
         res.elementUnitPrice = furniture.elementUnitPrice
+        res.backInserted = furniture.backInserted
+        res.roofInserted = furniture.roofInserted
         res.frontConfiguration = BottomModuleFrontConfiguration(presenter, furniture.frontConfiguration)
         return res
     }
