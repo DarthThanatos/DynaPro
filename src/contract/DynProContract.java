@@ -38,7 +38,6 @@ public interface DynProContract {
         void onFurnitureRemoved(String removedFurnitureName);
         void onFurnitureRenamed(String oldValue, @NotNull String newValue);
 
-
         void onAddElementToFrontConfiguration(String furnitureName, int columnIndex);
         void onFrontConfigurationElementAdded(String furnitureName, int columnIndex, int newElementIndex);
         void onRemoveElementFromConfiguration(String furnitureName, int columnIndex, int elementIndex);

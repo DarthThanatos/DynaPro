@@ -28,7 +28,7 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
     }
 
     override fun onRenameProject() {
-        dynProModel.renameProject(dynProView.promptForUserInput(Config.GIVE_NEW_PROJECT_NAME_MSG))
+        dynProModel.renameProject(dynProView.promptForUserInput(Config.GIVE_NEW_PROJECT_NAME_MSG, dynProModel.currentProject.getName()))
     }
 
     override fun onProjectRenamed() {

@@ -68,10 +68,11 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
         })
         furnitureTypeComboBinder.registerSubscriber(Config.CURRENT_FURNITURE, object: Binder.OnChange{
             override fun onChange(value: Any) {
-                if(furniture.type != value) {
-                    val furnitureWithChangedType = dynProModel.getFurnitureWithChangedType(furniture.name, value as String)
+                val translatedVal = typeEngToPolMap.filter{entry -> entry.value == value }.keys.single()
+                if(furniture.type != translatedVal) {
+                    val furnitureWithChangedType = dynProModel.getFurnitureWithChangedType(furniture.name, translatedVal)
                     onRefreshView(furnitureWithChangedType.name)
-                    furnitureWithChangedType.type = value   // must be here to activate the observer
+                    furnitureWithChangedType.type = translatedVal   // must be here to activate the observer
                 }
             }
         })
@@ -79,7 +80,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
     private fun onDisplayFurnitureMetadata(furniture: Furniture) {
         dynProView.displayMetadata(
-                furniture.type,
+                typeEngToPolMap[furniture.type],
                 furniture.name,
                 furniture.height,
                 furniture.width,
