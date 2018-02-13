@@ -1,5 +1,6 @@
 package actions
 
+import display.FrontConfigurationDisplayer
 import display.ProjectTree
 import main.DynProMain
 import java.awt.event.ActionEvent
@@ -56,10 +57,25 @@ class RenameMetadataFurnitureAction(private val dynProMain: DynProMain) : Abstra
 
 }
 
-
 class RenameProjectAction(private val dynProMain: DynProMain) : AbstractAction() {
 
     override fun actionPerformed(e: ActionEvent) {
         dynProMain.presenter.onRenameProject()
     }
+}
+
+class RemoveFrontConfigElementAction(private val dynProMain: DynProMain): AbstractAction(){
+    private var frontConfigurationDisplayer: FrontConfigurationDisplayer? = null
+
+    override fun actionPerformed(e: ActionEvent?) {
+        dynProMain.presenter.onRemoveElementFromConfiguration(
+                frontConfigurationDisplayer?.currentlyDisplayedFurnitureName,
+                frontConfigurationDisplayer?.recentlyClickedFurnitureElementId
+        )
+    }
+
+    fun setFrontConfigurationDisplayer(frontConfigurationDisplayer: FrontConfigurationDisplayer){
+        this.frontConfigurationDisplayer = frontConfigurationDisplayer
+    }
+
 }

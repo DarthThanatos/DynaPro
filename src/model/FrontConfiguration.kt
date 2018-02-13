@@ -7,6 +7,7 @@ interface FrontConfiguration{
     var columnOriented : Boolean
     fun getDefaultConfiguration(): ArrayList<ArrangementColumn>
     fun getConfiguration(): List<ArrangementColumn>
+    fun removeElement(elementId: String)
 }
 
 interface ArrangementColumn : MutableList<Element>
@@ -37,11 +38,19 @@ abstract class DynProFrontConfiguration(protected val presenter: DynProContract.
 
     override fun getConfiguration(): List<ArrangementColumn> = ArrayList<ArrangementColumn>(columns)
 
+
+    protected fun fetchElementWithId(elementId: String) =
+            columns.flatMap { it }.filter { it.id == elementId }.single()
+
+    override fun removeElement(elementId: String) {
+        println(fetchElementWithId(elementId).name)
+    }
 }
 
 class UpperModuleFrontConfiguration(presenter: DynProContract.Presenter): DynProFrontConfiguration(presenter){
+
     override var columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
-    override fun getDefaultConfiguration(): ArrayList<ArrangementColumn> = arrayListOf(Column(Drawer()), Column(Drawer()))
+    override fun getDefaultConfiguration(): ArrayList<ArrangementColumn> = arrayListOf(Column(Door()), Column(Drawer()), Column(Shelf()))
 
     constructor(presenter: DynProContract.Presenter, frontConfiguration: FrontConfiguration) : this(presenter){
         columns = getDefaultConfiguration()

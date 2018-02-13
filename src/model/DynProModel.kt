@@ -4,8 +4,11 @@ import contract.DynProContract
 import kotlin.properties.Delegates
 
 class DynProModel(private val presenter: DynProContract.Presenter) : DynProContract.Model{
-    override fun getFurnitureWithChangedType(name: String, newType: String): Furniture = project.getFurnitureWithChangedType(name, newType)
+    override fun removeFrontElementFromFurniture(furnitureName: String, elementId: String) {
+        project.getFurnitureByName(furnitureName)?.frontConfiguration?.removeElement(elementId)
+    }
 
+    override fun getFurnitureWithChangedType(name: String, newType: String): Furniture = project.getFurnitureWithChangedType(name, newType)
 
     private var project: DynProject by Delegates.observable(DynProject(presenter) ){property, oldValue, newValue -> presenter.onNewProjectCreated() }
 

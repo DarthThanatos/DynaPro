@@ -28,6 +28,23 @@
         <gridbagconstraints gridx="0" gridy="3" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                             anchor="GridBagConstraints.LAST_LINE_START" fill="GridBagConstraints.BOTH"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
+
+        <popupmenu id="frontConfigRowOrientedPopup">
+            <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
+            <menuitem text="Dodaj jednoelementowy rząd pod spodem" Action=""/>
+            <menuitem text="Dodaj wieloelementowy rząd pod spodem" Action=""/>
+            <menuitem text="Dodaj jednoelementowy rząd ponad elementem" Action=""/>
+            <menuitem text="Dodaj wieloelementowy rząd ponad elementem" Action=""/>
+        </popupmenu>
+
+
+        <popupmenu id="frontConfigColumnOrientedPopup">
+            <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
+            <menuitem text="Dodaj jednoelementową kolumnę po lewej" Action=""/>
+            <menuitem text="Dodaj wieloelementową kolumnę po lewej" Action=""/>
+            <menuitem text="Dodaj jednoelementową kolumnę po prawej" Action=""/>
+            <menuitem text="Dodaj wieloelementową kolumnę po prawej" Action=""/>
+        </popupmenu>
     </frontconfigurationdisplayer>
 
     <panel background="white">

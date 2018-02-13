@@ -21,7 +21,7 @@ public class DynProMain implements DynProContract.View {
     private static DynProContract.Presenter presenter = new DynProPresenter(dynProMain);
 
     static ProjectTree projectTree;
-    static JPopupMenu projectPopup, furniturePopup;
+    static JPopupMenu projectPopup, furniturePopup, frontConfigColumnOrientedPopup, frontConfigRowOrientedPopup;
 
     static ImagePanel furnitureAvatar;
     @SuppressWarnings("WeakerAccess") static JComboBox furnitureTypeDisplay, frontConfigurationOrientation, pedestalCB, furnitureBackOptions, furnitureRoofOptions;
@@ -36,6 +36,7 @@ public class DynProMain implements DynProContract.View {
     @SuppressWarnings("unused") public static RenameProjectAction renameProjectAction = new RenameProjectAction(dynProMain);
     @SuppressWarnings("unused")  public static RenameMetadataFurnitureAction renameMetadataFurnitureAction = new RenameMetadataFurnitureAction(dynProMain);
     @SuppressWarnings("unused") public static NewFurnitureAction newFurnitureAction = new NewFurnitureAction(dynProMain);
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static RemoveFrontConfigElementAction removeFrontConfigElementAction = new RemoveFrontConfigElementAction(dynProMain);
 
 
     public static void main(String args[]) throws Exception {
@@ -91,6 +92,16 @@ public class DynProMain implements DynProContract.View {
     public void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String orientationText) {
         frontConfigurationDisplayer.display(frontConfigurationVM, true);
         frontConfigurationOrientation.setSelectedItem(orientationText);
+    }
+
+    @Override
+    public void displayFrontConfigurationRowOrientedPopup(String elementId) {
+        frontConfigurationDisplayer.displayRowOrientedPopup(elementId);
+    }
+
+    @Override
+    public void displayFrontConfigurationColumnOrientedPopup(String elementId) {
+        frontConfigurationDisplayer.displayColumnOrientedPopup(elementId);
     }
 
 }

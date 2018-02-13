@@ -91,11 +91,18 @@ class DynProPresenter(private var dynProView: DynProContract.View): DynProContra
         furnitureSpecificsPresenter?.onFrontConfigurationElementAdded(furnitureName, newElementIndex)
     }
 
-    override fun onRemoveElementFromConfiguration(furnitureName: String?, columnIndex: Int, elementIndex: Int) {
-        furnitureSpecificsPresenter?.onRemoveElementFromConfiguration(furnitureName, columnIndex, elementIndex)
+    override fun onRemoveElementFromConfiguration(furnitureName: String?,  elementId: String) {
+        furnitureSpecificsPresenter?.onRemoveElementFromConfiguration(furnitureName, elementId)
     }
 
     override fun onFrontConfigurationElementRemoved(furnitureName: String?, columnIndex: Int) {
         furnitureSpecificsPresenter?.onFrontConfigurationElementRemoved(furnitureName, columnIndex)
+    }
+
+
+    override fun onChooseFurnitureConfigurationPopup(furnitureName: String?, elementId: String) {
+        if(dynProModel.getFurnitureByName(furnitureName).frontConfiguration.columnOriented)
+            dynProView.displayFrontConfigurationColumnOrientedPopup(elementId)
+        else dynProView.displayFrontConfigurationRowOrientedPopup(elementId)
     }
 }

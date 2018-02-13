@@ -21,14 +21,20 @@ class DynProSwingEngine extends SwingEngine {
     }
 
     void inject(){
-        setupProjectTree();
         injectProjectTree();
+        injectFrontConfigDisplayer();
         setupMetadataDisplayer();
+        setupFrontConfigDisplayer();
+        setupProjectTree();
     }
 
     private void injectProjectTree() {
         DynProMain.renameFurnitureAction.setProjectTree(DynProMain.projectTree);
         DynProMain.removeFurnitureAction.setProjectTree(DynProMain.projectTree);
+    }
+
+    private void injectFrontConfigDisplayer(){
+        DynProMain.removeFrontConfigElementAction.setFrontConfigurationDisplayer(DynProMain.frontConfigurationDisplayer);
     }
 
     private void setupMetadataDisplayer(){
@@ -46,6 +52,12 @@ class DynProSwingEngine extends SwingEngine {
         DynProMain.projectTree.attachDynProMain(dynProMain);
         DynProMain.projectTree.setProjectPopup(DynProMain.projectPopup);
         DynProMain.projectTree.setFurniturePopup(DynProMain.furniturePopup);
+    }
+
+    private void setupFrontConfigDisplayer(){
+        DynProMain.frontConfigurationDisplayer.setFrontConfigColumnOrientedPopup(DynProMain.frontConfigColumnOrientedPopup);
+        DynProMain.frontConfigurationDisplayer.setFrontConfigRowOrientedPopup(DynProMain.frontConfigRowOrientedPopup);
+        DynProMain.frontConfigurationDisplayer.setPresenter(dynProMain.getPresenter());
     }
 
 }

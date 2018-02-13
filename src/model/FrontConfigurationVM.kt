@@ -1,6 +1,6 @@
 package model
 
-class FrontConfigurationVM(frontConfiguration: List<ArrangementColumn>, private val imgPathMapper: Map<String, String>){
+class FrontConfigurationVM(val furnitureName: String, frontConfiguration: List<ArrangementColumn>, private val imgPathMapper: Map<String, String>){
 
     val columns: List<ConfigurationColumnVM> = fillColumns(frontConfiguration)
 

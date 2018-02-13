@@ -13,7 +13,7 @@ interface FurnitureSpecificsPresenter{
     fun attachView()
     fun onAddElementToFrontConfiguration(furnitureName: String?, columnIndex: Int)
     fun onFrontConfigurationElementAdded(furnitureName: String?, newElementIndex: Int)
-    fun onRemoveElementFromConfiguration(furnitureName: String?, columnIndex: Int, elementIndex: Int)
+    fun onRemoveElementFromConfiguration(furnitureName: String?, elementId: String)
     fun onFrontConfigurationElementRemoved(furnitureName: String?, columnIndex: Int)
     fun onFurnitureSelected(furnitureName: String)
 
@@ -58,7 +58,7 @@ class DynaProFurnitureSpecificsPresenter(private val dynaProModel: DynProContrac
     private fun onDisplayModelInformation(furniture: Furniture){
         val frontConfiguration = fetchFrontConfigurationFromFurniture(furniture)
         view.displayFrontConfiguration(
-                FrontConfigurationVM(frontConfiguration.getConfiguration(), typeToImgMapper),
+                FrontConfigurationVM(furniture.name, frontConfiguration.getConfiguration(), typeToImgMapper),
                 if(frontConfiguration.columnOriented) Config.COLUMN_ORIENTED else Config.ROW_ORIENTED
         )
         view.displaySpecifics(
@@ -106,8 +106,8 @@ class DynaProFurnitureSpecificsPresenter(private val dynaProModel: DynProContrac
 
     }
 
-    override fun onRemoveElementFromConfiguration(furnitureName: String?, columnIndex: Int, elementIndex: Int) {
-
+    override fun onRemoveElementFromConfiguration(furnitureName: String?, elementId:String) {
+        dynaProModel.removeFrontElementFromFurniture(furnitureName, elementId)
     }
 
     override fun onFrontConfigurationElementRemoved(furnitureName: String?, columnIndex: Int) {

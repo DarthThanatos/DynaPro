@@ -4,6 +4,7 @@ import model.FrontConfigurationVM;
 import model.Furniture;
 import model.Project;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.tree.TreeModel;
 
@@ -18,6 +19,9 @@ public interface DynProContract {
          void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage);
          void displaySpecifics(String pedestalOptionText, String backOptionText, String roofOptionText);
          void displayFrontConfiguration(FrontConfigurationVM frontConfigurationVM, String configOrientationText);
+
+         void displayFrontConfigurationRowOrientedPopup(String elementId);
+         void displayFrontConfigurationColumnOrientedPopup(String elementId);
 
     }
 
@@ -40,10 +44,11 @@ public interface DynProContract {
 
         void onAddElementToFrontConfiguration(String furnitureName, int columnIndex);
         void onFrontConfigurationElementAdded(String furnitureName, int columnIndex, int newElementIndex);
-        void onRemoveElementFromConfiguration(String furnitureName, int columnIndex, int elementIndex);
+        void onRemoveElementFromConfiguration(String furnitureName, String elementId);
         void onFrontConfigurationElementRemoved(String furnitureName, int columnIndex);
 
-         void onFurnitureTypeChanged(@NotNull String newValue);
+        void onFurnitureTypeChanged(@NotNull String newValue);
+        void onChooseFurnitureConfigurationPopup(String furnitureName, String elementId);
      }
 
      interface Model{
@@ -57,5 +62,7 @@ public interface DynProContract {
         void removeFurniture(String name);
         Furniture getDefaultFurniture();
         Furniture getFurnitureWithChangedType(String name, String newType);
-    }
+
+         void removeFrontElementFromFurniture(String furnitureName, String elementId);
+     }
 }

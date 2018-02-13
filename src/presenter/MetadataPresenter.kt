@@ -101,7 +101,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
 
     override fun onFurnitureAdded(addedFurnitureName: String) {
-        onRefreshView(addedFurnitureName)
+        onRefreshView(addedFurnitureName) //sets focus on the newly created furniture
     }
 
     override fun onFurnitureRemoved(removedFurnitureName: String?) {
@@ -112,7 +112,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
 
     override fun onFurnitureNameChanged(name: String) {
-        onRefreshView(name) //set focus on newly created furniture
+        onRefreshView(name) //sets focus on the renamed furniture
     }
 
 }
