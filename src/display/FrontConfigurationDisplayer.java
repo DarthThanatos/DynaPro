@@ -1,32 +1,26 @@
 package display;
 
-import contract.DynProContract;
 import model.ConfigurationColumnVM;
 import model.ConfigurationElementVM;
 import model.FrontConfigurationVM;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FrontConfigurationDisplayer extends JPanel implements MouseListener, ActionListener {
+public class FrontConfigurationDisplayer extends JPanel {
 
-    private DynProContract.Presenter presenter;
     private JPopupMenu frontConfigColumnOrientedPopup, frontConfigRowOrientedPopup;
-    private Map<String, JComponent> idToComponentBinding = new HashMap<>();
-    private Map<JComponent, String> componentToIdBinding = new HashMap<>();
+    private Map<String, FrontConfigViewElem> idToComponentBinding = new HashMap<>();
     private FrontConfigurationVM frontConfigurationVM;
 
-    private JComponent recentlyClickedComponent;
+    private FrontConfigViewElem recentlyClickedComponent;
 
-    public FrontConfigurationDisplayer(){
-        addMouseListener(this);
+    void onChildElemChanged(FrontConfigViewElem frontConfigViewElem){
+        recentlyClickedComponent = frontConfigViewElem;
     }
 
     public void display(FrontConfigurationVM frontConfigurationVM, boolean columnOriented) {
@@ -50,14 +44,16 @@ public class FrontConfigurationDisplayer extends JPanel implements MouseListener
         this.frontConfigurationVM = frontConfigurationVM;
         removeAll();
         idToComponentBinding = new HashMap<>();
-        componentToIdBinding = new HashMap<>();
     }
 
-    private ImageButton newFrontConfigElement(ConfigurationElementVM configurationElementVM){
-        ImageButton configElement = new ImageButton(configurationElementVM.getImagePath(), this);
-        configElement.addActionListener(this);
+    private FrontConfigViewElem newFrontConfigElement(ConfigurationElementVM configurationElementVM){
+        FrontConfigViewElem configElement = new FrontConfigViewElem(
+                configurationElementVM.getImagePath(),
+                configurationElementVM.getModelElementKey().toString(),
+                frontConfigurationVM.getFurnitureName()
+        );
         idToComponentBinding.put(configurationElementVM.getModelElementKey().toString(), configElement);
-        componentToIdBinding.put(configElement, configurationElementVM.getModelElementKey().toString());
+        configElement.setFrontConfigurationDisplayer(this);
         return configElement;
     }
 
@@ -79,11 +75,6 @@ public class FrontConfigurationDisplayer extends JPanel implements MouseListener
         return gridBagConstraints;
     }
 
-
-    public void setPresenter(DynProContract.Presenter presenter) {
-        this.presenter = presenter;
-    }
-
     public void displayColumnOrientedPopup(String elementId){
         displayPopup(frontConfigColumnOrientedPopup, elementId);
     }
@@ -94,45 +85,23 @@ public class FrontConfigurationDisplayer extends JPanel implements MouseListener
     }
 
     private void displayPopup(JPopupMenu popup, String elementId){
-        JComponent component = idToComponentBinding.get(elementId);
+        FrontConfigViewElem component = idToComponentBinding.get(elementId);
         Point center = getCenterOf(component);
         popup.show(
                 component, center.x,center.y
         );
     }
 
-    private Point getCenterOf(JComponent component){
+    private Point getCenterOf(FrontConfigViewElem component){
         return new Point(component.getWidth()/2, component.getHeight()/2);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        if(e.isPopupTrigger()){
-            recentlyClickedComponent = (JComponent) e.getSource();
-            presenter.onChooseFurnitureConfigurationPopup(
-                    frontConfigurationVM.getFurnitureName(),
-                    componentToIdBinding.get( e.getSource())
-            );
+    public void addMouseListener(MouseListener mouseListener){
+        for(FrontConfigViewElem component : idToComponentBinding.values()) {
+            component.addMouseListener(mouseListener);
         }
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 
     public void setFrontConfigColumnOrientedPopup(JPopupMenu frontConfigColumnOrientedPopup) {
@@ -143,13 +112,9 @@ public class FrontConfigurationDisplayer extends JPanel implements MouseListener
         this.frontConfigRowOrientedPopup = frontConfigRowOrientedPopup;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println("Action performed");
-    }
 
     public String getRecentlyClickedFurnitureElementId(){
-        return componentToIdBinding.get(recentlyClickedComponent);
+        return recentlyClickedComponent.getModelKey();
     }
 
     public String getCurrentlyDisplayedFurnitureName(){

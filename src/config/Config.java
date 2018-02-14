@@ -1,7 +1,5 @@
 package config;
 
-import org.jetbrains.annotations.NotNull;
-
 public class Config {
     public final static String UPPER_MODULE = "Upper Module";
     public final static String UPPER_MODULE_PL = "Korpus Górny";

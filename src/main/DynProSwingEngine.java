@@ -1,18 +1,19 @@
 package main;
 
-import display.FrontConfigurationDisplayer;
-import display.ImageButton;
-import display.ImagePanel;
-import display.ProjectTree;
+import actions.*;
+import contract.DynProContract;
+import display.*;
+import model.*;
 import org.swixml.SwingEngine;
+import presenter.*;
+
+import static main.DynProMain.*;
 
 class DynProSwingEngine extends SwingEngine {
 
-    private DynProMain dynProMain;
 
     DynProSwingEngine(Object client){
         super(client);
-        dynProMain = (DynProMain) client;
         getTaglib().registerTag("imagebutton", ImageButton.class);
         getTaglib().registerTag("imagepanel", ImagePanel.class);
         getTaglib().registerTag("projecttree", ProjectTree.class);
@@ -20,44 +21,102 @@ class DynProSwingEngine extends SwingEngine {
         DEBUG_MODE = true;
     }
 
-    void inject(){
+
+    void onAfterRender(){
+        setup();
+        inject();
+        initPresenter();
+    }
+
+    private void inject(){
         injectProjectTree();
         injectFrontConfigDisplayer();
+    }
+
+    private void setup(){
         setupMetadataDisplayer();
         setupFrontConfigDisplayer();
         setupProjectTree();
     }
 
+    private void initPresenter(){
+       Project project = new DynProject();
+       ProjectKeeper projectKeeper = new DynaProjectKeeper(project);
+       DynProContract.Model model = new DynProModel(project, projectKeeper);
+       FurnitureSpecificsPresenter furnitureSpecificsPresenter = new DynaProFurnitureSpecificsPresenter(model, dynProMain);
+       MetadataPresenter metadataPresenter = new DynProMetadataPresenter(model, dynProMain);
+       ProjectTreePresenter projectTreePresenter = new DynProTreePresenter(model, dynProMain);
+       presenter = new DynProPresenter(dynProMain, furnitureSpecificsPresenter, projectTreePresenter, metadataPresenter, model);
+       project.setPresenter(presenter);
+       projectKeeper.setPresenter(presenter);
+       projectTreePresenter.setParentPresenter(presenter);
+    }
+
+
+    void initActions(){
+        initProjectActions();
+        initFurnitureActions();
+        initFrontConfigActions();
+    }
+
+    private void initFurnitureActions(){
+        removeFurnitureAction = new RemoveFurnitureAction(dynProMain);
+        renameFurnitureAction = new RenameProjectTreeFurnitureAction(dynProMain);
+        renameMetadataFurnitureAction = new RenameMetadataFurnitureAction(dynProMain);
+        newFurnitureAction = new NewFurnitureAction(dynProMain);
+    }
+
+    private void initProjectActions(){
+        newProjectAction = new NewProjectAction(dynProMain);
+        renameProjectAction = new RenameProjectAction(dynProMain);
+
+    }
+
+    private void initFrontConfigActions(){
+        removeFrontConfigElementAction = new RemoveFrontConfigElementAction(dynProMain);
+        addElementBeforeAction = new AddElementBeforeAction(dynProMain);
+        addElementNextToAction = new AddElementNextToAction(dynProMain);
+        addMultiElementAggragateNextToAction = new AddMultiElementAggragateNextToAction(dynProMain);
+        addMultiElementAggregateBeforeAction = new AddMultiElementAggregateBeforeAction(dynProMain);
+        addOneElementAggregateBeforeAction = new AddOneElementAggregateBeforeAction(dynProMain);
+        addOneElementAggregateNextToAction = new AddOneElementAggregateNextToAction(dynProMain);
+    }
+
     private void injectProjectTree() {
-        DynProMain.renameFurnitureAction.setProjectTree(DynProMain.projectTree);
-        DynProMain.removeFurnitureAction.setProjectTree(DynProMain.projectTree);
+        renameFurnitureAction.setProjectTree(projectTree);
+        removeFurnitureAction.setProjectTree(projectTree);
     }
 
     private void injectFrontConfigDisplayer(){
-        DynProMain.removeFrontConfigElementAction.setFrontConfigurationDisplayer(DynProMain.frontConfigurationDisplayer);
+        removeFrontConfigElementAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
+        addElementBeforeAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
+        addElementNextToAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
+        addMultiElementAggragateNextToAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
+        addMultiElementAggregateBeforeAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
+        addOneElementAggregateBeforeAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
+        addOneElementAggregateNextToAction.setFrontConfigurationDisplayer(frontConfigurationDisplayer);
     }
 
     private void setupMetadataDisplayer(){
-        DynProMain.metadataDisplayer.setDepthDisplay(DynProMain.furnitureDepthDisplay);
-        DynProMain.metadataDisplayer.setFrontPriceDisplay(DynProMain.furnitureFrontPriceDisplay);
-        DynProMain.metadataDisplayer.setHeightDisplay(DynProMain.furnitureHeightDisplay);
-        DynProMain.metadataDisplayer.setModuleUnitPriceDisplay(DynProMain.furnitureModuleUnitPriceDisplay);
-        DynProMain.metadataDisplayer.setWidthDisplay(DynProMain.furnitureWidthDisplay);
-        DynProMain.metadataDisplayer.setNameDisplay(DynProMain.furnitureNameDisplay);
-        DynProMain.metadataDisplayer.setTypeDisplay(DynProMain.furnitureTypeDisplay);
-        DynProMain.metadataDisplayer.setFurnitureAvatar(DynProMain.furnitureAvatar);
+        metadataDisplayer = new MetadataDisplayer();
+        metadataDisplayer.setDepthDisplay(furnitureDepthDisplay);
+        metadataDisplayer.setFrontPriceDisplay(furnitureFrontPriceDisplay);
+        metadataDisplayer.setHeightDisplay(furnitureHeightDisplay);
+        metadataDisplayer.setModuleUnitPriceDisplay(furnitureModuleUnitPriceDisplay);
+        metadataDisplayer.setWidthDisplay(furnitureWidthDisplay);
+        metadataDisplayer.setNameDisplay(furnitureNameDisplay);
+        metadataDisplayer.setTypeDisplay(furnitureTypeDisplay);
+        metadataDisplayer.setFurnitureAvatar(furnitureAvatar);
     }
 
     private void setupProjectTree(){
-        DynProMain.projectTree.attachDynProMain(dynProMain);
-        DynProMain.projectTree.setProjectPopup(DynProMain.projectPopup);
-        DynProMain.projectTree.setFurniturePopup(DynProMain.furniturePopup);
+        projectTree.setProjectPopup(projectPopup);
+        projectTree.setFurniturePopup(furniturePopup);
     }
 
     private void setupFrontConfigDisplayer(){
-        DynProMain.frontConfigurationDisplayer.setFrontConfigColumnOrientedPopup(DynProMain.frontConfigColumnOrientedPopup);
-        DynProMain.frontConfigurationDisplayer.setFrontConfigRowOrientedPopup(DynProMain.frontConfigRowOrientedPopup);
-        DynProMain.frontConfigurationDisplayer.setPresenter(dynProMain.getPresenter());
+        frontConfigurationDisplayer.setFrontConfigColumnOrientedPopup(frontConfigColumnOrientedPopup);
+        frontConfigurationDisplayer.setFrontConfigRowOrientedPopup(frontConfigRowOrientedPopup);
     }
 
 }

@@ -5,6 +5,8 @@ import contract.DynProContract
 import kotlin.properties.Delegates
 
 interface Project {
+    var presenter: DynProContract.Presenter?
+    fun reset(name: String, presenter: DynProContract.Presenter)
     fun getName(): String
     fun rename(newProjectName: String) : Boolean
     val factoriesChain: FactoriesChain
@@ -12,17 +14,41 @@ interface Project {
     fun addDefaultFurniture() : Boolean
     fun addChildFurniture(type: String): Boolean
     fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean
-    fun removeChildFurniture(oldChildName: String) : Boolean
-    fun renameChildFurniture(oldChildName: String, newChildName: String) : Boolean
+    fun removeFurniture(oldChildName: String) : Boolean
+    fun renameFurniture(oldName: String, newName: String) : Boolean
     fun getFurnitureByName(name: String) : Furniture?
     fun isNameMine(potentialName: String): Boolean
     fun getDefaultFurniture(): Furniture
-    fun getFurnitureWithChangedType(name: String, type: String) : Furniture
+    fun getFurnitureWithChangedType(name: String, newType: String) : Furniture
+    fun removeFrontElementFromFurniture(furnitureName: String, elementId: String)
+
+    fun addFrontConfigElementNextTo(furnitureName: String, elementId: String)
+    fun addFrontConfigElementBefore(furnitureName: String, elementId: String)
+    fun addOneAggregateFrontConfigElemenetNextTo(furnitureName: String, elementId: String)
+    fun addMultiFrontConfigElementAggregateNextTo(furnitureName: String, elementId: String)
+    fun addOneFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
+    fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
 }
 
-class DynProject(private val presenter: DynProContract.Presenter,  initialName: String = Config.NEW_PROJECT_PL) : Project{
+class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project{
 
-    private var projectName: String by Delegates.observable(initialName){property, oldValue, newValue -> presenter.onProjectRenamed() }
+    override fun reset(name: String, presenter: DynProContract.Presenter) {
+        this.projectName = name
+        this.furnituresList.removeAll { true }
+        this.presenter = presenter
+    }
+
+    private var projectName: String by Delegates.observable(initialName){property, oldValue, newValue -> presenter?.onProjectRenamed() }
+
+    override var presenter: DynProContract.Presenter? = null
+    set(value) {
+        field = value
+        addChildFurniture(childName = Config.NEW_UPPER_MODULE_PL, childFurnitureType = Config.UPPER_MODULE)
+    }
+
+    override val furnituresList = mutableListOf<Furniture>()
+
+    override val factoriesChain: FactoriesChain = AllFurnitureTypesChain(this)
 
     override fun getDefaultFurniture(): Furniture =  furnituresList.last()
 
@@ -36,12 +62,14 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
         projectName = if(newNameCorrect) newProjectName else oldProjectName
         return newNameCorrect
     }
-    
-    override val furnituresList = mutableListOf<Furniture>()
 
-    override val factoriesChain: FactoriesChain = AllFurnitureTypesChain(presenter)
 
     override fun getFurnitureByName(name: String) : Furniture? = furnituresList.singleOrNull() { it.name == name }
+
+
+    override fun removeFrontElementFromFurniture(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.removeElement(elementId)
+    }
 
     private fun pickDefaultName(): String{
         for (i in 1..Config.MAX_DEFAULT_FURNITURE_NAMES_NUMBER){
@@ -70,17 +98,17 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
                 if (factory.typeCorrect(childFurnitureType))
                     furnituresList.add(factory.createFurnitureChild(childName))
             }
-            presenter.onFurnitureAdded(childName)
+            presenter?.onFurnitureAdded(childName)
             return true
         }
         return false
     }
 
-    override fun removeChildFurniture(oldChildName: String) : Boolean{
+    override fun removeFurniture(oldChildName: String) : Boolean{
         val success = furnituresList.removeIf { it.name == oldChildName }
         if(success) {
             keepAtLeastOneFurniture()
-            presenter.onFurnitureRemoved(oldChildName)
+            presenter?.onFurnitureRemoved(oldChildName)
         }
         return success
     }
@@ -88,21 +116,21 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
 
     private fun furnitureNotExist(furnitureName: String) : Boolean = furnituresList.count { it.name == furnitureName } == 0
 
-    override fun renameChildFurniture(oldChildName: String, newChildName: String) :Boolean{
-        if (furnitureNotExist(newChildName) and (newChildName != projectName) and (newChildName != "")){
-            furnituresList.single { it.name == oldChildName }.name=newChildName
-            presenter.onFurnitureRenamed(oldChildName, newChildName)
+    override fun renameFurniture(oldName: String, newName: String) :Boolean{
+        if (furnitureNotExist(newName) and (newName != projectName) and (newName != "")){
+            furnituresList.single { it.name == oldName }.name= newName
+            presenter?.onFurnitureNameChanged(newName)
             return true
         }
         return false
     }
 
-    override fun getFurnitureWithChangedType(name: String, type: String) : Furniture{
+    override fun getFurnitureWithChangedType(name: String, newType: String) : Furniture{
         val furnitureIndex = furnituresList.indexOf(furnituresList.filter { it.name == name }.single())
         val oldFurniture = furnituresList.removeAt(furnitureIndex)
         var newFurniture : Furniture? = null
         for (factory: FurnitureFactory in factoriesChain.getChain()){
-            if (factory.typeCorrect(type)){
+            if (factory.typeCorrect(newType)){
                 newFurniture = factory.createFurnitureChild(oldFurniture)
             }
         }
@@ -110,9 +138,29 @@ class DynProject(private val presenter: DynProContract.Presenter,  initialName: 
         return newFurniture
     }
 
-    init {
-        addChildFurniture(childName = Config.NEW_UPPER_MODULE_PL, childFurnitureType = Config.UPPER_MODULE)
+
+    override fun addFrontConfigElementNextTo(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.addElementNextTo(elementId)
     }
 
+    override fun addFrontConfigElementBefore(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.addElementBefore(elementId)
+    }
+
+    override fun addOneAggregateFrontConfigElemenetNextTo(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.addOneElementAggregateNextTo(elementId)
+    }
+
+    override fun addMultiFrontConfigElementAggregateNextTo(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.addMultiElementAggragateNextTo(elementId)
+    }
+
+    override fun addOneFrontConfigElementAggregateBefore(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.addOneElementAggregateBefore(elementId)
+    }
+
+    override fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String) {
+        getFurnitureByName(furnitureName)?.frontConfiguration?.addMultiElementAggregateBefore(elementId)
+    }
 }
 

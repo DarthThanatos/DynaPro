@@ -31,15 +31,19 @@
 
         <popupmenu id="frontConfigRowOrientedPopup">
             <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
-            <menuitem text="Dodaj jednoelementowy rząd pod spodem" Action=""/>
-            <menuitem text="Dodaj wieloelementowy rząd pod spodem" Action=""/>
-            <menuitem text="Dodaj jednoelementowy rząd ponad elementem" Action=""/>
-            <menuitem text="Dodaj wieloelementowy rząd ponad elementem" Action=""/>
+            <menuitem text="Dodaj element po prawej" Action="addElementNextToAction"/>
+            <menuitem text="Dodaj element po lewej" Action="addElementBeforeAction"/>
+            <menuitem text="Dodaj jednoelementowy rząd pod spodem" Action="addOneElementAggregateNextToAction"/>
+            <menuitem text="Dodaj wieloelementowy rząd pod spodem" Action="addMultiElementAggragateNextToAction"/>
+            <menuitem text="Dodaj jednoelementowy rząd ponad elementem" Action="addOneElementAggregateBeforeAction"/>
+            <menuitem text="Dodaj wieloelementowy rząd ponad elementem" Action="addMultiElementAggregateBeforeAction"/>
         </popupmenu>
 
 
         <popupmenu id="frontConfigColumnOrientedPopup">
             <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
+            <menuitem text="Dodaj element poniżej" Action="addElementNextToAction"/>
+            <menuitem text="Dodaj element powyżej" Action="addElementBeforeAction"/>
             <menuitem text="Dodaj jednoelementową kolumnę po lewej" Action=""/>
             <menuitem text="Dodaj wieloelementową kolumnę po lewej" Action=""/>
             <menuitem text="Dodaj jednoelementową kolumnę po prawej" Action=""/>

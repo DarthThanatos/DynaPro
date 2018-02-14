@@ -1,5 +1,6 @@
 package actions
 
+import config.Config
 import display.FrontConfigurationDisplayer
 import display.ProjectTree
 import main.DynProMain
@@ -10,7 +11,7 @@ import javax.swing.AbstractAction
 class NewFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() {
 
     override fun actionPerformed(e: ActionEvent) {
-        dynProMain.presenter.onAddNewFurniture()
+        dynProMain.presenter.model.addDefaultFurniture()
 
     }
 }
@@ -18,7 +19,7 @@ class NewFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() 
 class NewProjectAction(private val dynProMain: DynProMain) : AbstractAction() {
 
     override fun actionPerformed(e: ActionEvent) {
-        dynProMain.presenter.onCreateNewProject()
+        dynProMain.presenter.model.createNewProject()
     }
 }
 
@@ -26,7 +27,7 @@ class RemoveFurnitureAction(private val dynProMain: DynProMain) : AbstractAction
     private var projectTree: ProjectTree? = null
 
     override fun actionPerformed(e: ActionEvent) {
-        dynProMain.presenter.onRemoveFurniture(projectTree!!.lastSelectedPathComponent.toString())
+        dynProMain.presenter.model.removeFurniture(projectTree!!.lastSelectedPathComponent.toString())
     }
 
     fun setProjectTree(projectTree: ProjectTree) {
@@ -38,7 +39,9 @@ class RenameProjectTreeFurnitureAction(private val dynProMain: DynProMain) : Abs
     private var projectTree: ProjectTree? = null
 
     override fun actionPerformed(e: ActionEvent) {
-        dynProMain.presenter.onRenameProjectTreeFurniture(projectTree!!.lastSelectedPathComponent.toString())
+        val furnitureName = projectTree!!.lastSelectedPathComponent.toString()
+        val newFurnitureName = dynProMain.presenter.view.promptForUserInput(Config.GIVE_NEW_FURNITURE_NAME_MSG, furnitureName)
+        dynProMain.presenter.model.renameFurniture(furnitureName, newFurnitureName)
 
     }
 
@@ -51,8 +54,9 @@ class RenameProjectTreeFurnitureAction(private val dynProMain: DynProMain) : Abs
 class RenameMetadataFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() {
 
     override fun actionPerformed(e: ActionEvent) {
-        dynProMain.presenter.onRenameMetadataFurniture()
 
+        val newFurnitureName = dynProMain.presenter.view.promptForUserInput(Config.GIVE_NEW_FURNITURE_NAME_MSG, dynProMain.presenter.getCurrentDisplayedFurnitureName())
+        dynProMain.presenter.model.renameFurniture( dynProMain.presenter.getCurrentDisplayedFurnitureName(), newFurnitureName)
     }
 
 }
@@ -60,22 +64,45 @@ class RenameMetadataFurnitureAction(private val dynProMain: DynProMain) : Abstra
 class RenameProjectAction(private val dynProMain: DynProMain) : AbstractAction() {
 
     override fun actionPerformed(e: ActionEvent) {
-        dynProMain.presenter.onRenameProject()
+        dynProMain.presenter.model.renameProject(dynProMain.presenter.view.promptForUserInput(Config.GIVE_NEW_PROJECT_NAME_MSG, dynProMain.presenter.model.getCurrentProject().getName()))
     }
 }
 
-class RemoveFrontConfigElementAction(private val dynProMain: DynProMain): AbstractAction(){
-    private var frontConfigurationDisplayer: FrontConfigurationDisplayer? = null
+abstract class FrontConfigAction(protected val dynProMain: DynProMain): AbstractAction(){
+    var frontConfigurationDisplayer: FrontConfigurationDisplayer? = null
+    abstract val presenterAction: ((String, String)->Unit)
 
     override fun actionPerformed(e: ActionEvent?) {
-        dynProMain.presenter.onRemoveElementFromConfiguration(
-                frontConfigurationDisplayer?.currentlyDisplayedFurnitureName,
-                frontConfigurationDisplayer?.recentlyClickedFurnitureElementId
-        )
+        presenterAction(frontConfigurationDisplayer?.currentlyDisplayedFurnitureName!!, frontConfigurationDisplayer?.recentlyClickedFurnitureElementId!!)
     }
+  }
 
-    fun setFrontConfigurationDisplayer(frontConfigurationDisplayer: FrontConfigurationDisplayer){
-        this.frontConfigurationDisplayer = frontConfigurationDisplayer
-    }
+class RemoveFrontConfigElementAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1,s2->dynProMain.presenter.model.removeFrontElementFromFurniture(s1,s2)}
+}
+
+class AddElementNextToAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addFrontConfigElementNextTo(s1, s2)}
+}
+
+class AddElementBeforeAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addFrontConfigElementBefore(s1,s2)}
+}
+
+class AddOneElementAggregateNextToAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addOneAggregateFrontConfigElemenetNextTo(s1, s2)}
+}
+
+class AddMultiElementAggragateNextToAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addMultiFrontConfigElementAggregateNextTo(s1, s2)}
+}
+
+class AddOneElementAggregateBeforeAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addOneFrontConfigElementAggregateBefore(s1,s2)}
+
+}
+
+class AddMultiElementAggregateBeforeAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
+    override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addMultiFrontConfigElementAggregateBefore(s1,s2)}
 
 }

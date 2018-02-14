@@ -13,7 +13,7 @@ interface MetadataPresenter{
     fun onFurnitureNameChanged(name: String)
     fun onNewProjectCreated()
     fun onFurnitureAdded(addedFurnitureName: String)
-    fun onFurnitureRemoved(removedFurnitureName: String?)
+    fun onFurnitureRemoved(removedFurnitureName: String)
 }
 
 class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, private var dynProView: DynProContract.View) : MetadataPresenter{
@@ -80,14 +80,14 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
 
     private fun onDisplayFurnitureMetadata(furniture: Furniture) {
         dynProView.displayMetadata(
-                typeEngToPolMap[furniture.type],
+                typeEngToPolMap[furniture.type]!!,
                 furniture.name,
                 furniture.height,
                 furniture.width,
                 furniture.depth,
                 furniture.frontUnitPrice,
                 furniture.elementUnitPrice,
-                typeToImgPath[furniture.type]
+                typeToImgPath[furniture.type]!!
         )
     }
 
@@ -96,7 +96,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
     }
 
     override fun onNewProjectCreated() {
-        onRefreshView( dynProModel.defaultFurniture.name) //default furniture is the first and the only one in model
+        onRefreshView( dynProModel.getDefaultFurniture().name) //default furniture is the first and the only one in model
     }
 
 
@@ -104,9 +104,9 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
         onRefreshView(addedFurnitureName) //sets focus on the newly created furniture
     }
 
-    override fun onFurnitureRemoved(removedFurnitureName: String?) {
+    override fun onFurnitureRemoved(removedFurnitureName: String) {
         if(currentlyDisplayed?.name == removedFurnitureName){
-            onRefreshView(dynProModel.defaultFurniture.name)
+            onRefreshView(dynProModel.getDefaultFurniture().name)
         }
     }
 

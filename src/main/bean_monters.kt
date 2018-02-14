@@ -1,7 +1,12 @@
 package main
 
+import display.FrontConfigViewElem
+import display.FrontConfigurationDisplayer
+import display.ProjectTree
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
+import java.awt.event.MouseEvent
+import java.awt.event.MouseListener
 import javax.swing.JComboBox
 import javax.swing.JSpinner
 import javax.swing.JSpinner.DefaultEditor
@@ -52,6 +57,52 @@ class JComboboxBinder(private val combobox: JComboBox<Any>): Binder(){
     }
 }
 
+data class ProjectTreeNotifyValue(val popupActionTriggered: Boolean, val furnitureName: String)
+
+class ProjectTreeBinder(private val projectTree: ProjectTree): Binder(){
+    init{
+        projectTree.addMouseListener(object:MouseListener{
+            override fun mouseReleased(e: MouseEvent) {
+                val lastSelectedPathComponent = projectTree.lastSelectedPathComponent
+                if (lastSelectedPathComponent != null) {
+                    notifyChange(ProjectTreeNotifyValue(e.isPopupTrigger, lastSelectedPathComponent.toString()))
+                }
+
+            }
+
+            override fun mouseEntered(e: MouseEvent?) { }
+
+            override fun mouseClicked(e: MouseEvent?) { }
+
+            override fun mouseExited(e: MouseEvent?) { }
+
+            override fun mousePressed(e: MouseEvent?) { }
+        })
+    }
+}
+
+data class FrontConfDisplayNotifyValue(val popupActionTriggered: Boolean, val furnitureName: String, val elementId: String)
+
+class FrontConfigurationDisplayBinder(private val frontConfigurationDisplayer: FrontConfigurationDisplayer): Binder(){
+    override fun registerSubscriber(id:String, onChange: OnChange){
+        super.registerSubscriber(id, onChange)
+        frontConfigurationDisplayer.addMouseListener(object: MouseListener{
+            override fun mouseReleased(e: MouseEvent?) {
+                val frontConfigElem = e!!.getSource() as FrontConfigViewElem
+                frontConfigElem.notifyParentAboutChange()
+                notifyChange(FrontConfDisplayNotifyValue(e.isPopupTrigger(), frontConfigElem.furnitureName, frontConfigElem.modelKey))
+            }
+
+            override fun mouseEntered(e: MouseEvent?) {}
+
+            override fun mouseClicked(e: MouseEvent?) {}
+
+            override fun mouseExited(e: MouseEvent?) {}
+
+            override fun mousePressed(e: MouseEvent?) {}
+        })
+    }
+}
 
 val furnitureNameJTABinder = JTFBinder(DynProMain.furnitureNameDisplay)
 val furnitureWidthSpinnerBinder = JSpinnerBinder(DynProMain.furnitureWidthDisplay)
@@ -63,3 +114,5 @@ val furnitureTypeComboBinder = JComboboxBinder(DynProMain.furnitureTypeDisplay)
 val frontConfigurationOrientationBinder = JComboboxBinder(DynProMain.frontConfigurationOrientation)
 val furnitureRoofOptionsBinder = JComboboxBinder(DynProMain.furnitureRoofOptions)
 val furnitureBackOptionsBinder = JComboboxBinder(DynProMain.furnitureBackOptions)
+val projectTreeBinder = ProjectTreeBinder(DynProMain.projectTree)
+val frontConfigurationDisplayBinder = FrontConfigurationDisplayBinder(DynProMain.frontConfigurationDisplayer)

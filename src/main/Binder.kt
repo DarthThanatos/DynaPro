@@ -7,7 +7,7 @@ abstract class Binder {
     private val registrars = mutableMapOf<String,OnChange>()
     private val orderedRegistrars = mutableListOf<String>()
 
-    fun registerSubscriber(id:String, onChange: OnChange) {
+    open fun registerSubscriber(id:String, onChange: OnChange) {
         registrars.put(id, onChange)
         if(id !in orderedRegistrars) orderedRegistrars.add(id)
     }

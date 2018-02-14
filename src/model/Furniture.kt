@@ -1,7 +1,6 @@
 package model
 
 import config.Config
-import contract.DynProContract
 import kotlin.properties.Delegates
 
 
@@ -21,18 +20,18 @@ interface Furniture{
 }
 
 
-class UpperModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture {
+class UpperModule(initialName: String, private val parentProject: Project): Furniture {
     override val hasPedestal: Boolean = false
 
     override var roofInserted: Boolean = false
 
     override var backInserted: Boolean = false
 
-    override var frontConfiguration: FrontConfiguration = UpperModuleFrontConfiguration(presenter)
+    override var frontConfiguration: FrontConfiguration = UpperModuleFrontConfiguration(parentProject)
 
-    override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureRenamed(oldValue, newValue)}
+    override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
 
-    override var type: String by Delegates.observable(Config.UPPER_MODULE){property, oldValue, newValue -> presenter.onFurnitureTypeChanged(name) }
+    override var type: String by Delegates.observable(Config.UPPER_MODULE){property, oldValue, newValue -> parentProject.presenter?.onFurnitureTypeChanged(name) }
 
     override var frontUnitPrice: Int = 100
 
@@ -51,18 +50,18 @@ class UpperModule(initialName: String, private val presenter: DynProContract.Pre
 
 }
 
-class BottomModule(initialName: String, private val presenter: DynProContract.Presenter): Furniture{
+class BottomModule(initialName: String, private val parentProject: Project): Furniture{
     override val hasPedestal: Boolean = true
 
     override var roofInserted: Boolean = true
 
     override var backInserted: Boolean = true
 
-    override var frontConfiguration: FrontConfiguration = BottomModuleFrontConfiguration(presenter)
+    override var frontConfiguration: FrontConfiguration = BottomModuleFrontConfiguration(parentProject)
 
-    override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) presenter.onFurnitureRenamed(oldValue, newValue)}
+    override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
 
-    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){property, oldValue, newValue -> presenter.onFurnitureTypeChanged(name) }
+    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){property, oldValue, newValue -> parentProject.presenter?.onFurnitureTypeChanged(name) }
 
     override var frontUnitPrice : Int = 10
 

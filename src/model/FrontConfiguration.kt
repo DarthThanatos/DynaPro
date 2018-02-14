@@ -8,6 +8,12 @@ interface FrontConfiguration{
     fun getDefaultConfiguration(): ArrayList<ArrangementColumn>
     fun getConfiguration(): List<ArrangementColumn>
     fun removeElement(elementId: String)
+    fun addElementNextTo(elementId:String)
+    fun addElementBefore(elementId: String)
+    fun addOneElementAggregateNextTo(elementId: String)
+    fun addMultiElementAggragateNextTo(elementId: String)
+    fun addOneElementAggregateBefore(elementId: String)
+    fun addMultiElementAggregateBefore(elementId: String)
 }
 
 interface ArrangementColumn : MutableList<Element>
@@ -18,7 +24,7 @@ class Column(vararg elements: Element):ArrangementColumn, MutableList<Element> b
     }
 }
 
-abstract class DynProFrontConfiguration(protected val presenter: DynProContract.Presenter): FrontConfiguration{
+abstract class DynProFrontConfiguration(protected val parentProject: Project): FrontConfiguration{
     abstract protected val columns: ArrayList<ArrangementColumn>
 
     override var columnOriented: Boolean by Delegates.observable(true){property, oldValue, newValue -> }
@@ -43,25 +49,51 @@ abstract class DynProFrontConfiguration(protected val presenter: DynProContract.
             columns.flatMap { it }.filter { it.id == elementId }.single()
 
     override fun removeElement(elementId: String) {
-        println(fetchElementWithId(elementId).name)
+        println("removing ${fetchElementWithId(elementId).name}")
     }
+    override fun addElementNextTo(elementId:String){
+        println("adding element next to ${fetchElementWithId(elementId)}")
+    }
+
+    override fun addElementBefore(elementId: String){
+        println("adding element before ${fetchElementWithId(elementId)}")
+
+    }
+
+    override  fun addOneElementAggregateNextTo(elementId: String){
+        println("adding one-aggregate element next to ${fetchElementWithId(elementId)}")
+    }
+
+    override fun addMultiElementAggragateNextTo(elementId: String){
+        println("adding multi-aggregate element next to ${fetchElementWithId(elementId)}")
+    }
+
+    override fun addMultiElementAggregateBefore(elementId: String){
+        println("adding multi-aggregate element before ${fetchElementWithId(elementId)}")
+
+    }
+
+    override fun addOneElementAggregateBefore(elementId: String){
+        println("adding one-aggregate element before ${fetchElementWithId(elementId)}")
+    }
+
 }
 
-class UpperModuleFrontConfiguration(presenter: DynProContract.Presenter): DynProFrontConfiguration(presenter){
+class UpperModuleFrontConfiguration(parentProject: Project): DynProFrontConfiguration(parentProject){
 
     override var columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
     override fun getDefaultConfiguration(): ArrayList<ArrangementColumn> = arrayListOf(Column(Door()), Column(Drawer()), Column(Shelf()))
 
-    constructor(presenter: DynProContract.Presenter, frontConfiguration: FrontConfiguration) : this(presenter){
+    constructor(parentProject: Project, frontConfiguration: FrontConfiguration) : this(parentProject){
         columns = getDefaultConfiguration()
         columnOriented = frontConfiguration.columnOriented
     }
 }
 
-class BottomModuleFrontConfiguration(presenter: DynProContract.Presenter): DynProFrontConfiguration(presenter){
+class BottomModuleFrontConfiguration(parentProject: Project): DynProFrontConfiguration(parentProject){
     override var columns: ArrayList<ArrangementColumn> = getDefaultConfiguration()
     override fun getDefaultConfiguration(): ArrayList<ArrangementColumn> = arrayListOf(Column(Door()), Column(Door()))
-    constructor(presenter: DynProContract.Presenter, frontConfiguration: FrontConfiguration) : this(presenter){
+    constructor(parentProject: Project, frontConfiguration: FrontConfiguration) : this(parentProject){
         columns = getDefaultConfiguration()
         columnOriented = frontConfiguration.columnOriented
     }
