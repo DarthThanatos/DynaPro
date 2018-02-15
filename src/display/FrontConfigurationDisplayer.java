@@ -40,13 +40,12 @@ public class FrontConfigurationDisplayer extends JPanel {
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = gridx;
         gridBagConstraints.gridy = gridy;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
         if(frontConfigurationVM.getColumnOriented()) {
             gridBagConstraints.gridheight = maxNumberInAggregate;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
         }
         else {
             gridBagConstraints.gridwidth = maxNumberInAggregate;
-            gridBagConstraints.fill = GridBagConstraints.BOTH;
         }
         return gridBagConstraints;
     }
@@ -124,8 +123,7 @@ public class FrontConfigurationDisplayer extends JPanel {
         configElement.setFrontConfigurationDisplayer(this);
         return configElement;
     }
-
-
+    
 
     public void displayColumnOrientedPopup(String elementId){
         displayPopup(frontConfigColumnOrientedPopup, elementId);
