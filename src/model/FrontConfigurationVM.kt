@@ -13,7 +13,11 @@ class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolea
                             }
                     )
             }
+
+    val maxElementsAmount = columns.maxBy { it.size }?.size ?: 0
 }
+
+
 
 class ConfigurationAggregateVM : MutableList<ConfigurationElementVM> by ArrayList<ConfigurationElementVM>(){
     fun addAll_(elements: Collection<ConfigurationElementVM>): ConfigurationAggregateVM {

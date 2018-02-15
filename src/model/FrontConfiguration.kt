@@ -40,7 +40,6 @@ abstract class DynProFrontConfiguration(protected val parentProject: Project): F
 
     override fun getConfiguration(): List<ArrangementAggregate> = ArrayList<ArrangementAggregate>(aggregates)
 
-
     private fun maxElementsNumberInAggregates(): Int = aggregates.maxBy { arrangementAggregate -> arrangementAggregate.size }!!.size
 
     private fun aggregateContainingElementWithId(elementId: String) : ArrangementAggregate =
