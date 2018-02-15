@@ -30,7 +30,7 @@ class UpperModulesFactory(private val parentProject: Project): FurnitureFactory{
         res.elementUnitPrice = furniture.elementUnitPrice
         res.backInserted = furniture.backInserted
         res.roofInserted = furniture.roofInserted
-        res.frontConfiguration = UpperModuleFrontConfiguration(parentProject, furniture)
+        res.frontConfiguration = UpperModuleFrontConfiguration(parentProject, res)
         return res
     }
 
@@ -51,7 +51,7 @@ class BottomModulesFactory(private val parentProject: Project): FurnitureFactory
         res.elementUnitPrice = furniture.elementUnitPrice
         res.backInserted = furniture.backInserted
         res.roofInserted = furniture.roofInserted
-        res.frontConfiguration = BottomModuleFrontConfiguration(parentProject, furniture)
+        res.frontConfiguration = BottomModuleFrontConfiguration(parentProject, res)
         return res
     }
 

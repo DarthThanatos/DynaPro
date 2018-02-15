@@ -69,7 +69,7 @@ abstract class DynProFrontConfiguration(protected val parentProject: Project): F
         if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
-    
+
     override fun addElementNextTo(elementId:String){
         val indexOfBenchmarkElement = indexOfElementWithId(elementId)
         aggregateContainingElementWithId(elementId).add(indexOfBenchmarkElement + 1, defaultElementBuilder())
@@ -125,6 +125,7 @@ abstract class DynProFrontConfiguration(protected val parentProject: Project): F
 }
 
 class UpperModuleFrontConfiguration(parentProject: Project, override var parentFurniture: Furniture): DynProFrontConfiguration(parentProject){
+
     override val defaultElementBuilder = { Drawer() }
 
     override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){ property, oldValue, newValue -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name) }
@@ -134,6 +135,7 @@ class UpperModuleFrontConfiguration(parentProject: Project, override var parentF
 }
 
 class BottomModuleFrontConfiguration(parentProject: Project, override var parentFurniture: Furniture): DynProFrontConfiguration(parentProject){
+
     override val defaultElementBuilder = { Shelf() }
 
     override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){ property, oldValue, newValue -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name) }
