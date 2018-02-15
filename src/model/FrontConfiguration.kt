@@ -4,10 +4,10 @@ import kotlin.properties.Delegates
 
 
 interface FrontConfiguration{
-    val parentFurnitureName: String
+    var parentFurniture: Furniture
     var columnOriented : Boolean
     val defaultElementBuilder: () -> Element
-    fun getDefaultConfiguration(): ArrayList<ArrangementAggregate>
+    fun getDefaultAggregates(): ArrayList<ArrangementAggregate>
     fun getConfiguration(): List<ArrangementAggregate>
     fun removeElement(elementId: String)
     fun addElementNextTo(elementId:String)
@@ -16,6 +16,7 @@ interface FrontConfiguration{
     fun addMultiElementAggragateNextTo(elementId: String)
     fun addOneElementAggregateBefore(elementId: String)
     fun addMultiElementAggregateBefore(elementId: String)
+    fun updateOrientation(columnOriented: Boolean)
 }
 
 interface ArrangementAggregate : MutableList<Element>
@@ -34,9 +35,9 @@ class Aggregate(vararg elements: Element): ArrangementAggregate, MutableList<Ele
 }
 
 abstract class DynProFrontConfiguration(protected val parentProject: Project): FrontConfiguration{
-    abstract protected val aggregates: ArrayList<ArrangementAggregate>
+    abstract protected var aggregates: ArrayList<ArrangementAggregate>
 
-    override var columnOriented: Boolean by Delegates.observable(true){property, oldValue, newValue -> parentProject.presenter?.onFrontConfigOrientationChanged(parentFurnitureName) }
+    override var columnOriented: Boolean by Delegates.observable(true){property, oldValue, newValue -> parentProject.presenter?.onFrontConfigOrientationChanged(parentFurniture.name) }
 
     override fun getConfiguration(): List<ArrangementAggregate> = ArrayList<ArrangementAggregate>(aggregates)
 
@@ -65,30 +66,29 @@ abstract class DynProFrontConfiguration(protected val parentProject: Project): F
         val aggregate = aggregateContainingElement(elementToRemove)
         aggregate.remove(elementToRemove)
         if(aggregate.size == 0) aggregates.remove(aggregate)
-        parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+        if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
+        parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
+    
     override fun addElementNextTo(elementId:String){
         val indexOfBenchmarkElement = indexOfElementWithId(elementId)
         aggregateContainingElementWithId(elementId).add(indexOfBenchmarkElement + 1, defaultElementBuilder())
-        parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+        parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
 
     }
 
     override fun addElementBefore(elementId: String){
         val indexOfBenchmarkElement: Int = indexOfElementWithId(elementId)
-        aggregateContainingElementWithId(elementId).add(maxOf(indexOfBenchmarkElement -1, 0), defaultElementBuilder())
-        println("adding element before ${fetchElementWithId(elementId)}")
-        parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+        aggregateContainingElementWithId(elementId).add(indexOfBenchmarkElement, defaultElementBuilder())
+        parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
 
     }
 
    override fun addOneElementAggregateNextTo(elementId: String){
-       println("adding one-aggregate element next to ${fetchElementWithId(elementId)}, currently: ${this}")
-        val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
-        val newAggregate = Aggregate(defaultElementBuilder())
-        aggregates.add(indexOfAggregate + 1, newAggregate)
-        println("after: ${this}")
-       parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+       val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
+       val newAggregate = Aggregate(defaultElementBuilder())
+       aggregates.add(indexOfAggregate + 1, newAggregate)
+       parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
 
@@ -96,51 +96,48 @@ abstract class DynProFrontConfiguration(protected val parentProject: Project): F
         val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
         val newAggregate = Aggregate().filledWithRepeatingDefault(times = maxElementsNumberInAggregates(), builder = defaultElementBuilder)
         aggregates.add(indexOfAggregate + 1, newAggregate)
-        println("adding multi-aggregate element next to ${fetchElementWithId(elementId)}")
-        parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+        parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
     override fun addMultiElementAggregateBefore(elementId: String){
         val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
         val newAggregate = Aggregate().filledWithRepeatingDefault(times = maxElementsNumberInAggregates(), builder = defaultElementBuilder)
-        aggregates.add(maxOf(indexOfAggregate - 1, 0), newAggregate)
-        println("adding multi-aggregate element before ${fetchElementWithId(elementId)}")
-        parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+        aggregates.add(indexOfAggregate, newAggregate)
+        parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
 
     }
 
     override fun addOneElementAggregateBefore(elementId: String){
         val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
         val newAggregate = Aggregate(defaultElementBuilder())
-        aggregates.add(maxOf(indexOfAggregate - 1, 0), newAggregate)
-        println("adding one-aggregate element before ${fetchElementWithId(elementId)}")
-        parentProject.presenter?.onFrontConfigurationChanged(parentFurnitureName)
+        aggregates.add(indexOfAggregate, newAggregate)
+        parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
     override fun toString(): String =
-            aggregates.map { it.toString() }.reduce { acc, arrangementAggregateString -> acc + arrangementAggregateString + "\n"}
+        aggregates.map { it.toString() }.reduce { acc, arrangementAggregateString -> acc + arrangementAggregateString + "\n"}
+
+    override fun updateOrientation(columnOriented: Boolean) {
+        aggregates = getDefaultAggregates()
+        this.columnOriented = columnOriented
+    }
 
 }
 
-class UpperModuleFrontConfiguration(parentProject: Project, override val parentFurnitureName: String): DynProFrontConfiguration(parentProject){
+class UpperModuleFrontConfiguration(parentProject: Project, override var parentFurniture: Furniture): DynProFrontConfiguration(parentProject){
     override val defaultElementBuilder = { Drawer() }
 
-    override var aggregates: ArrayList<ArrangementAggregate> = getDefaultConfiguration()
-    override fun getDefaultConfiguration(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Door()), Aggregate(Drawer()), Aggregate(Shelf()))
+    override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){ property, oldValue, newValue -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name) }
 
-    constructor(parentProject: Project, frontConfiguration: FrontConfiguration) : this(parentProject, frontConfiguration.parentFurnitureName){
-        aggregates = getDefaultConfiguration()
-        columnOriented = frontConfiguration.columnOriented
-    }
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Door()), Aggregate(Drawer()), Aggregate(Shelf()))
+
 }
 
-class BottomModuleFrontConfiguration(parentProject: Project, override val parentFurnitureName: String): DynProFrontConfiguration(parentProject){
+class BottomModuleFrontConfiguration(parentProject: Project, override var parentFurniture: Furniture): DynProFrontConfiguration(parentProject){
     override val defaultElementBuilder = { Shelf() }
 
-    override var aggregates: ArrayList<ArrangementAggregate> = getDefaultConfiguration()
-    override fun getDefaultConfiguration(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Door()), Aggregate(Door()))
-    constructor(parentProject: Project, frontConfiguration: FrontConfiguration) : this(parentProject, frontConfiguration.parentFurnitureName){
-        aggregates = getDefaultConfiguration()
-        columnOriented = frontConfiguration.columnOriented
-    }
+    override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){ property, oldValue, newValue -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name) }
+
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Door()), Aggregate(Door()))
+
 }

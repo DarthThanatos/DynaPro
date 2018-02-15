@@ -29,7 +29,7 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
 
     override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
 
-    override var frontConfiguration: FrontConfiguration = UpperModuleFrontConfiguration(parentProject, name)
+    override var frontConfiguration: FrontConfiguration = UpperModuleFrontConfiguration(parentProject, this)
 
     override var type: String by Delegates.observable(Config.UPPER_MODULE){property, oldValue, newValue -> parentProject.presenter?.onFurnitureTypeChanged(name) }
 
@@ -59,7 +59,7 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
 
     override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
 
-    override var frontConfiguration: FrontConfiguration = BottomModuleFrontConfiguration(parentProject, name)
+    override var frontConfiguration: FrontConfiguration = BottomModuleFrontConfiguration(parentProject, this)
 
     override var type: String by Delegates.observable(Config.BOTTOM_MODULE){property, oldValue, newValue -> parentProject.presenter?.onFurnitureTypeChanged(name) }
 

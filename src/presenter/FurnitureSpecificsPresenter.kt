@@ -41,7 +41,11 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
     private fun registerSubscribers(furniture: Furniture){
         frontConfigurationOrientationBinder.registerSubscriber(Config.CURRENT_FURNITURE , object:Binder.OnChange{
             override fun onChange(value: Any) {
-                fetchFrontConfigurationFromFurniture(furniture).columnOriented = value == Config.COLUMN_ORIENTED
+//                fetchFrontConfigurationFromFurniture(furniture).columnOriented = value == Config.COLUMN_ORIENTED
+                val columnOriented = value == Config.COLUMN_ORIENTED
+                if(columnOriented != fetchFrontConfigurationFromFurniture(furniture).columnOriented)
+                    fetchFrontConfigurationFromFurniture(furniture).updateOrientation(value == Config.COLUMN_ORIENTED)
+
             }
         })
         furnitureRoofOptionsBinder.registerSubscriber(Config.CURRENT_FURNITURE, object:Binder.OnChange{
