@@ -17,7 +17,9 @@ class Shelf(
         override var width: Int = 25,
         override val id: String = UUID.randomUUID().toString(),
         override val type: String = Config.SHELF_PL
-) : Element
+) : Element, PrintableElement by DefaultPrinter(){
+    override fun toString(): String = print(this)
+}
 
 class Door(
         override val name: String = Config.DOOR_PL,
@@ -25,7 +27,9 @@ class Door(
         override var width: Int = 25,
         override val id: String = UUID.randomUUID().toString(),
         override val type: String = Config.DOOR_PL
-) : Element
+) : Element, PrintableElement by DefaultPrinter(){
+    override fun toString(): String = print(this)
+}
 
 class Drawer(
         override val name: String= Config.DRAWER_PL,
@@ -33,4 +37,15 @@ class Drawer(
         override var width: Int=25,
         override val id: String = UUID.randomUUID().toString(),
         override val type: String = Config.DRAWER_PL
-): Element
+): Element, PrintableElement by DefaultPrinter(){
+    override fun toString(): String = print(this)
+}
+
+interface PrintableElement{
+    fun print(element: Element): String
+}
+
+class DefaultPrinter: PrintableElement{
+    override fun print(element: Element): String = "${element.type}(${element.name}, ${element.id})"
+
+}

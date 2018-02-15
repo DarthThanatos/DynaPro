@@ -36,6 +36,8 @@ interface DynProContract {
         fun onFurnitureRemoved(removedFurnitureName: String)
         fun onFurnitureNameChanged(name: String)
         fun onFurnitureTypeChanged(furnitureName: String)
+        fun onFrontConfigurationChanged(furnitureName: String)
+        fun onFrontConfigOrientationChanged(parentFurnitureName: String)
     }
 
     interface Model {

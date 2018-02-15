@@ -1,22 +1,22 @@
 package model
 
-class FrontConfigurationVM(val furnitureName: String, frontConfiguration: List<ArrangementColumn>, private val imgPathMapper: Map<String, String>){
+class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolean, frontConfiguration: List<ArrangementAggregate>, private val imgPathMapper: Map<String, String>){
 
-    val columns: List<ConfigurationColumnVM> = fillColumns(frontConfiguration)
+    val columns: List<ConfigurationAggregateVM> = fillColumns(frontConfiguration)
 
-    private fun fillColumns(configuration: List<ArrangementColumn>): List<ConfigurationColumnVM>
+    private fun fillColumns(configuration: List<ArrangementAggregate>): List<ConfigurationAggregateVM>
             = configuration.map {
-                arrangementColumn ->
-                    ConfigurationColumnVM().addAll_(
-                            arrangementColumn.map {
+                arrangementAggregate ->
+                    ConfigurationAggregateVM().addAll_(
+                            arrangementAggregate.map {
                                 element -> ConfigurationElementVM(element.name, imgPathMapper[element.type]!!, element.id)
                             }
                     )
             }
 }
 
-class ConfigurationColumnVM : MutableList<ConfigurationElementVM> by ArrayList<ConfigurationElementVM>(){
-    fun addAll_(elements: Collection<ConfigurationElementVM>): ConfigurationColumnVM {
+class ConfigurationAggregateVM : MutableList<ConfigurationElementVM> by ArrayList<ConfigurationElementVM>(){
+    fun addAll_(elements: Collection<ConfigurationElementVM>): ConfigurationAggregateVM {
         addAll(elements)
         return this
     }

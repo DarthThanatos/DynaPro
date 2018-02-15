@@ -53,4 +53,7 @@ class DynProPresenter(
         furnitureSpecificsPresenter.onFurnitureSelected(furnitureName)
     }
 
+
+
+
 }

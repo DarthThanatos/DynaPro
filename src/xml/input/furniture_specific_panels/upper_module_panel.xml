@@ -44,10 +44,10 @@
             <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
             <menuitem text="Dodaj element poniżej" Action="addElementNextToAction"/>
             <menuitem text="Dodaj element powyżej" Action="addElementBeforeAction"/>
-            <menuitem text="Dodaj jednoelementową kolumnę po lewej" Action=""/>
-            <menuitem text="Dodaj wieloelementową kolumnę po lewej" Action=""/>
-            <menuitem text="Dodaj jednoelementową kolumnę po prawej" Action=""/>
-            <menuitem text="Dodaj wieloelementową kolumnę po prawej" Action=""/>
+            <menuitem text="Dodaj jednoelementową kolumnę po lewej" Action="addOneElementAggregateBeforeAction"/>
+            <menuitem text="Dodaj wieloelementową kolumnę po lewej" Action="addMultiElementAggregateBeforeAction"/>
+            <menuitem text="Dodaj jednoelementową kolumnę po prawej" Action="addOneElementAggregateNextToAction"/>
+            <menuitem text="Dodaj wieloelementową kolumnę po prawej" Action="addMultiElementAggragateNextToAction"/>
         </popupmenu>
     </frontconfigurationdisplayer>
 

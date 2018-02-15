@@ -1,6 +1,6 @@
 package display;
 
-import model.ConfigurationColumnVM;
+import model.ConfigurationAggregateVM;
 import model.ConfigurationElementVM;
 import model.FrontConfigurationVM;
 
@@ -23,10 +23,11 @@ public class FrontConfigurationDisplayer extends JPanel {
         recentlyClickedComponent = frontConfigViewElem;
     }
 
-    public void display(FrontConfigurationVM frontConfigurationVM, boolean columnOriented) {
+    public void display(FrontConfigurationVM frontConfigurationVM) {
         initConfigurationDisplay(frontConfigurationVM);
+        boolean columnOriented = frontConfigurationVM.getColumnOriented();
         int gridx = 0, gridy = 0;
-        for(ConfigurationColumnVM configurationColumnVM: frontConfigurationVM.getColumns()){
+        for(ConfigurationAggregateVM configurationColumnVM: frontConfigurationVM.getColumns()){
             if(columnOriented)gridy = 0; else gridx=0;
             for(ConfigurationElementVM configurationElementVM: configurationColumnVM){
                 add(
@@ -57,21 +58,14 @@ public class FrontConfigurationDisplayer extends JPanel {
         return configElement;
     }
 
-    private GridBagConstraints newConstraints(int gridx, int gridy, List<ConfigurationColumnVM> columns, boolean columnOriented, boolean singleElement){
+    private GridBagConstraints newConstraints(int gridx, int gridy, List<ConfigurationAggregateVM> columns, boolean columnOriented, boolean singleElement){
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = gridx;
         gridBagConstraints.gridy = gridy;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
+        if(columnOriented) gridBagConstraints.weighty = 1; else gridBagConstraints.weightx = 1;
         gridBagConstraints.ipadx = 50;
         gridBagConstraints.ipady = 75;
-        if(singleElement){
-            if(columnOriented){
-
-            }
-            else{
-
-            }
-        }
         return gridBagConstraints;
     }
 

@@ -95,7 +95,7 @@ public class DynProMain implements DynProContract.View {
 
     @Override
     public void displayFrontConfiguration(@NotNull FrontConfigurationVM frontConfigurationVM, @NotNull String orientationText) {
-        frontConfigurationDisplayer.display(frontConfigurationVM, true);
+        frontConfigurationDisplayer.display(frontConfigurationVM);
         frontConfigurationOrientation.setSelectedItem(orientationText);
     }
 
