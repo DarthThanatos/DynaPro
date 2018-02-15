@@ -26,7 +26,9 @@ class DynProSwingEngine extends SwingEngine {
         setup();
         inject();
         initPresenter();
+        injectPresenter();
     }
+
 
     private void inject(){
         injectProjectTree();
@@ -80,6 +82,7 @@ class DynProSwingEngine extends SwingEngine {
         addMultiElementAggregateBeforeAction = new AddMultiElementAggregateBeforeAction(dynProMain);
         addOneElementAggregateBeforeAction = new AddOneElementAggregateBeforeAction(dynProMain);
         addOneElementAggregateNextToAction = new AddOneElementAggregateNextToAction(dynProMain);
+        modifyConfigElemAction = new ModifyConfigElemAction(dynProMain);
     }
 
     private void injectProjectTree() {
@@ -117,6 +120,14 @@ class DynProSwingEngine extends SwingEngine {
     private void setupFrontConfigDisplayer(){
         frontConfigurationDisplayer.setFrontConfigColumnOrientedPopup(frontConfigColumnOrientedPopup);
         frontConfigurationDisplayer.setFrontConfigRowOrientedPopup(frontConfigRowOrientedPopup);
+        frontConfigurationDisplayer.setFrontConfigElementDialogPanel(frontConfigElementDialogPanel);
+        frontConfigurationDisplayer.setFrontConfigElemName(frontConfigElemName);
+        frontConfigurationDisplayer.setFrontConfigElemHeight(frontConfigElemHeight);
+        frontConfigurationDisplayer.setFrontConfigElemWidth(frontConfigElemWidth);
+        frontConfigurationDisplayer.setFrontConfigElemType(frontConfigElemType);
     }
 
+    private void injectPresenter() {
+        frontConfigurationDisplayer.setPresenter(presenter);
+    }
 }

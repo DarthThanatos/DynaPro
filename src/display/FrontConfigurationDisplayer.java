@@ -1,5 +1,8 @@
 package display;
 
+import config.Config;
+import contract.DynProContract;
+import main.DynProMain;
 import model.ConfigurationAggregateVM;
 import model.ConfigurationElementVM;
 import model.FrontConfigurationVM;
@@ -12,11 +15,18 @@ import java.util.Map;
 
 public class FrontConfigurationDisplayer extends JPanel {
 
+    private DynProContract.Presenter presenter;
+
     private JPopupMenu frontConfigColumnOrientedPopup, frontConfigRowOrientedPopup;
     private Map<String, FrontConfigViewElem> idToComponentBinding = new HashMap<>();
     private FrontConfigurationVM frontConfigurationVM;
 
     private FrontConfigViewElem recentlyClickedComponent;
+
+    private JPanel frontConfigElementDialogPanel;
+    private JSpinner frontConfigElemWidth, frontConfigElemHeight;
+    private JComboBox frontConfigElemType;
+    private JTextField frontConfigElemName;
 
     void onChildElemChanged(FrontConfigViewElem frontConfigViewElem){
         recentlyClickedComponent = frontConfigViewElem;
@@ -119,6 +129,7 @@ public class FrontConfigurationDisplayer extends JPanel {
                 configurationElementVM.getModelElementKey().toString(),
                 frontConfigurationVM.getFurnitureName()
         );
+        configElement.setAction(DynProMain.modifyConfigElemAction);
         idToComponentBinding.put(configurationElementVM.getModelElementKey().toString(), configElement);
         configElement.setFrontConfigurationDisplayer(this);
         return configElement;
@@ -154,6 +165,59 @@ public class FrontConfigurationDisplayer extends JPanel {
         }
     }
 
+
+    @SuppressWarnings("ConstantConditions")
+    public void displayFrontConfigElemDialog(String furnitureName, String elementId, String initialType, int initialWidth, int initialHeight, String initialElemName){
+
+        frontConfigElemType.setSelectedItem(initialType);
+        frontConfigElemWidth.setValue(initialWidth);
+        frontConfigElemHeight.setValue(initialHeight);
+        frontConfigElemName.setText(initialElemName);
+
+        frontConfigElementDialogPanel.setVisible(true);
+
+        int optionClicked = JOptionPane.showConfirmDialog(
+                null,
+                frontConfigElementDialogPanel,
+                Config.FRONT_CONFIG_ELEM_DIALOG_TITLE_PL,
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
+        frontConfigElementDialogPanel.setVisible(false);
+
+        if(optionClicked == JOptionPane.OK_OPTION){
+            presenter.onModifyFrontConfigElement(
+                    furnitureName,
+                    elementId,
+                    frontConfigElemType.getSelectedItem().toString(),
+                    Integer.parseInt(frontConfigElemWidth.getValue().toString()),
+                    Integer.parseInt(frontConfigElemHeight.getValue().toString()),
+                    frontConfigElemName.getText()
+            );
+        }
+    }
+
+    public void setFrontConfigElementDialogPanel(JPanel frontConfigElementDialogPanel) {
+        this.frontConfigElementDialogPanel = frontConfigElementDialogPanel;
+    }
+
+    public void setFrontConfigElemWidth(JSpinner frontConfigElemWidth) {
+        this.frontConfigElemWidth = frontConfigElemWidth;
+    }
+
+    public void setFrontConfigElemHeight(JSpinner frontConfigElemHeight) {
+        this.frontConfigElemHeight = frontConfigElemHeight;
+    }
+
+    public void setFrontConfigElemType(JComboBox frontConfigElemType) {
+        this.frontConfigElemType = frontConfigElemType;
+    }
+
+    public void setFrontConfigElemName(JTextField frontConfigElemeName) {
+        this.frontConfigElemName = frontConfigElemeName;
+    }
+
+
     public void setFrontConfigColumnOrientedPopup(JPopupMenu frontConfigColumnOrientedPopup) {
         this.frontConfigColumnOrientedPopup = frontConfigColumnOrientedPopup;
     }
@@ -161,7 +225,6 @@ public class FrontConfigurationDisplayer extends JPanel {
     public void setFrontConfigRowOrientedPopup(JPopupMenu frontConfigRowOrientedPopup) {
         this.frontConfigRowOrientedPopup = frontConfigRowOrientedPopup;
     }
-
 
     public String getRecentlyClickedFurnitureElementId(){
         return recentlyClickedComponent.getModelKey();
@@ -171,4 +234,7 @@ public class FrontConfigurationDisplayer extends JPanel {
         return frontConfigurationVM.getFurnitureName();
     }
 
+    public void setPresenter(DynProContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
 }

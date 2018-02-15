@@ -1,9 +1,11 @@
 package actions
 
 import config.Config
+import display.FrontConfigViewElem
 import display.FrontConfigurationDisplayer
 import display.ProjectTree
 import main.DynProMain
+import model.Element
 import java.awt.event.ActionEvent
 import javax.swing.AbstractAction
 
@@ -77,6 +79,7 @@ abstract class FrontConfigAction(protected val dynProMain: DynProMain): Abstract
     }
   }
 
+
 class RemoveFrontConfigElementAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
     override val presenterAction: (String, String) -> Unit = {s1,s2->dynProMain.presenter.model.removeFrontElementFromFurniture(s1,s2)}
 }
@@ -104,5 +107,14 @@ class AddOneElementAggregateBeforeAction(dynProMain: DynProMain): FrontConfigAct
 
 class AddMultiElementAggregateBeforeAction(dynProMain: DynProMain): FrontConfigAction(dynProMain){
     override val presenterAction: (String, String) -> Unit = {s1, s2 -> dynProMain.presenter.model.addMultiFrontConfigElementAggregateBefore(s1,s2)}
+
+}
+
+class ModifyConfigElemAction(private val dynProMain: DynProMain): AbstractAction(){
+    override fun actionPerformed(e: ActionEvent?) {
+        val frontConfigViewElem = e?.source as FrontConfigViewElem
+        val modelElem: Element = dynProMain.presenter.model.getFurnitureByName(frontConfigViewElem.furnitureName)?.frontConfiguration?.fetchElementWithId(frontConfigViewElem.modelKey)!!
+        dynProMain.presenter.view.displayFrontConfigElemDialog(frontConfigViewElem.furnitureName, frontConfigViewElem.modelKey, modelElem.type, modelElem.width, modelElem.height, modelElem.name)
+    }
 
 }

@@ -17,6 +17,7 @@ interface FrontConfiguration{
     fun addOneElementAggregateBefore(elementId: String)
     fun addMultiElementAggregateBefore(elementId: String)
     fun updateOrientation(columnOriented: Boolean)
+    fun fetchElementWithId(elementId: String): Element
 }
 
 interface ArrangementAggregate : MutableList<Element>
@@ -55,7 +56,7 @@ abstract class DynProFrontConfiguration(protected val parentProject: Project): F
     private fun aggregateIndexContainingElement(element: Element) : Int =
             aggregates.indexOf( aggregateContainingElement(element))
 
-    private fun fetchElementWithId(elementId: String) =
+    override fun fetchElementWithId(elementId: String) =
             aggregates.flatMap { it }.single { it.id == elementId }
 
     private fun indexOfElementWithId(elementId: String) =

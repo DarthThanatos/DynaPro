@@ -17,7 +17,7 @@ interface DynProContract {
         fun displayMetadata(type: String, name: String, height: Int, width: Int, depth: Int, fronPrice: Int, moduleUnitPrice: Int, pathToImage: String)
         fun displaySpecifics(pedestalOptionText: String, backOptionText: String, roofOptionText: String)
         fun displayFrontConfiguration(frontConfigurationVM: FrontConfigurationVM, configOrientationText: String)
-
+        fun displayFrontConfigElemDialog(furnitureName: String, elementId: String, initialType: String, initialWidth: Int, initialHeight: Int, initialName: String)
         fun displayFrontConfigurationRowOrientedPopup(elementId: String)
         fun displayFrontConfigurationColumnOrientedPopup(elementId: String)
 
@@ -28,6 +28,7 @@ interface DynProContract {
         val view: View
         val model: Model
 
+        fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String)
         fun getCurrentDisplayedFurnitureName(): String
         fun onFurnitureSelected(furnitureName: String)
         fun onNewProjectCreated()

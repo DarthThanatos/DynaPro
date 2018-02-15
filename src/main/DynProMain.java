@@ -29,6 +29,12 @@ public class DynProMain implements DynProContract.View {
     static MetadataDisplayer metadataDisplayer;
     @SuppressWarnings("WeakerAccess")  static FrontConfigurationDisplayer frontConfigurationDisplayer;
 
+    @SuppressWarnings("unused") static JPanel frontConfigElementDialogPanel;
+    @SuppressWarnings("unused") static JSpinner frontConfigElemWidth, frontConfigElemHeight;
+    @SuppressWarnings("unused") static JComboBox frontConfigElemType;
+    @SuppressWarnings("unused") static JTextField frontConfigElemName;
+
+
     @SuppressWarnings({"unused", "WeakerAccess"}) public static NewProjectAction newProjectAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RemoveFurnitureAction removeFurnitureAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RenameProjectTreeFurnitureAction renameFurnitureAction;
@@ -38,6 +44,7 @@ public class DynProMain implements DynProContract.View {
     @SuppressWarnings({"unused", "WeakerAccess"}) public static FrontConfigAction removeFrontConfigElementAction, addElementNextToAction,
             addElementBeforeAction, addOneElementAggregateNextToAction, addMultiElementAggragateNextToAction,
             addOneElementAggregateBeforeAction, addMultiElementAggregateBeforeAction;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static ModifyConfigElemAction modifyConfigElemAction;
 
 
 
@@ -109,4 +116,8 @@ public class DynProMain implements DynProContract.View {
         frontConfigurationDisplayer.displayColumnOrientedPopup(elementId);
     }
 
+    @Override
+    public void displayFrontConfigElemDialog(@NotNull String furnitureName, @NotNull String elementId,@NotNull String initialType, int initialWidth, int initialHeight, String initialElemName) {
+        frontConfigurationDisplayer.displayFrontConfigElemDialog(furnitureName, elementId, initialType, initialWidth, initialHeight, initialElemName);
+    }
 }
