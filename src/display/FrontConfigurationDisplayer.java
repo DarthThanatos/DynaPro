@@ -123,7 +123,7 @@ public class FrontConfigurationDisplayer extends JPanel {
         configElement.setFrontConfigurationDisplayer(this);
         return configElement;
     }
-    
+
 
     public void displayColumnOrientedPopup(String elementId){
         displayPopup(frontConfigColumnOrientedPopup, elementId);
