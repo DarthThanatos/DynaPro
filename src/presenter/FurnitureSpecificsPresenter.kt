@@ -21,15 +21,22 @@ interface FurnitureSpecificsPresenter{
 }
 
 class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Model, private val view: DynProContract.View): FurnitureSpecificsPresenter{
-    override fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String) {
-        println("$furnitureName, $elementId, $selectedType, $width, $height, $elemName")
-    }
 
     private var currentlyDisplayed: Furniture? = null
-    private val typeToImgMapper: Map<String, String> = mapOf(Pair(Config.DRAWER_PL, "icons/szuflada_front.png"), Pair(Config.DOOR_PL, "icons/drzwiczki_klamka_lewo.png"), Pair(Config.SHELF_PL, "icons/shelf.png"))
+    private val typeToImgMapper: Map<String, String> = mapOf(
+            Pair(Config.DRAWER_PL, "icons/szuflada_front.png"),
+            Pair(Config.LEFT_DOOR_PL, "icons/drzwiczki_klamka_prawo.png"),
+            Pair(Config.RIGHT_DOOR_PL, "icons/drzwiczki_klamka_lewo.png"),
+            Pair(Config.SHELF_PL, "icons/shelf.png")
+    )
 
-    private fun fetchFrontConfigurationFromFurniture(furniture: Furniture) =
-            model.getCurrentProject().getFurnitureByName(furniture.name)!!.frontConfiguration
+    private fun fetchFrontConfigurationFromFurniture(furniture: Furniture) = fetchFrontConfigurationHavingName(furniture.name)
+
+    private fun fetchFrontConfigurationHavingName(furnitureName: String) =
+            model.getCurrentProject().getFurnitureByName(furnitureName)!!.frontConfiguration
+
+    private fun fetchConfigElem(furnitureName: String, elementId: String) =
+            fetchFrontConfigurationHavingName(furnitureName).fetchElementWithId(elementId)
 
     override fun attachView() {
         onNewProjectCreated()
@@ -133,6 +140,18 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         changeFrontConfigurationDisplay(model.getFurnitureByName(furnitureName)!!)
     }
 
+    override fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String) {
+        println("$furnitureName, $elementId, $selectedType, $width, $height, $elemName")
+        val configElem = fetchConfigElem(furnitureName, elementId)
+        val shouldNotifyViewAboutChange =
+                (configElem.width != width) or (configElem.height != height) or  (configElem.name != elemName) or (configElem.type != selectedType)
+        if(configElem.width != width) configElem.width = width
+        if(configElem.height != height) configElem.height = height
+        if(configElem.name != elemName) configElem.name = elemName
+        if(configElem.type != selectedType)
+            fetchFrontConfigurationHavingName(furnitureName).changeTypeOfElem(elementId, selectedType)
+        if(shouldNotifyViewAboutChange) refreshView(furnitureName)
+    }
 
 
 }

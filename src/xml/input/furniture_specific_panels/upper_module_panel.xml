@@ -51,30 +51,34 @@
         </popupmenu>
 
         <panel id="frontConfigElementDialogPanel" layout="GridBagLayout" visible="false">
-
-            <textfield id="frontConfigElemName" preferredSize="150,25">
+            <panel>
                 <gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                                     anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                                     insets="0,0,0,0" ipadx="0" ipady="0"/>
-            </textfield>
-
-            <combobox id="frontConfigElemType" preferredSize="150,25" initclass="model.ComboFrontConfigElemTypeModel">
+                <label text="Jeśli chcesz, podaj nową nazwę szafki: "/>
+                <textfield id="frontConfigElemName" preferredSize="150,25"/>
+            </panel>
+            <panel>
                 <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                                     anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                                     insets="0,0,0,0" ipadx="0" ipady="0"/>
-            </combobox>
-
-            <spinner id="frontConfigElemWidth" preferredSize="150,25">
+                <label text="Jeśli chcesz, zmień typ szafki: "/>
+                <combobox id="frontConfigElemType" preferredSize="150,25" initclass="model.ComboFrontConfigElemTypeModel"/>
+            </panel>
+            <panel>
                 <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                                     anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                                     insets="0,0,0,0" ipadx="0" ipady="0"/>
-            </spinner>
-
-            <spinner id="frontConfigElemHeight" preferredSize="150,25">
+                <label text="Jeśli chcesz, zmień szerokość szafki: "/>
+                <spinner id="frontConfigElemWidth" preferredSize="150,25"/>
+            </panel>
+            <panel>
                 <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                                     anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                                     insets="0,0,0,0" ipadx="0" ipady="0"/>
-            </spinner>
+                <label text="Jeśli chcesz, zmień wysokość szafki: "/>
+                <spinner id="frontConfigElemHeight" preferredSize="150,25"/>
+            </panel>
         </panel>
     </frontconfigurationdisplayer>
 

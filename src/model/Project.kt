@@ -1,15 +1,18 @@
 package model
 
 import config.Config
+import contract.DefaultFactoryChooser
 import contract.DynProContract
+import contract.FactoriesChain
+import contract.TypedFactoryChooser
 import kotlin.properties.Delegates
 
-interface Project {
+interface Project: TypedFactoryChooser<FurnitureFactory> {
     var presenter: DynProContract.Presenter?
     fun reset(name: String, presenter: DynProContract.Presenter)
     fun getName(): String
     fun rename(newProjectName: String) : Boolean
-    val factoriesChain: FactoriesChain
+    val factoriesChain: FactoriesChain<FurnitureFactory>
     val furnituresList: MutableList<Furniture>
     fun addDefaultFurniture() : Boolean
     fun addChildFurniture(type: String): Boolean
@@ -30,7 +33,9 @@ interface Project {
     fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
 }
 
-class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project{
+class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(){
+
+    override val factoriesChain: FactoriesChain<FurnitureFactory> = AllFurnitureTypesChain(this)
 
     override fun reset(name: String, presenter: DynProContract.Presenter) {
         this.projectName = name
@@ -48,7 +53,20 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project{
 
     override val furnituresList = mutableListOf<Furniture>()
 
-    override val factoriesChain: FactoriesChain = AllFurnitureTypesChain(this)
+    override fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean{
+        if(furnitureNotExist( childName)){
+            chooseFactoryTo(childFurnitureType, {furnituresList.add(it.createFurnitureChild(childName))}, factoriesChain)
+            presenter?.onFurnitureAdded(childName)
+            return true
+        }
+        return false
+    }
+
+
+    override fun getFurnitureWithChangedType(name: String, newType: String) : Furniture{
+        val furnitureIndex = furnituresList.indexOf(furnituresList.filter { it.name == name }.single())
+        return changeType(newType,furnituresList,furnitureIndex, {furnitureFactory, furniture -> furnitureFactory.createFurnitureChild(furniture) }, factoriesChain)
+    }
 
     override fun getDefaultFurniture(): Furniture =  furnituresList.last()
 
@@ -92,18 +110,6 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project{
 
     override fun addChildFurniture(type: String): Boolean = addChildFurniture(pickDefaultName(), type)
 
-    override fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean{
-        if(furnitureNotExist( childName)){
-            for (factory: FurnitureFactory in factoriesChain.getChain()){
-                if (factory.typeCorrect(childFurnitureType))
-                    furnituresList.add(factory.createFurnitureChild(childName))
-            }
-            presenter?.onFurnitureAdded(childName)
-            return true
-        }
-        return false
-    }
-
     override fun removeFurniture(oldChildName: String) : Boolean{
         val success = furnituresList.removeIf { it.name == oldChildName }
         if(success) {
@@ -125,18 +131,6 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project{
         return false
     }
 
-    override fun getFurnitureWithChangedType(name: String, newType: String) : Furniture{
-        val furnitureIndex = furnituresList.indexOf(furnituresList.filter { it.name == name }.single())
-        val oldFurniture = furnituresList.removeAt(furnitureIndex)
-        var newFurniture : Furniture? = null
-        for (factory: FurnitureFactory in factoriesChain.getChain()){
-            if (factory.typeCorrect(newType)){
-                newFurniture = factory.createFurnitureChild(oldFurniture)
-            }
-        }
-        furnituresList.add(furnitureIndex, newFurniture!!)
-        return newFurniture
-    }
 
 
     override fun addFrontConfigElementNextTo(furnitureName: String, elementId: String) {

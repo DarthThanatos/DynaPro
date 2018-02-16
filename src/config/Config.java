@@ -22,7 +22,8 @@ public class Config {
     public final static String META_PRESENTER_SUB = "meta presenter sub";
 
     public final static String DRAWER_PL = "szuflada";
-    public final static String DOOR_PL = "drzwiczki";
+    public final static String LEFT_DOOR_PL = "lewe drzwiczki";
+    public final static String RIGHT_DOOR_PL = "prawe drzwiczki";
     public final static String SHELF_PL = "półka";
 
     public static final String ROW_ORIENTED = "Zorientowany wierszami";
