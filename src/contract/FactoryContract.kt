@@ -4,7 +4,7 @@ interface TypedFactory{
     fun typeCorrect(type : String): Boolean
 }
 
-interface FactoriesChain <T: TypedFactory>{
+interface FactoriesChain <out T: TypedFactory>{
     fun getChain():List<T>
 }
 
@@ -25,13 +25,12 @@ class DefaultFactoryChooser<T : TypedFactory>: TypedFactoryChooser<T> {
         return newEntity as E
     }
 
-    private fun findFactory(newType: String, factoriesChain: FactoriesChain<T>): T = factoriesChain.getChain().find { it.typeCorrect(newType) }!!
+    private fun findFactory(newType: String, factoriesChain: FactoriesChain<T>): T =
+            factoriesChain.getChain().find { it.typeCorrect(newType) }!!
 
     override fun chooseFactoryTo(type: String, factoryAction: (T) -> Unit, factoriesChain: FactoriesChain<T>) {
-
-        for (factory in factoriesChain.getChain()){
-            if (factory.typeCorrect(type))
-                factoryAction(factory)
-        }
+        factoriesChain.getChain()
+                .filter { it.typeCorrect(type) }
+                .forEach { factoryAction(it) }
     }
 }

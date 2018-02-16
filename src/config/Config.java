@@ -38,4 +38,6 @@ public class Config {
     public static final String PEDESTAL_EXISTS = "Jest";
     public static final String NO_PEDESTAL = "Brak";
     public static final String FRONT_CONFIG_ELEM_DIALOG_TITLE_PL = "Podaj charakterystykę elementu:";
+
+    public static final String FRONT_CONFIG_ELEMENT_TIP_FORMAT = "<html>Nazwa: %s<br/>Typ: %s<br/>Szerokość: %d<br/>Wysokość: %d<br/></html>";
 }

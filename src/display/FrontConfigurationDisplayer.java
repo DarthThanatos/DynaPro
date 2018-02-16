@@ -32,6 +32,10 @@ public class FrontConfigurationDisplayer extends JPanel {
         recentlyClickedComponent = frontConfigViewElem;
     }
 
+    public FrontConfigurationDisplayer(){
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+    }
+
     public void display(FrontConfigurationVM frontConfigurationVM) {
         initConfigurationDisplay(frontConfigurationVM);
         boolean columnOriented = frontConfigurationVM.getColumnOriented();
@@ -130,6 +134,7 @@ public class FrontConfigurationDisplayer extends JPanel {
                 frontConfigurationVM.getFurnitureName()
         );
         configElement.setAction(DynProMain.modifyConfigElemAction);
+        configElement.setToolTipText(configurationElementVM.getTooltip());
         idToComponentBinding.put(configurationElementVM.getModelElementKey().toString(), configElement);
         configElement.setFrontConfigurationDisplayer(this);
         return configElement;
@@ -183,9 +188,19 @@ public class FrontConfigurationDisplayer extends JPanel {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
         );
+
         frontConfigElementDialogPanel.setVisible(false);
 
         if(optionClicked == JOptionPane.OK_OPTION){
+            idToComponentBinding.get(elementId).setToolTipText(
+                    String.format(
+                            Config.FRONT_CONFIG_ELEMENT_TIP_FORMAT,
+                            frontConfigElemName.getText(),
+                            frontConfigElemType.getSelectedItem().toString(),
+                            Integer.parseInt(frontConfigElemWidth.getValue().toString()),
+                            Integer.parseInt(frontConfigElemHeight.getValue().toString())
+                    )
+            );
             presenter.onModifyFrontConfigElement(
                     furnitureName,
                     elementId,
