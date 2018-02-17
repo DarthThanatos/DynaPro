@@ -88,7 +88,8 @@ abstract class DynProFrontConfiguration(private val parentProject: Project): Fro
         val newAggregate =
                 if(!repeated) Aggregate(defaultElementBuilder())
                 else Aggregate().filledWithRepeatingDefault(
-                        times = maxElementsNumberInAggregates(), builder = defaultElementBuilder
+                        times = maxElementsNumberInAggregates(),
+                        builder = defaultElementBuilder
                 )
         aggregates.add(indexModifier(indexOfAggregate), newAggregate)
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
