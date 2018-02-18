@@ -1,19 +1,21 @@
-package extra;//import java.awt.DisplayMode;
-
+package extra;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
+//import Jama.Matrix;
+import javax.swing.*;
+
 import com.jogamp.opengl.util.FPSAnimator;
+import com.jogamp.opengl.util.GLBuffers;
 import com.jogamp.opengl.util.PMVMatrix;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import javafx.geometry.Point3D;
 
-import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.FloatBuffer;
+import java.util.*;
 
 import static com.jogamp.opengl.GL.*;
 
@@ -22,8 +24,151 @@ public class Cube implements GLEventListener, MouseListener, MouseMotionListener
     //    public static DisplayMode dm, dm_old;
     private GLU glu = new GLU();
     private float rquad = 0.0f;
-    private float rotationX, rotationY, buttonX, buttonY, translationZ;
+    private float rotationX, rotationY, buttonX, glButtonY, mathButtonY, translationZ;
     private int texture;
+
+
+
+    private double[][] vToColumnWiseMd(double v[]){
+        double[][] res = new double[4][4];
+        for(int j = 0; j < 4; j ++){
+            for (int i = 0; i < 4; i++){
+                res[i][j] = v[i * 4 + j];
+            }
+        }
+        return res;
+
+    }
+
+    private double[][] vToRowWiseMd(double v[]){
+        double [][] res = new double[4][4];
+        double[][]columnWise = vToColumnWiseMd(v);
+        for(int i = 0; i < 4; i ++){
+            for (int j = 0; j < 4; j++){
+                res[i][j] = columnWise[j][i];
+            }
+        }
+        return res;
+
+    }
+
+    private float[][] vToColumnWiseMf(float v[]){
+        float[][] res = new float[4][4];
+        for(int j = 0; j < 4; j ++){
+            for (int i = 0; i < 4; i++){
+                res[i][j] = v[i * 4 + j];
+            }
+        }
+        return res;
+
+    }
+
+    private float[][] vToRowWiseMf(float v[]){
+        float [][] res = new float[4][4];
+        float[][]columnWise = vToColumnWiseMf(v);
+        for(int i = 0; i < 4; i ++){
+            for (int j = 0; j < 4; j++){
+                res[i][j] = columnWise[j][i];
+            }
+        }
+        return res;
+
+    }
+
+    private float[][] pmvBufferToColumnWiseArray(PMVMatrix pmvMatrix){
+        return vToColumnWiseMf(pmvMatrix.glGetPMatrixf().array());
+    }
+
+    private float[][] pmvBufferToRowWiseArray(PMVMatrix pmvMatrix){
+        return vToRowWiseMf(pmvMatrix.glGetPMatrixf().array());
+    }
+
+    private void printM4x4(float [][] m, String title){
+        System.out.println(title);
+        for(int i = 0; i < 4; i++){
+            for (int j = 0 ; j < 4; j++){
+                System.out.print(m[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private void utils(){
+//        Matrix projMatInversed = new Matrix(vToRowWiseMd(projection)).inverse();
+//        Matrix mVMatInversed = new Matrix(vToRowWiseMd(modelView)).inverse();
+//        printM4x4(vToColumnWiseMf(projection), "column wise");
+//        printM4x4(vToRowWiseMf(projection), "row wise");
+        printM4x4(pmvBufferToColumnWiseArray(new PMVMatrix()), "column wise");
+        printM4x4(pmvBufferToRowWiseArray(new PMVMatrix()), "row wise");
+
+    }
+
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        buttonX = e.getX(); glButtonY = e.getY();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+        buttonX = e.getX(); glButtonY = e.getY();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if(e.getX() != buttonX)
+            rotationY += (e.getX() - buttonX);
+        buttonX = e.getX();
+        if(e.getY() != glButtonY)
+            rotationX += (e.getY() - glButtonY);
+        glButtonY = e.getY();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        translationZ -= e.getPreciseWheelRotation();
+    }
+
+
+    private double[] recentWorldCoordinatesAtClickedPoint = new double[3], previousWorldCoordinatesAtClickedPoint = new double[3];
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(
+                recentWorldCoordinatesAtClickedPoint[0] != previousWorldCoordinatesAtClickedPoint[0]
+                        || recentWorldCoordinatesAtClickedPoint[1] != previousWorldCoordinatesAtClickedPoint[1]
+                        || recentWorldCoordinatesAtClickedPoint[2] != previousWorldCoordinatesAtClickedPoint[2]
+                ){
+            System.out.println("Most recently clicked: 2D: " + buttonX + ", " + mathButtonY + "; 3D: " +
+                    recentWorldCoordinatesAtClickedPoint[0] + ", "
+                    + recentWorldCoordinatesAtClickedPoint[1]
+                    + ", " + recentWorldCoordinatesAtClickedPoint[2]
+            );
+            previousWorldCoordinatesAtClickedPoint[0] = recentWorldCoordinatesAtClickedPoint[0];
+            previousWorldCoordinatesAtClickedPoint[1] = recentWorldCoordinatesAtClickedPoint[1];
+            previousWorldCoordinatesAtClickedPoint[2] = recentWorldCoordinatesAtClickedPoint[2];
+
+        }
+        buttonX = e.getX();
+        glButtonY = e.getY();
+    }
 
     @Override
     public void display(GLAutoDrawable drawable) {
@@ -35,11 +180,9 @@ public class Cube implements GLEventListener, MouseListener, MouseMotionListener
 
         gl.glTranslatef(0f, 0f, -10.0f + translationZ);
 
-        // Rotate The Cube On X, Y & Z
         gl.glRotatef(rotationX, 1, 0, 0.0f);
         gl.glRotatef(rotationY, 0, 1, 0);
-//        drawCasting(gl);
-//        drawCuboid(gl);
+
         float height = 0.1f;
         float width = 0.1f;
         float depth = 0.1f;
@@ -54,13 +197,32 @@ public class Cube implements GLEventListener, MouseListener, MouseMotionListener
         drawCuboid(gl, new Point3D(-0, -2, -0), new Point3D(2, 2, 2), colorMap, false);
         colorMap.put("Front", new Point3D(0.0f / 255f, 180f / 255f, 144f / 255f));
         drawCuboid(gl, new Point3D(0, 2, -2), new Point3D(2, 6, width), colorMap, false);
-//        drawCuboid(gl, new Point3D(0, -2 + height + rift, 3), new Point3D(2, height, 2));
 
-//        drawCuboid(gl, new Point3D(0,-2,0), new Point3D(2,2,2));
-//        drawCuboid(gl, new Point3D(0,0,0), new Point3D(width,2,2));
-//        drawCuboid(gl, new Point3D(2 - width,0,0), new Point3D(width,2,2));
         drawInsertedSector(gl, new Point3D(0,0,0), new Point3D(2,2,2));
         drawMesh(gl);
+        double[] projection = new double[16], modelView = new double[16];
+        int viewport[] = new int[4];
+
+
+        gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelView, 0);
+        gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
+        gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
+        float viewportHeight = viewport[3];
+        mathButtonY= viewportHeight - glButtonY;
+        FloatBuffer z = GLBuffers.newDirectFloatBuffer(1);
+        gl.glReadPixels((int)buttonX, (int)mathButtonY, 1, 1, GL2.GL_DEPTH_COMPONENT, GL2.GL_FLOAT, z);
+        glu.gluUnProject(
+                (double) buttonX,
+                (double) mathButtonY,
+                z.get(0),
+                modelView, 0,
+                projection, 0,
+                viewport, 0,
+                recentWorldCoordinatesAtClickedPoint, 0
+        );
+
+//        System.out.println(z.get(0) + ", " + "Most recently clicked: 2D: " + buttonX + ", " + y + "; 3D: " + recentWorldCoordinatesAtClickedPoint[0] + ", " + recentWorldCoordinatesAtClickedPoint[1] + ", " + recentWorldCoordinatesAtClickedPoint[2]);
+
         gl.glFlush();
 
         rquad -= 0.15f;
@@ -512,53 +674,5 @@ public class Cube implements GLEventListener, MouseListener, MouseMotionListener
         animator.start();
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        System.out.println(new PMVMatrix().glGetPMatrixf().array().length);
-    }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        buttonX = e.getX(); buttonY = e.getY();
-//        System.out.println("Mouse pressed");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-        buttonX = e.getX(); buttonY = e.getY();
-//        System.out.println("Mouse released");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-//        System.out.println("Mouse entered");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-//        System.out.println("Mouse exited");
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        if(e.getX() != buttonX)
-            rotationY += (e.getX() - buttonX);
-        buttonX = e.getX();
-        if(e.getY() != buttonY)
-            rotationX += (e.getY() - buttonY);
-        buttonY = e.getY();
-//        System.out.println("Mouse dragged: " + rotationX + ", " + rotationY);
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-//        System.out.println("Mouse moved " + e.getX() + ", " + e.getY());
-    }
-
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        translationZ -= e.getPreciseWheelRotation();
-    }
 }
