@@ -108,11 +108,13 @@ public class Cube implements GLEventListener, MouseListener, MouseMotionListener
     @Override
     public void mousePressed(MouseEvent e) {
         buttonX = e.getX(); glButtonY = e.getY();
+        System.out.println("Pressed");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
 
+        System.out.println("released");
         buttonX = e.getX(); glButtonY = e.getY();
     }
 
@@ -134,6 +136,7 @@ public class Cube implements GLEventListener, MouseListener, MouseMotionListener
         if(e.getY() != glButtonY)
             rotationX += (e.getY() - glButtonY);
         glButtonY = e.getY();
+        System.out.println("dragged");
     }
 
     @Override
