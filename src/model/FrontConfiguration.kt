@@ -27,6 +27,7 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
     fun propagateAggragateSpecificDimen(elementId: String)
     fun propagateAggregateSpecificBlock(elementId: String, propertyBlocked: Boolean)
     fun getMaxDimensionOf(elementId: String): Dimension
+    fun getMinDimensionOf(elementId: String): Dimension
 }
 
 interface ArrangementAggregate : MutableList<Element>
@@ -213,6 +214,24 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         val dh = if(columnOriented) getRemainingColumnOrientedHeight(aggregateContainingElementWithId(elementId)) else getRemainingRowOrientedHeight()
         return Dimension(currentWidth + dw, currentHeight + dh)
 
+    }
+
+    private fun getNumberOfNonBlockedWidthElements(elementId: String): Int{
+        return if (!columnOriented) aggregateContainingElementWithId(elementId).filter { !it.blockedWidth and (it.id != elementId) }.size
+        else aggregates.filter { !it[0].blockedWidth }.size
+    }
+
+    private fun getNumberOfNonBlockedHeightElements(elementId:String) : Int{
+        return if (!columnOriented) aggregates.filter { !it[0].blockedHeight }.size
+        else aggregateContainingElementWithId(elementId).filter { !it.blockedHeight and (it.id != elementId) }.size
+    }
+
+    override fun getMinDimensionOf(elementId: String): Dimension{
+        val nonBlockedWidthElems = getNumberOfNonBlockedWidthElements(elementId)
+        val nonBlockedHeight = getNumberOfNonBlockedHeightElements(elementId)
+        val minWidth = 0
+        val minHeight = 0
+        return Dimension(minWidth, minHeight)
     }
 
     private fun getRemainingRowOrientedHeight(): Int{
