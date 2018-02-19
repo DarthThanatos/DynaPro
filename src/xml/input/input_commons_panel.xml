@@ -38,7 +38,7 @@
         <gridbagconstraints gridx="2" gridy="3" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                             anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
-        <label text="Wysokość szafki: "/>
+        <label text="Wysokość szafki [mm]: "/>
         <spinner preferredsize="100,25" id="furnitureHeightDisplay"/>
     </panel>
 
@@ -47,7 +47,7 @@
         <gridbagconstraints gridx="2" gridy="4" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                             anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
-        <label text="Szerokość szafki: "/>
+        <label text="Szerokość szafki [mm]: "/>
         <spinner preferredsize="100,25" id="furnitureWidthDisplay"/>
     </panel>
 
@@ -56,7 +56,7 @@
         <gridbagconstraints gridx="2" gridy="5" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                             anchor="GridBagConstraints.PAGE_START" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
-        <label text="Głębokość szafki: "/>
+        <label text="Głębokość szafki [mm]: "/>
         <spinner preferredsize="100,25" id="furnitureDepthDisplay"/>
     </panel>
 

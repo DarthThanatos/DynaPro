@@ -36,12 +36,11 @@ public class Config {
     public static final String ROOF_INSERTED = "Wkładany";
 
     public static final String PEDESTAL_EXISTS = "Jest";
-    public static final String NO_PEDESTAL = "Brak";
+    public static final String NO_PEDESTAL = "Brak (ignorowana wprowadzana wartość po prawej)";
     public static final String FRONT_CONFIG_ELEM_DIALOG_TITLE_PL = "Podaj charakterystykę elementu:";
 
     public static final String YES_PL = "Tak", NO_PL = "Nie";
     public static final String FRONT_CONFIG_ELEMENT_TIP_FORMAT = "<html>Nazwa: %s<br/>Typ: %s<br/>Szerokość: %d<br/>Wysokość: %d<br/>Szerokość zablokowana: %s<br/> Wysokość zablokowana: %s<br/>Orientacja słojów wzdłuż wysokości: %s<br/>Ilość dodatkowych półek: %d</html>";
 
     public static final int SLAB_WIDTH = 18, BETWEEN_ELEMENTS_HORIZONTAL_GAP = 3, BETWEEN_ELEMENTS_VERTICAL_GAP = 2;
-    public static final int PEDESTAL_HEIGHT = 50;
 }

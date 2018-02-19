@@ -80,7 +80,7 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
     private fun onDisplayModelInformation(furniture: Furniture){
         changeFrontConfigurationDisplay(furniture)
         view.displaySpecifics(
-                if(furniture.type == Config.UPPER_MODULE) Config.NO_PEDESTAL else Config.PEDESTAL_EXISTS,
+                if(furniture.hasPedestal) Config.NO_PEDESTAL else Config.PEDESTAL_EXISTS,
                 if(furniture.backInserted) Config.BACK_INSERTED else Config.BACK_HPV,
                 if(furniture.roofInserted) Config.ROOF_INSERTED else Config.ROOF_NOT_INSERTED,
                 furniture.pedestalHeight

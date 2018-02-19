@@ -69,14 +69,14 @@
                 <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                                     anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                                     insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Jeśli chcesz, zmień szerokość szafki: "/>
+                <label text="Jeśli chcesz, zmień szerokość szafki [mm]: "/>
                 <spinner id="frontConfigElemWidth" preferredSize="150,25"/>
             </panel>
             <panel>
                 <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                                     anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                                     insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Jeśli chcesz, zmień wysokość szafki: "/>
+                <label text="Jeśli chcesz, zmień wysokość szafki[mm]: "/>
                 <spinner id="frontConfigElemHeight" preferredSize="150,25"/>
             </panel>
             <panel>
@@ -114,8 +114,8 @@
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Cokół: "/>
-        <combobox preferredsize="100,25" id="pedestalCB" initclass="model.ComboPedestalModel" enabled="false"/>
-        <label text="Wysokość cokołu: "/>
+        <combobox preferredsize="200,25" id="pedestalCB" initclass="model.ComboPedestalModel" enabled="false"/>
+        <label text="Wysokość cokołu [mm]: "/>
         <spinner id="pedestalHeightDisplayer" preferredsize="100,25"/>
     </panel>
 </panel>
