@@ -17,10 +17,13 @@ interface Furniture{
     var backInserted: Boolean
     val hasPedestal: Boolean
     fun getElements(): List<Element>
+    var pedestalHeight: Int
 }
 
 
 class UpperModule(initialName: String, private val parentProject: Project): Furniture {
+    override var pedestalHeight: Int = 0
+
     override val hasPedestal: Boolean = false
 
     override var roofInserted: Boolean = false
@@ -37,9 +40,9 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
 
     override var elementUnitPrice: Int = 115
 
-    override var height: Int = 200
+    override var height: Int by Delegates.observable(200){ _, _, _ -> frontConfiguration.recalculateElementsDimens()}
 
-    override var width: Int = 50
+    override var width: Int by Delegates.observable(100){ _, _, _ -> frontConfiguration.recalculateElementsDimens()}
 
     override var depth: Int = 75
 
@@ -48,9 +51,16 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    init{
+        frontConfiguration.recalculateElementsDimens()
+        frontConfiguration.propagateAggragateSpecificDimen()
+    }
+
 }
 
 class BottomModule(initialName: String, private val parentProject: Project): Furniture{
+    override var pedestalHeight: Int = 50
+
     override val hasPedestal: Boolean = true
 
     override var roofInserted: Boolean = true
@@ -67,9 +77,9 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
 
     override var elementUnitPrice : Int  = 10
 
-    override var height : Int = 10
+    override var height : Int by Delegates.observable(200){ _, _, _ -> frontConfiguration.recalculateElementsDimens()}
 
-    override var width : Int = 50
+    override var width : Int by Delegates.observable(100){ _, _, _ -> frontConfiguration.recalculateElementsDimens()}
 
     override var depth : Int = 10
 
@@ -77,4 +87,8 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    init{
+        frontConfiguration.recalculateElementsDimens()
+        frontConfiguration.propagateAggragateSpecificDimen()
+    }
 }

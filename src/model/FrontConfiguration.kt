@@ -1,5 +1,6 @@
 package model
 
+import config.Config
 import contract.DefaultFactoryChooser
 import contract.TypedFactoryChooser
 import kotlin.properties.Delegates
@@ -21,6 +22,11 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
     fun updateOrientation(columnOriented: Boolean)
     fun fetchElementWithId(elementId: String): Element
     fun changeTypeOfElem(elementId: String, newType: String): Element
+    fun recalculateElementsDimens()
+    fun getRemainingColumnOrientedHeight(column: ArrangementAggregate): Int
+    fun getRemainingRowOrientedWidth(row: ArrangementAggregate): Int
+    fun propagateAggragateSpecificDimen(elementId: String? = null)
+    fun propagateAggregateSpecificBlock(elementId: String, propertyBlocked: Boolean)
 }
 
 interface ArrangementAggregate : MutableList<Element>
@@ -38,7 +44,7 @@ class Aggregate(vararg elements: Element): ArrangementAggregate, MutableList<Ele
     }
 }
 
-abstract class DynProFrontConfiguration(private val parentProject: Project): FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(){
+abstract class DynProFrontConfiguration(private val parentProject: Project, override var parentFurniture: Furniture): FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(){
     abstract protected var aggregates: ArrayList<ArrangementAggregate>
     private val factoriesChain = AllFrontElementFactoriesChain()
 
@@ -134,9 +140,107 @@ abstract class DynProFrontConfiguration(private val parentProject: Project): Fro
         val aggregate = aggregateContainingElementWithId(elementId)
         return changeType(newType, aggregate, frontElemIndex, {frontElemFactory, element -> frontElemFactory.createFrontElem(element)}, factoriesChain)
     }
+
+    override fun recalculateElementsDimens(){
+        if(columnOriented) recalculateColumnOrientedConfig()
+        else recalculateRowOrientedConfig()
+    }
+
+    private fun propagate(element: Element, propagation: (Element) -> Unit){
+        aggregateContainingElementWithId(element.id).forEach { propagation(it) }
+    }
+
+    private fun propagateColumnWidth(){
+        val remainingWidth = getRemainingColumnOrientedWidth()
+        val (blockedWidthColumns, nonBlockedWidthColumns) = aggregates.partition { it[0].blockedWidth }
+        blockedWidthColumns.forEach { agg -> propagate(agg[0]){it.width = agg[0].width} }
+        nonBlockedWidthColumns.forEach { propagate(it[0]) { it.width = remainingWidth / nonBlockedWidthColumns.size} }
+    }
+
+    private fun propagateRowHeight(){
+//        propagate(aggregates[0][0]) { it.height = aggregates[0][0].height }
+        val remainingHeight = getRemainingRowOrientedHeight()
+        val (blockedHeightRows, nonBlockedHeightRows) = aggregates.partition { it[0].blockedHeight }
+        blockedHeightRows.forEach { agg -> propagate(agg[0]){it.height = agg[0].height} }
+        nonBlockedHeightRows.forEach { propagate(it[0]){it.height = remainingHeight / nonBlockedHeightRows.size} }
+    }
+
+    private fun propagateColumnWidthHavingelemId(elementId: String){
+        val element = fetchElementWithId(elementId)
+        propagate(element) { it.width = element.width }
+    }
+
+    private fun propagateRowHeightHavingElemId(elementId: String){
+        val element = fetchElementWithId(elementId)
+        propagate(element) { it.height = element.height }
+
+    }
+
+    private fun getRemainingColumnOrientedWidth(): Int{
+        val blockedWidthColumns = aggregates.filter { it[0].blockedWidth }
+        return parentFurniture.width - (aggregates.size + 1) * Config.BETWEEN_ELEMENTS_VERTICAL_GAP - blockedWidthColumns.sumBy { it[0].width }
+    }
+
+    private fun getRemainingRowOrientedHeight(): Int{
+        val blockedHeightRows = aggregates.filter { it[0].blockedHeight }
+        return parentFurniture.height - (aggregates.size + 1) * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP - blockedHeightRows.sumBy { it[0].height } - parentFurniture.pedestalHeight
+    }
+
+    override fun getRemainingColumnOrientedHeight(column: ArrangementAggregate) : Int{
+        val blockedHeightElements = column.filter { it.blockedHeight }
+        return parentFurniture.height - (column.size + 1) * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP - blockedHeightElements.sumBy { it.height } - parentFurniture.pedestalHeight
+
+    }
+
+    override fun getRemainingRowOrientedWidth(row: ArrangementAggregate): Int {
+        val blockedWidthElements = row.filter { it.blockedWidth }
+        return parentFurniture.width - (row.size + 1) * Config.BETWEEN_ELEMENTS_VERTICAL_GAP - blockedWidthElements.sumBy { it.width }
+    }
+
+    private fun recalculateColumnOrientedConfig(){
+        for(column in aggregates){
+            val nonBlockedHeightElements = column.filter { !it.blockedHeight }
+            val remainingHeight = getRemainingColumnOrientedHeight(column)
+            nonBlockedHeightElements.forEach{ it -> it.height = remainingHeight / nonBlockedHeightElements.size}
+        }
+    }
+
+    private fun recalculateRowOrientedConfig(){
+        for (row in aggregates){
+            val nonBlockedWidthElements = row.filter { !it.blockedWidth }
+            val remainingWidth = getRemainingRowOrientedWidth(row)
+            nonBlockedWidthElements.forEach { it -> it.width = remainingWidth / nonBlockedWidthElements.size }
+        }
+    }
+
+    override fun propagateAggragateSpecificDimen(elementId:String?){
+        if(elementId == null){
+            if(columnOriented) propagateColumnWidth()
+            else propagateRowHeight()
+        }
+        else{
+            if(columnOriented) propagateColumnWidthHavingelemId(elementId)
+            else propagateRowHeightHavingElemId(elementId)
+        }
+    }
+
+    private fun propagateBlockedWidth(elementId: String, widthBlocked: Boolean){
+        val element = fetchElementWithId(elementId)
+        propagate(element){it.blockedWidth = widthBlocked}
+    }
+
+    private fun propagateBlockedHeight(elementId: String, heightBlocked: Boolean){
+        val element = fetchElementWithId(elementId)
+        propagate(element){it.blockedHeight = heightBlocked}
+    }
+
+    override fun propagateAggregateSpecificBlock(elementId: String, propertyBlocked: Boolean){
+        if(columnOriented) propagateBlockedWidth(elementId, propertyBlocked)
+        else propagateBlockedHeight(elementId, propertyBlocked)
+    }
 }
 
-class UpperModuleFrontConfiguration(parentProject: Project, override var parentFurniture: Furniture): DynProFrontConfiguration(parentProject){
+class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
 
     override val defaultElementBuilder = { Drawer() }
 
@@ -148,7 +252,7 @@ class UpperModuleFrontConfiguration(parentProject: Project, override var parentF
 
 }
 
-class BottomModuleFrontConfiguration(parentProject: Project, override var parentFurniture: Furniture): DynProFrontConfiguration(parentProject){
+class BottomModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
 
     override val defaultElementBuilder = { Shelf() }
 
