@@ -116,3 +116,4 @@ val furnitureRoofOptionsBinder = JComboboxBinder(DynProMain.furnitureRoofOptions
 val furnitureBackOptionsBinder = JComboboxBinder(DynProMain.furnitureBackOptions)
 val projectTreeBinder = ProjectTreeBinder(DynProMain.projectTree)
 val frontConfigurationDisplayBinder = FrontConfigurationDisplayBinder(DynProMain.frontConfigurationDisplayer)
+val pedestalHeightDisplayBinder = JSpinnerBinder(DynProMain.pedestalHeightDisplayer)

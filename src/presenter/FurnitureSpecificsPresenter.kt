@@ -18,6 +18,8 @@ interface FurnitureSpecificsPresenter{
     fun onFurnitureAdded(addedFurnitureName: String)
     fun onFurnitureSelected(furnitureName: String)
     fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String, widthBlocked: Boolean, heightBlocked: Boolean, growthRingVertical: Boolean, shelvesNumber: Int)
+    fun onFrontConfigDimensChanged(furnitureName: String)
+    fun onPedestalHeightChanged(name: String)
 }
 
 class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Model, private val view: DynProContract.View): FurnitureSpecificsPresenter{
@@ -55,6 +57,7 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
                 val columnOriented = value == Config.COLUMN_ORIENTED
                 if(columnOriented != fetchFrontConfigurationFromFurniture(furniture).columnOriented)
                     fetchFrontConfigurationFromFurniture(furniture).updateOrientation(value == Config.COLUMN_ORIENTED)
+                    refreshView(furniture.name)
 
             }
         })
@@ -66,6 +69,11 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         furnitureBackOptionsBinder.registerSubscriber(Config.CURRENT_FURNITURE, object:Binder.OnChange{
             override fun onChange(value: Any) {
                 furniture.backInserted = value == Config.BACK_INSERTED
+            }
+        })
+        pedestalHeightDisplayBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
+            override fun onChange(value: Any) {
+                furniture.pedestalHeight = value as Int
             }
         })
     }
@@ -90,7 +98,6 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
             override fun onChange(value: Any) {
                 val (popupActionTriggered: Boolean, furnitureName: String, elementId: String) = value as FrontConfDisplayNotifyValue
                 if(popupActionTriggered) onChooseFurnitureConfigurationPopup(furnitureName, elementId)
-                else println("Clicked $elementId")
             }
 
         })
@@ -100,6 +107,7 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         if(model.isProject(furnitureName)) return
         currentlyDisplayed = model.getFurnitureByName(furnitureName)
         if(currentlyDisplayed==null) return
+        System.out.println("Refreshing")
         registerSubscribers(currentlyDisplayed!!)
         onDisplayModelInformation(currentlyDisplayed!!)
     }
@@ -147,11 +155,36 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
                 (configElem.width != width) or (configElem.height != height) or  (configElem.name != elemName) or (configElem.type != selectedType) or
                 (configElem.blockedWidth != widthBlocked) or (configElem.blockedHeight != heightBlocked) or
                 (configElem.growthRingVerticallyOriented != growthRingVertical) or (configElem.shelvesNumber != shelvesNumber)
-        if(configElem.width != width) configElem.width = width
-        if(configElem.height != height) configElem.height = height
+
+        if(configElem.blockedWidth != widthBlocked) {
+            val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
+            configElem.blockedWidth = widthBlocked
+            if(frontConfig.columnOriented)frontConfig.propagateAggregateSpecificBlock(elementId, widthBlocked)
+            frontConfig.recalculateElementsDimens()
+        }
+//            configElem.blockedWidth = widthBlocked
+        if(configElem.blockedHeight != heightBlocked) {
+            val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
+            configElem.blockedHeight = heightBlocked
+            if(!frontConfig.columnOriented) frontConfig.propagateAggregateSpecificBlock(elementId, heightBlocked)
+            frontConfig.recalculateElementsDimens()
+        }
+//            configElem.blockedHeight = heightBlocked
+        if(configElem.width != width) {
+            val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
+            configElem.width = width
+            frontConfig.propagateAggragateSpecificDimen(elementId)
+            frontConfig.recalculateElementsDimens()
+        }
+//            configElem.width = width
+        if(configElem.height != height) {
+            val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
+            configElem.height = height
+            frontConfig.propagateAggragateSpecificDimen(elementId)
+            frontConfig.recalculateElementsDimens()
+        }
+//            configElem.height = height
         if(configElem.name != elemName) configElem.name = elemName
-        if(configElem.blockedWidth != widthBlocked) configElem.blockedWidth = widthBlocked
-        if(configElem.blockedHeight != heightBlocked)configElem.blockedHeight = heightBlocked
         if(configElem.growthRingVerticallyOriented != growthRingVertical) configElem.growthRingVerticallyOriented = growthRingVertical
         if(configElem.shelvesNumber != shelvesNumber) configElem.shelvesNumber = shelvesNumber
         if(configElem.type != selectedType)
@@ -159,5 +192,12 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         if(shouldNotifyViewAboutChange) refreshView(furnitureName)
     }
 
+    override fun onFrontConfigDimensChanged(furnitureName: String) {
+        refreshView(furnitureName)
+    }
+
+    override fun onPedestalHeightChanged(name: String) {
+        refreshView(name)
+    }
 
 }

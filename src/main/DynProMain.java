@@ -24,6 +24,7 @@ public class DynProMain implements DynProContract.View {
 
     static ImagePanel furnitureAvatar;
     @SuppressWarnings("WeakerAccess") static JComboBox furnitureTypeDisplay, frontConfigurationOrientation, pedestalCB, furnitureBackOptions, furnitureRoofOptions;
+    static JSpinner pedestalHeightDisplayer;
     static JTextField furnitureNameDisplay;
     static JSpinner furnitureHeightDisplay, furnitureWidthDisplay, furnitureDepthDisplay, furnitureFrontPriceDisplay, furnitureModuleUnitPriceDisplay;
     static MetadataDisplayer metadataDisplayer;
@@ -119,7 +120,7 @@ public class DynProMain implements DynProContract.View {
 
 
     @Override
-    public void displayFrontConfigElemDialog(@NotNull String furnitureName, @NotNull String elementId, @NotNull String initialType, int initialWidth, int initialHeight, @NotNull String initialName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber) {
-        frontConfigurationDisplayer.displayFrontConfigElemDialog(furnitureName, elementId, initialType, initialWidth, initialHeight, initialName, widthBlocked, heightBlocked, growthRingVertically, shelvesNumber);
+    public void displayFrontConfigElemDialog(@NotNull String furnitureName, @NotNull String elementId, @NotNull String initialType, int initialWidth, int initialHeight, int maxWidth, int maxHeight, @NotNull String initialName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber) {
+        frontConfigurationDisplayer.displayFrontConfigElemDialog(furnitureName, elementId, initialType, initialWidth, initialHeight, maxWidth, maxHeight,  initialName, widthBlocked, heightBlocked, growthRingVertically, shelvesNumber);
     }
 }

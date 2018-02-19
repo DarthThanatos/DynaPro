@@ -17,7 +17,7 @@ interface DynProContract {
         fun displayMetadata(type: String, name: String, height: Int, width: Int, depth: Int, fronPrice: Int, moduleUnitPrice: Int, pathToImage: String)
         fun displaySpecifics(pedestalOptionText: String, backOptionText: String, roofOptionText: String)
         fun displayFrontConfiguration(frontConfigurationVM: FrontConfigurationVM, configOrientationText: String)
-        fun displayFrontConfigElemDialog(furnitureName: String, elementId: String, initialType: String, initialWidth: Int, initialHeight: Int, initialName: String,
+        fun displayFrontConfigElemDialog(furnitureName: String, elementId: String, initialType: String, initialWidth: Int, initialHeight: Int, maxWidth: Int, maxHeight: Int, initialName: String,
                                          widthBlocked: Boolean, heightBlocked: Boolean, growthRingVertically: Boolean, shelvesNumber:Int)
         fun displayFrontConfigurationRowOrientedPopup(elementId: String)
         fun displayFrontConfigurationColumnOrientedPopup(elementId: String)
@@ -40,6 +40,9 @@ interface DynProContract {
         fun onFurnitureTypeChanged(furnitureName: String)
         fun onFrontConfigurationChanged(furnitureName: String)
         fun onFrontConfigOrientationChanged(parentFurnitureName: String)
+
+        fun onFrontConfigDimensChanged(furnitureName: String)
+        fun onPedestalHeightChanged(name: String)
     }
 
     interface Model {

@@ -115,5 +115,7 @@
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
         <label text="Cokół: "/>
         <combobox preferredsize="100,25" id="pedestalCB" initclass="model.ComboPedestalModel" enabled="false"/>
+        <label text="Wysokość cokołu: "/>
+        <spinner id="pedestalHeightDisplayer" preferredsize="100,25"/>
     </panel>
 </panel>

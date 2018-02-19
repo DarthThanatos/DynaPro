@@ -174,11 +174,14 @@ public class FrontConfigurationDisplayer extends JPanel {
 
 
     @SuppressWarnings("ConstantConditions")
-    public void displayFrontConfigElemDialog(String furnitureName, String elementId, String initialType, int initialWidth, int initialHeight, String initialElemName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber){
-
+    public void displayFrontConfigElemDialog(String furnitureName, String elementId, String initialType, int initialWidth, int initialHeight, int maxWidth, int maxHeight, String initialElemName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber){
+        System.out.println("Max width/height: " + maxWidth + ", " + maxHeight);
         frontConfigElemType.setSelectedItem(initialType);
-        frontConfigElemWidth.setValue(initialWidth);
-        frontConfigElemHeight.setValue(initialHeight);
+//        frontConfigElemWidth.setValue(initialWidth);
+        frontConfigElemWidth.setModel(new SpinnerNumberModel(initialWidth, 0, maxWidth, 1));
+//        frontConfigElemHeight.setValue(initialHeight);
+        frontConfigElemHeight.setModel(new SpinnerNumberModel(initialHeight,0,maxHeight,1));
+
         frontConfigElemName.setText(initialElemName);
         widthBlocker.setSelected(widthBlocked);
         heightBlocker.setSelected(heightBlocked);
@@ -233,6 +236,7 @@ public class FrontConfigurationDisplayer extends JPanel {
 
     public void setFrontConfigElemWidth(JSpinner frontConfigElemWidth) {
         this.frontConfigElemWidth = frontConfigElemWidth;
+        this.frontConfigElemWidth.setModel(new SpinnerNumberModel(0,0,0,1));
     }
 
     public void setFrontConfigElemHeight(JSpinner frontConfigElemHeight) {
