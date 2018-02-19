@@ -30,19 +30,19 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
 
     override var backInserted: Boolean = false
 
-    override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
+    override var name: String by Delegates.observable(initialName){ _, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
 
     override var frontConfiguration: FrontConfiguration = UpperModuleFrontConfiguration(parentProject, this)
 
-    override var type: String by Delegates.observable(Config.UPPER_MODULE){property, oldValue, newValue -> parentProject.presenter?.onFurnitureTypeChanged(name) }
+    override var type: String by Delegates.observable(Config.UPPER_MODULE){ _, _, _ -> parentProject.presenter?.onFurnitureTypeChanged(name) }
 
     override var frontUnitPrice: Int = 100
 
     override var elementUnitPrice: Int = 115
 
-    override var height: Int by Delegates.observable(200){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); frontConfiguration.propagateAggragateSpecificDimen(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
+    override var height: Int by Delegates.observable(200){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
-    override var width: Int by Delegates.observable(100){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); frontConfiguration.propagateAggragateSpecificDimen(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
+    override var width: Int by Delegates.observable(100){ _, _, _ -> frontConfiguration.recalculateElementsDimens();  parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
     override var depth: Int = 75
 
@@ -53,7 +53,6 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
 
     init{
         frontConfiguration.recalculateElementsDimens()
-        frontConfiguration.propagateAggragateSpecificDimen()
     }
 
 }
@@ -66,21 +65,21 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
 
     override var backInserted: Boolean = true
 
-    override var name: String by Delegates.observable(initialName){ property, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
+    override var name: String by Delegates.observable(initialName){ _, oldValue, newValue ->  if(newValue != oldValue) parentProject.presenter?.onFurnitureNameChanged(newValue)}
 
-    override var pedestalHeight: Int by Delegates.observable(50){_,_,_ -> parentProject.presenter?.onPedestalHeightChanged(name)}
+    override var pedestalHeight: Int by Delegates.observable(50){_,_,_ -> frontConfiguration.recalculateElementsDimens(); parentProject.presenter?.onPedestalHeightChanged(name)}
 
     override var frontConfiguration: FrontConfiguration = BottomModuleFrontConfiguration(parentProject, this)
 
-    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){property, oldValue, newValue -> parentProject.presenter?.onFurnitureTypeChanged(name) }
+    override var type: String by Delegates.observable(Config.BOTTOM_MODULE){ _, _, _ -> parentProject.presenter?.onFurnitureTypeChanged(name) }
 
     override var frontUnitPrice : Int = 10
 
     override var elementUnitPrice : Int  = 10
 
-    override var height : Int by Delegates.observable(200){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); frontConfiguration.propagateAggragateSpecificDimen(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
+    override var height : Int by Delegates.observable(200){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
-    override var width : Int by Delegates.observable(100){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); frontConfiguration.propagateAggragateSpecificDimen(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
+    override var width : Int by Delegates.observable(100){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
     override var depth : Int = 10
 
@@ -90,6 +89,5 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
 
     init{
         frontConfiguration.recalculateElementsDimens()
-        frontConfiguration.propagateAggragateSpecificDimen()
     }
 }

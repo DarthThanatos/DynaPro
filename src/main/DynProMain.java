@@ -95,10 +95,11 @@ public class DynProMain implements DynProContract.View {
     }
 
     @Override
-    public void displaySpecifics(@NotNull String pedestalOptionText, @NotNull String backOptionText, @NotNull String roofOptionText) {
+    public void displaySpecifics(@NotNull String pedestalOptionText, @NotNull String backOptionText, @NotNull String roofOptionText, int pedestalHeight) {
         pedestalCB.setSelectedItem(pedestalOptionText);
         furnitureBackOptions.setSelectedItem(backOptionText);
         furnitureRoofOptions.setSelectedItem(roofOptionText);
+        pedestalHeightDisplayer.setValue(pedestalHeight);
     }
 
 

@@ -175,59 +175,66 @@ public class FrontConfigurationDisplayer extends JPanel {
 
     @SuppressWarnings("ConstantConditions")
     public void displayFrontConfigElemDialog(String furnitureName, String elementId, String initialType, int initialWidth, int initialHeight, int maxWidth, int maxHeight, String initialElemName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber){
-        System.out.println("Max width/height: " + maxWidth + ", " + maxHeight);
         frontConfigElemType.setSelectedItem(initialType);
-//        frontConfigElemWidth.setValue(initialWidth);
         frontConfigElemWidth.setModel(new SpinnerNumberModel(initialWidth, 0, maxWidth, 1));
-//        frontConfigElemHeight.setValue(initialHeight);
         frontConfigElemHeight.setModel(new SpinnerNumberModel(initialHeight,0,maxHeight,1));
-
         frontConfigElemName.setText(initialElemName);
         widthBlocker.setSelected(widthBlocked);
         heightBlocker.setSelected(heightBlocked);
         growthRingOrientationDisplayer.setSelected(growthRingVertically);
         shelvesNumberDisplayer.setValue(shelvesNumber);
-
         frontConfigElementDialogPanel.setVisible(true);
+        int optionClicked = showFrontConfigElemModal();
+        frontConfigElementDialogPanel.setVisible(false);
+        if(optionClicked == JOptionPane.OK_OPTION){
+            setupTipFor(elementId);
+            modifyFrontConfigElement(furnitureName, elementId);
+        }
+    }
 
-
-        int optionClicked = JOptionPane.showConfirmDialog(
+    private int showFrontConfigElemModal(){
+        return JOptionPane.showConfirmDialog(
                 null,
                 frontConfigElementDialogPanel,
                 Config.FRONT_CONFIG_ELEM_DIALOG_TITLE_PL,
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE
         );
+    }
 
-        frontConfigElementDialogPanel.setVisible(false);
+    private void setupTipFor(String elementId){
+        //noinspection ConstantConditions
+        idToComponentBinding.get(elementId).setToolTipText(
+                String.format(
+                        Config.FRONT_CONFIG_ELEMENT_TIP_FORMAT,
+                        frontConfigElemName.getText(),
+                        frontConfigElemType.getSelectedItem().toString(),
+                        Integer.parseInt(frontConfigElemWidth.getValue().toString()),
+                        Integer.parseInt(frontConfigElemHeight.getValue().toString()),
+                        widthBlocker.isSelected() ? Config.YES_PL : Config.NO_PL,
+                        heightBlocker.isSelected() ? Config.YES_PL : Config.NO_PL,
+                        growthRingOrientationDisplayer.isSelected() ? Config.YES_PL : Config.NO_PL,
+                        Integer.parseInt(shelvesNumberDisplayer.getValue().toString())
+                )
+        );
 
-        if(optionClicked == JOptionPane.OK_OPTION){
-            idToComponentBinding.get(elementId).setToolTipText(
-                    String.format(
-                            Config.FRONT_CONFIG_ELEMENT_TIP_FORMAT,
-                            frontConfigElemName.getText(),
-                            frontConfigElemType.getSelectedItem().toString(),
-                            Integer.parseInt(frontConfigElemWidth.getValue().toString()),
-                            Integer.parseInt(frontConfigElemHeight.getValue().toString()),
-                            widthBlocker.isSelected() ? Config.YES_PL : Config.NO_PL,
-                            heightBlocker.isSelected() ? Config.YES_PL : Config.NO_PL,
-                            growthRingOrientationDisplayer.isSelected() ? Config.YES_PL : Config.NO_PL,
-                            Integer.parseInt(shelvesNumberDisplayer.getValue().toString())
-                    )
-            );
-            presenter.onModifyFrontConfigElement(
-                    furnitureName,
-                    elementId,
-                    frontConfigElemType.getSelectedItem().toString(),
-                    Integer.parseInt(frontConfigElemWidth.getValue().toString()),
-                    Integer.parseInt(frontConfigElemHeight.getValue().toString()),
-                    frontConfigElemName.getText(),
-                    widthBlocker.isSelected(),
-                    heightBlocker.isSelected(),
-                    growthRingOrientationDisplayer.isSelected(),
-                    Integer.parseInt(shelvesNumberDisplayer.getValue().toString())
-            );
-        }
+    }
+
+    private void modifyFrontConfigElement(String furnitureName, String elementId){
+        //noinspection ConstantConditions
+        presenter.onModifyFrontConfigElement(
+                furnitureName,
+                elementId,
+                frontConfigElemType.getSelectedItem().toString(),
+                Integer.parseInt(frontConfigElemWidth.getValue().toString()),
+                Integer.parseInt(frontConfigElemHeight.getValue().toString()),
+                frontConfigElemName.getText(),
+                widthBlocker.isSelected(),
+                heightBlocker.isSelected(),
+                growthRingOrientationDisplayer.isSelected(),
+                Integer.parseInt(shelvesNumberDisplayer.getValue().toString())
+        );
+
     }
 
     public void setFrontConfigElementDialogPanel(JPanel frontConfigElementDialogPanel) {

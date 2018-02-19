@@ -57,7 +57,6 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
                 val columnOriented = value == Config.COLUMN_ORIENTED
                 if(columnOriented != fetchFrontConfigurationFromFurniture(furniture).columnOriented)
                     fetchFrontConfigurationFromFurniture(furniture).updateOrientation(value == Config.COLUMN_ORIENTED)
-                    refreshView(furniture.name)
 
             }
         })
@@ -83,7 +82,8 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         view.displaySpecifics(
                 if(furniture.type == Config.UPPER_MODULE) Config.NO_PEDESTAL else Config.PEDESTAL_EXISTS,
                 if(furniture.backInserted) Config.BACK_INSERTED else Config.BACK_HPV,
-                if(furniture.roofInserted) Config.ROOF_INSERTED else Config.ROOF_NOT_INSERTED
+                if(furniture.roofInserted) Config.ROOF_INSERTED else Config.ROOF_NOT_INSERTED,
+                furniture.pedestalHeight
         )
     }
 
@@ -162,33 +162,28 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
             if(frontConfig.columnOriented)frontConfig.propagateAggregateSpecificBlock(elementId, widthBlocked)
             frontConfig.recalculateElementsDimens()
         }
-//            configElem.blockedWidth = widthBlocked
         if(configElem.blockedHeight != heightBlocked) {
             val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
             configElem.blockedHeight = heightBlocked
             if(!frontConfig.columnOriented) frontConfig.propagateAggregateSpecificBlock(elementId, heightBlocked)
             frontConfig.recalculateElementsDimens()
         }
-//            configElem.blockedHeight = heightBlocked
         if(configElem.width != width) {
             val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
             configElem.width = width
-            frontConfig.propagateAggragateSpecificDimen(elementId)
+            if(frontConfig.columnOriented)frontConfig.propagateAggragateSpecificDimen(elementId)
             frontConfig.recalculateElementsDimens()
         }
-//            configElem.width = width
         if(configElem.height != height) {
             val frontConfig = fetchFrontConfigurationHavingName(furnitureName)
             configElem.height = height
-            frontConfig.propagateAggragateSpecificDimen(elementId)
+            if(!frontConfig.columnOriented)frontConfig.propagateAggragateSpecificDimen(elementId)
             frontConfig.recalculateElementsDimens()
         }
-//            configElem.height = height
         if(configElem.name != elemName) configElem.name = elemName
         if(configElem.growthRingVerticallyOriented != growthRingVertical) configElem.growthRingVerticallyOriented = growthRingVertical
         if(configElem.shelvesNumber != shelvesNumber) configElem.shelvesNumber = shelvesNumber
-        if(configElem.type != selectedType)
-            fetchFrontConfigurationHavingName(furnitureName).changeTypeOfElem(elementId, selectedType)
+        if(configElem.type != selectedType) fetchFrontConfigurationHavingName(furnitureName).changeTypeOfElem(elementId, selectedType)
         if(shouldNotifyViewAboutChange) refreshView(furnitureName)
     }
 

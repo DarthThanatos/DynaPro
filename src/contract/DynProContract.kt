@@ -15,7 +15,7 @@ interface DynProContract {
         fun promptForUserInput(message: String): String
         fun promptForUserInput(message: String?, initialValue: String?): String
         fun displayMetadata(type: String, name: String, height: Int, width: Int, depth: Int, fronPrice: Int, moduleUnitPrice: Int, pathToImage: String)
-        fun displaySpecifics(pedestalOptionText: String, backOptionText: String, roofOptionText: String)
+        fun displaySpecifics(pedestalOptionText: String, backOptionText: String, roofOptionText: String, pedestalHeight: Int)
         fun displayFrontConfiguration(frontConfigurationVM: FrontConfigurationVM, configOrientationText: String)
         fun displayFrontConfigElemDialog(furnitureName: String, elementId: String, initialType: String, initialWidth: Int, initialHeight: Int, maxWidth: Int, maxHeight: Int, initialName: String,
                                          widthBlocked: Boolean, heightBlocked: Boolean, growthRingVertically: Boolean, shelvesNumber:Int)
