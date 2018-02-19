@@ -25,6 +25,10 @@ class DefaultFrontElemPropertiesSetter: FrontElemPropertiesSetter {
         newFrontElem.width = oldFrontElem.width
         newFrontElem.height = oldFrontElem.height
         newFrontElem.id = oldFrontElem.id
+        newFrontElem.blockedWidth = oldFrontElem.blockedWidth
+        newFrontElem.blockedHeight = oldFrontElem.blockedHeight
+        newFrontElem.growthRingVerticallyOriented = oldFrontElem.growthRingVerticallyOriented
+        newFrontElem.shelvesNumber = oldFrontElem.shelvesNumber
         return newFrontElem
     }
 }

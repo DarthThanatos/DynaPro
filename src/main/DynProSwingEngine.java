@@ -125,6 +125,10 @@ class DynProSwingEngine extends SwingEngine {
         frontConfigurationDisplayer.setFrontConfigElemHeight(frontConfigElemHeight);
         frontConfigurationDisplayer.setFrontConfigElemWidth(frontConfigElemWidth);
         frontConfigurationDisplayer.setFrontConfigElemType(frontConfigElemType);
+        frontConfigurationDisplayer.setShelvesNumberDisplayer(shelvesNumberDisplayer);
+        frontConfigurationDisplayer.setWidthBlocker(widthBlocker);
+        frontConfigurationDisplayer.setHeightBlocker(heightBlocker);
+        frontConfigurationDisplayer.setGrowthRingOrientationDisplayer(growthRingOrientationDisplayer);
     }
 
     private void injectPresenter() {

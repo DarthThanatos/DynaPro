@@ -17,7 +17,7 @@ interface FurnitureSpecificsPresenter{
     fun onFurnitureNameChanged(name: String)
     fun onFurnitureAdded(addedFurnitureName: String)
     fun onFurnitureSelected(furnitureName: String)
-    fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String)
+    fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String, widthBlocked: Boolean, heightBlocked: Boolean, growthRingVertical: Boolean, shelvesNumber: Int)
 }
 
 class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Model, private val view: DynProContract.View): FurnitureSpecificsPresenter{
@@ -140,14 +140,20 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         changeFrontConfigurationDisplay(model.getFurnitureByName(furnitureName)!!)
     }
 
-    override fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String) {
+    override fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String, widthBlocked: Boolean, heightBlocked: Boolean, growthRingVertical: Boolean, shelvesNumber: Int) {
         println("$furnitureName, $elementId, $selectedType, $width, $height, $elemName")
         val configElem = fetchConfigElem(furnitureName, elementId)
         val shouldNotifyViewAboutChange =
-                (configElem.width != width) or (configElem.height != height) or  (configElem.name != elemName) or (configElem.type != selectedType)
+                (configElem.width != width) or (configElem.height != height) or  (configElem.name != elemName) or (configElem.type != selectedType) or
+                (configElem.blockedWidth != widthBlocked) or (configElem.blockedHeight != heightBlocked) or
+                (configElem.growthRingVerticallyOriented != growthRingVertical) or (configElem.shelvesNumber != shelvesNumber)
         if(configElem.width != width) configElem.width = width
         if(configElem.height != height) configElem.height = height
         if(configElem.name != elemName) configElem.name = elemName
+        if(configElem.blockedWidth != widthBlocked) configElem.blockedWidth = widthBlocked
+        if(configElem.blockedHeight != heightBlocked)configElem.blockedHeight = heightBlocked
+        if(configElem.growthRingVerticallyOriented != growthRingVertical) configElem.growthRingVerticallyOriented = growthRingVertical
+        if(configElem.shelvesNumber != shelvesNumber) configElem.shelvesNumber = shelvesNumber
         if(configElem.type != selectedType)
             fetchFrontConfigurationHavingName(furnitureName).changeTypeOfElem(elementId, selectedType)
         if(shouldNotifyViewAboutChange) refreshView(furnitureName)

@@ -79,6 +79,33 @@
                 <label text="Jeśli chcesz, zmień wysokość szafki: "/>
                 <spinner id="frontConfigElemHeight" preferredSize="150,25"/>
             </panel>
+            <panel>
+                <gridbagconstraints gridx="0" gridy="2" gridwidth="3" gridheight="1" weightx="1" weighty="1"
+                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
+                <label text="Ilość dodatkowych półek w środku: "/>
+                <spinner id="shelvesNumberDisplayer" preferredSize="125,25"/>
+                <label text="   Słoje wzdłuż wysokości: "/>
+                <checkbox id="growthRingOrientationDisplayer" />
+            </panel>
+
+            <panel>
+                <gridbagconstraints gridx="2" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
+                <label text="Blokuj szerokość: "/>
+                <checkbox id="widthBlocker"/>
+
+            </panel>
+
+
+            <panel>
+                <gridbagconstraints gridx="2" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
+                <label text="Blokuj wysokość: "/>
+                <checkbox id="heightBlocker"/>
+            </panel>
         </panel>
     </frontconfigurationdisplayer>
 

@@ -24,7 +24,11 @@ class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolea
                     element.name,
                     element.type,
                     element.width,
-                    element.height
+                    element.height,
+                    if(element.blockedWidth) Config.YES_PL else Config.NO_PL,
+                    if(element.blockedHeight) Config.YES_PL else Config.NO_PL,
+                    if(element.growthRingVerticallyOriented) Config.YES_PL else Config.NO_PL,
+                    element.shelvesNumber
             )
 }
 

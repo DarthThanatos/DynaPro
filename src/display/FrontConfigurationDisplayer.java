@@ -27,6 +27,8 @@ public class FrontConfigurationDisplayer extends JPanel {
     private JSpinner frontConfigElemWidth, frontConfigElemHeight;
     private JComboBox frontConfigElemType;
     private JTextField frontConfigElemName;
+    private JSpinner shelvesNumberDisplayer;
+    private JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;
 
     void onChildElemChanged(FrontConfigViewElem frontConfigViewElem){
         recentlyClickedComponent = frontConfigViewElem;
@@ -172,14 +174,19 @@ public class FrontConfigurationDisplayer extends JPanel {
 
 
     @SuppressWarnings("ConstantConditions")
-    public void displayFrontConfigElemDialog(String furnitureName, String elementId, String initialType, int initialWidth, int initialHeight, String initialElemName){
+    public void displayFrontConfigElemDialog(String furnitureName, String elementId, String initialType, int initialWidth, int initialHeight, String initialElemName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber){
 
         frontConfigElemType.setSelectedItem(initialType);
         frontConfigElemWidth.setValue(initialWidth);
         frontConfigElemHeight.setValue(initialHeight);
         frontConfigElemName.setText(initialElemName);
+        widthBlocker.setSelected(widthBlocked);
+        heightBlocker.setSelected(heightBlocked);
+        growthRingOrientationDisplayer.setSelected(growthRingVertically);
+        shelvesNumberDisplayer.setValue(shelvesNumber);
 
         frontConfigElementDialogPanel.setVisible(true);
+
 
         int optionClicked = JOptionPane.showConfirmDialog(
                 null,
@@ -198,7 +205,11 @@ public class FrontConfigurationDisplayer extends JPanel {
                             frontConfigElemName.getText(),
                             frontConfigElemType.getSelectedItem().toString(),
                             Integer.parseInt(frontConfigElemWidth.getValue().toString()),
-                            Integer.parseInt(frontConfigElemHeight.getValue().toString())
+                            Integer.parseInt(frontConfigElemHeight.getValue().toString()),
+                            widthBlocker.isSelected() ? Config.YES_PL : Config.NO_PL,
+                            heightBlocker.isSelected() ? Config.YES_PL : Config.NO_PL,
+                            growthRingOrientationDisplayer.isSelected() ? Config.YES_PL : Config.NO_PL,
+                            Integer.parseInt(shelvesNumberDisplayer.getValue().toString())
                     )
             );
             presenter.onModifyFrontConfigElement(
@@ -207,7 +218,11 @@ public class FrontConfigurationDisplayer extends JPanel {
                     frontConfigElemType.getSelectedItem().toString(),
                     Integer.parseInt(frontConfigElemWidth.getValue().toString()),
                     Integer.parseInt(frontConfigElemHeight.getValue().toString()),
-                    frontConfigElemName.getText()
+                    frontConfigElemName.getText(),
+                    widthBlocker.isSelected(),
+                    heightBlocker.isSelected(),
+                    growthRingOrientationDisplayer.isSelected(),
+                    Integer.parseInt(shelvesNumberDisplayer.getValue().toString())
             );
         }
     }
@@ -251,5 +266,22 @@ public class FrontConfigurationDisplayer extends JPanel {
 
     public void setPresenter(DynProContract.Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    public void setShelvesNumberDisplayer(JSpinner shelvesNumberDisplayer) {
+        this.shelvesNumberDisplayer = shelvesNumberDisplayer;
+        this.shelvesNumberDisplayer.setModel(new SpinnerNumberModel(0,0,5,1));
+    }
+
+    public void setGrowthRingOrientationDisplayer(JCheckBox growthRingOrientationDisplayer) {
+        this.growthRingOrientationDisplayer = growthRingOrientationDisplayer;
+    }
+
+    public void setWidthBlocker(JCheckBox widthBlocker) {
+        this.widthBlocker = widthBlocker;
+    }
+
+    public void setHeightBlocker(JCheckBox heightBlocker) {
+        this.heightBlocker = heightBlocker;
     }
 }

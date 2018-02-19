@@ -114,7 +114,7 @@ class ModifyConfigElemAction(private val dynProMain: DynProMain): AbstractAction
     override fun actionPerformed(e: ActionEvent?) {
         val frontConfigViewElem = e?.source as FrontConfigViewElem
         val modelElem: Element = dynProMain.presenter.model.getFurnitureByName(frontConfigViewElem.furnitureName)?.frontConfiguration?.fetchElementWithId(frontConfigViewElem.modelKey)!!
-        dynProMain.presenter.view.displayFrontConfigElemDialog(frontConfigViewElem.furnitureName, frontConfigViewElem.modelKey, modelElem.type, modelElem.width, modelElem.height, modelElem.name)
+        dynProMain.presenter.view.displayFrontConfigElemDialog(frontConfigViewElem.furnitureName, frontConfigViewElem.modelKey, modelElem.type, modelElem.width, modelElem.height, modelElem.name, modelElem.blockedWidth, modelElem.blockedHeight, modelElem.growthRingVerticallyOriented, modelElem.shelvesNumber)
     }
 
 }

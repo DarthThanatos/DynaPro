@@ -39,5 +39,6 @@ public class Config {
     public static final String NO_PEDESTAL = "Brak";
     public static final String FRONT_CONFIG_ELEM_DIALOG_TITLE_PL = "Podaj charakterystykę elementu:";
 
-    public static final String FRONT_CONFIG_ELEMENT_TIP_FORMAT = "<html>Nazwa: %s<br/>Typ: %s<br/>Szerokość: %d<br/>Wysokość: %d<br/></html>";
+    public static final String YES_PL = "Tak", NO_PL = "Nie";
+    public static final String FRONT_CONFIG_ELEMENT_TIP_FORMAT = "<html>Nazwa: %s<br/>Typ: %s<br/>Szerokość: %d<br/>Wysokość: %d<br/>Szerokość zablokowana: %s<br/> Wysokość zablokowana: %s<br/>Orientacja słojów wzdłuż wysokości: %s<br/>Ilość dodatkowych półek: %d</html>";
 }

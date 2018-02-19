@@ -46,7 +46,8 @@ public class DynProMain implements DynProContract.View {
             addOneElementAggregateBeforeAction, addMultiElementAggregateBeforeAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static ModifyConfigElemAction modifyConfigElemAction;
 
-
+    static JSpinner shelvesNumberDisplayer;
+    static JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;
 
     public static void main(String args[]) throws Exception {
         renderer.initActions();
@@ -116,8 +117,9 @@ public class DynProMain implements DynProContract.View {
         frontConfigurationDisplayer.displayColumnOrientedPopup(elementId);
     }
 
+
     @Override
-    public void displayFrontConfigElemDialog(@NotNull String furnitureName, @NotNull String elementId,@NotNull String initialType, int initialWidth, int initialHeight, String initialElemName) {
-        frontConfigurationDisplayer.displayFrontConfigElemDialog(furnitureName, elementId, initialType, initialWidth, initialHeight, initialElemName);
+    public void displayFrontConfigElemDialog(@NotNull String furnitureName, @NotNull String elementId, @NotNull String initialType, int initialWidth, int initialHeight, @NotNull String initialName, boolean widthBlocked, boolean heightBlocked, boolean growthRingVertically, int shelvesNumber) {
+        frontConfigurationDisplayer.displayFrontConfigElemDialog(furnitureName, elementId, initialType, initialWidth, initialHeight, initialName, widthBlocked, heightBlocked, growthRingVertically, shelvesNumber);
     }
 }
