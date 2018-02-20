@@ -89,18 +89,26 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     override fun getBlockedHeight(): Int {
             return if (columnOriented){
-                (aggregates.map { it.filter { it.blockedHeight }.sumBy { it.height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP }}.max()?:0) + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+                (aggregates.map {
+                    val (blocked, nonBlocked) = it.partition{ it.blockedHeight }
+                    blocked .sumBy { it.height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP } + nonBlocked.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP + nonBlocked.size
+                }.max()?:0) + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
             }else {
-               aggregates.filter{ it[0].blockedHeight}.map { it[0].height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP}.sum() + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+                val( blocked, nonBlocked) = aggregates.partition{ it[0].blockedHeight}
+               blocked.map { it[0].height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP}.sum() + nonBlocked.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP + nonBlocked.size + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
             }
     }
 
     override fun getBlockedWidth(): Int{
         return if(columnOriented){
-            aggregates.filter{ it[0]. blockedWidth}.map { it[0].width + Config.BETWEEN_ELEMENTS_VERTICAL_GAP}.sum()  + Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+            val(blocked, nonBlocked) = aggregates.partition{ it[0]. blockedWidth}
+            blocked.map { it[0].width + Config.BETWEEN_ELEMENTS_VERTICAL_GAP}.sum()  + nonBlocked.size * Config.BETWEEN_ELEMENTS_VERTICAL_GAP + nonBlocked.size  + Config.BETWEEN_ELEMENTS_VERTICAL_GAP
         }
         else{
-            (aggregates.map{it.filter{it.blockedWidth}.sumBy { it.width + Config.BETWEEN_ELEMENTS_VERTICAL_GAP}}.max() ?: 0) + Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+            (aggregates.map{
+                val (blocked, nonBlocked) = it.partition{it.blockedWidth}
+                blocked.sumBy { it.width + Config.BETWEEN_ELEMENTS_VERTICAL_GAP}   + nonBlocked.size * Config.BETWEEN_ELEMENTS_VERTICAL_GAP + nonBlocked.size
+            }.max() ?: 0) + Config.BETWEEN_ELEMENTS_VERTICAL_GAP
         }
     }
 

@@ -72,7 +72,10 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         })
         pedestalHeightDisplayBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
             override fun onChange(value: Any) {
-                furniture.pedestalHeight = value as Int
+                println( furniture.frontConfiguration.getBlockedHeight())
+                if(furniture.hasPedestal and (furniture.height - furniture.frontConfiguration.getBlockedHeight() >= value as Int))
+                    furniture.pedestalHeight = value
+                else refreshView(furniture.name)
             }
         })
     }
