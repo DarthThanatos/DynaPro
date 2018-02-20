@@ -12,9 +12,9 @@ public class MetadataDisplayer {
     public void displayMetadata(String type, String name, int height, int width, int depth, int fronPrice, int moduleUnitPrice, String pathToImage){
         typeDisplay.setSelectedItem(type);
         nameDisplay.setText(name);
-        heightDisplay.setValue(height);
-        widthDisplay.setValue(width);
-        depthDisplay.setValue(depth);
+        heightDisplay.setModel(new SpinnerNumberModel(height, 0, 2500, 1));
+        widthDisplay.setModel(new SpinnerNumberModel(width, 0, 2500, 1));
+        depthDisplay.setModel(new SpinnerNumberModel(depth, 0, 2500, 1));
         frontPriceDisplay.setValue(fronPrice);
         moduleUnitPriceDisplay.setValue(moduleUnitPrice);
         furnitureAvatar.setImage(pathToImage);

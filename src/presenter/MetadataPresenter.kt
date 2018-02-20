@@ -54,7 +54,7 @@ class DynProMetadataPresenter(private val dynProModel: DynProContract.Model, pri
         furnitureHeightSpinnerBinder.registerSubscriber(Config.CURRENT_FURNITURE, object : Binder.OnChange{
             override fun onChange(value: Any) {
                 if(furniture.frontConfiguration.getBlockedHeight() + furniture.pedestalHeight < value as Int)
-                    furniture.height = value 
+                    furniture.height = value
                 else{
                     onRefreshView(furniture.name)
                 }
