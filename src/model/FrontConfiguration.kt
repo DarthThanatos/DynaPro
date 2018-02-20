@@ -29,6 +29,8 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
     fun getMaxDimensionOf(elementId: String): Dimension
     fun canBlockWidth(elementId: String): Boolean
     fun canBlockHeight(elementId: String): Boolean
+    fun getBlockedHeight(): Int
+    fun getBlockedWidth(): Int
 }
 
 interface ArrangementAggregate : MutableList<Element>
@@ -83,6 +85,23 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
+    }
+
+    override fun getBlockedHeight(): Int {
+            return if (columnOriented){
+                (aggregates.map { it.filter { it.blockedHeight }.sumBy { it.height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP }}.max()?:0) + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+            }else {
+               aggregates.filter{ it[0].blockedHeight}.map { it[0].height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP}.sum() + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+            }
+    }
+
+    override fun getBlockedWidth(): Int{
+        return if(columnOriented){
+            aggregates.filter{ it[0]. blockedWidth}.map { it[0].width + Config.BETWEEN_ELEMENTS_VERTICAL_GAP}.sum()  + Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+        }
+        else{
+            (aggregates.map{it.filter{it.blockedWidth}.sumBy { it.width + Config.BETWEEN_ELEMENTS_VERTICAL_GAP}}.max() ?: 0) + Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+        }
     }
 
     private fun removeAggregateIfEmpty(aggregate: ArrangementAggregate){
