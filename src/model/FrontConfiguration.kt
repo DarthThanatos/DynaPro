@@ -78,20 +78,27 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         val aggregate = aggregateContainingElement(elementToRemove)
         aggregate.remove(elementToRemove)
         if(aggregate.size == 0) aggregates.remove(aggregate)
-        else keepOneNonFixedElemInAggregate(aggregate)
+        keepOneNonFixedElemInAggregate(aggregate)
+        keepOneNonBlockedOneElemAggregate()
         if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
+    }
+
+    private fun keepOneNonBlockedOneElemAggregate(){
+        if ((aggregates.size == 1) ){
+            val aggregate = aggregates[0]
+            if(aggregate.size == 1) {
+                aggregate[0].blockedHeight = false
+                aggregate[0].blockedWidth = false
+            }
+        }
     }
 
     private fun keepOneNonFixedElemInAggregate(aggregate: ArrangementAggregate){
         if(aggregate.size == 1) {
             if(!columnOriented) aggregate[0].blockedWidth = false
             else aggregate[0].blockedHeight = false
-        }
-        if ((aggregates.size == 1) and (aggregate == aggregates[0])){
-            if(!columnOriented) aggregate[0].blockedHeight = false
-            else aggregate[0].blockedWidth = false
         }
     }
 
@@ -295,7 +302,7 @@ class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Fur
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
-    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this)), Aggregate(Drawer(parentConfig = this)), Aggregate(Shelf(parentConfig =  this)))
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this)), Aggregate(RightDoor(parentConfig = this)))
 
 }
 
@@ -308,5 +315,5 @@ class BottomModuleFrontConfiguration(parentProject: Project, parentFurniture: Fu
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
-    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this)), Aggregate(LeftDoor(parentConfig = this)))
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Drawer(parentConfig = this)), Aggregate(Drawer(parentConfig = this)))
 }
