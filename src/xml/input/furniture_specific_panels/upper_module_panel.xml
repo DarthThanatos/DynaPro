@@ -23,92 +23,97 @@
 
     </combobox>
 
-    <frontconfigurationdisplayer background="white"  layout="GridBagLayout" id="frontConfigurationDisplayer">
-
+    <panel layout="GridBagLayout">
         <gridbagconstraints gridx="0" gridy="3" gridwidth="1" gridheight="1" weightx="0" weighty="1"
                             anchor="GridBagConstraints.LAST_LINE_START" fill="GridBagConstraints.BOTH"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>
 
-        <popupmenu id="frontConfigRowOrientedPopup">
-            <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
-            <menuitem text="Dodaj element po prawej" Action="addElementNextToAction"/>
-            <menuitem text="Dodaj element po lewej" Action="addElementBeforeAction"/>
-            <menuitem text="Dodaj jednoelementowy rząd pod spodem" Action="addOneElementAggregateNextToAction"/>
-            <menuitem text="Dodaj wieloelementowy rząd pod spodem" Action="addMultiElementAggragateNextToAction"/>
-            <menuitem text="Dodaj jednoelementowy rząd ponad elementem" Action="addOneElementAggregateBeforeAction"/>
-            <menuitem text="Dodaj wieloelementowy rząd ponad elementem" Action="addMultiElementAggregateBeforeAction"/>
-        </popupmenu>
+        <frontconfigurationdisplayer background="white"  layout="GridBagLayout" id="frontConfigurationDisplayer" constraints="BorderLayout.CENTER">
+
+            <gridbagconstraints gridx="0" gridy="3" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.BOTH"
+                                insets="0,0,0,0" ipadx="0" ipady="0"/>
+
+            <popupmenu id="frontConfigRowOrientedPopup">
+                <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
+                <menuitem text="Dodaj element po prawej" Action="addElementNextToAction"/>
+                <menuitem text="Dodaj element po lewej" Action="addElementBeforeAction"/>
+                <menuitem text="Dodaj jednoelementowy rząd pod spodem" Action="addOneElementAggregateNextToAction"/>
+                <menuitem text="Dodaj wieloelementowy rząd pod spodem" Action="addMultiElementAggragateNextToAction"/>
+                <menuitem text="Dodaj jednoelementowy rząd ponad elementem" Action="addOneElementAggregateBeforeAction"/>
+                <menuitem text="Dodaj wieloelementowy rząd ponad elementem" Action="addMultiElementAggregateBeforeAction"/>
+            </popupmenu>
 
 
-        <popupmenu id="frontConfigColumnOrientedPopup">
-            <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
-            <menuitem text="Dodaj element poniżej" Action="addElementNextToAction"/>
-            <menuitem text="Dodaj element powyżej" Action="addElementBeforeAction"/>
-            <menuitem text="Dodaj jednoelementową kolumnę po lewej" Action="addOneElementAggregateBeforeAction"/>
-            <menuitem text="Dodaj wieloelementową kolumnę po lewej" Action="addMultiElementAggregateBeforeAction"/>
-            <menuitem text="Dodaj jednoelementową kolumnę po prawej" Action="addOneElementAggregateNextToAction"/>
-            <menuitem text="Dodaj wieloelementową kolumnę po prawej" Action="addMultiElementAggragateNextToAction"/>
-        </popupmenu>
+            <popupmenu id="frontConfigColumnOrientedPopup">
+                <menuitem text="Uuń ten element" Action="removeFrontConfigElementAction"/>
+                <menuitem text="Dodaj element poniżej" Action="addElementNextToAction"/>
+                <menuitem text="Dodaj element powyżej" Action="addElementBeforeAction"/>
+                <menuitem text="Dodaj jednoelementową kolumnę po lewej" Action="addOneElementAggregateBeforeAction"/>
+                <menuitem text="Dodaj wieloelementową kolumnę po lewej" Action="addMultiElementAggregateBeforeAction"/>
+                <menuitem text="Dodaj jednoelementową kolumnę po prawej" Action="addOneElementAggregateNextToAction"/>
+                <menuitem text="Dodaj wieloelementową kolumnę po prawej" Action="addMultiElementAggragateNextToAction"/>
+            </popupmenu>
 
-        <panel id="frontConfigElementDialogPanel" layout="GridBagLayout" visible="false">
-            <panel>
-                <gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="0"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Jeśli chcesz, podaj nową nazwę szafki: "/>
-                <textfield id="frontConfigElemName" preferredSize="150,25"/>
+            <panel id="frontConfigElementDialogPanel" layout="GridBagLayout" visible="false">
+                <panel>
+                    <gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="0"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Jeśli chcesz, podaj nową nazwę szafki: "/>
+                    <textfield id="frontConfigElemName" preferredSize="150,25"/>
+                </panel>
+                <panel>
+                    <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Jeśli chcesz, zmień typ szafki: "/>
+                    <combobox id="frontConfigElemType" preferredsize="150,25" initclass="model.ComboFrontConfigElemTypeModel"/>
+                </panel>
+                <panel>
+                    <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Jeśli chcesz, zmień szerokość szafki [mm]: "/>
+                    <spinner id="frontConfigElemWidth" preferredSize="150,25"/>
+                </panel>
+                <panel>
+                    <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Jeśli chcesz, zmień wysokość szafki[mm]: "/>
+                    <spinner id="frontConfigElemHeight" preferredSize="150,25"/>
+                </panel>
+                <panel>
+                    <gridbagconstraints gridx="0" gridy="2" gridwidth="3" gridheight="1" weightx="1" weighty="1"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Ilość dodatkowych półek w środku: "/>
+                    <spinner id="shelvesNumberDisplayer" preferredSize="125,25"/>
+                    <label text="   Słoje wzdłuż wysokości: "/>
+                    <checkbox id="growthRingOrientationDisplayer" />
+                </panel>
+
+                <panel>
+                    <gridbagconstraints gridx="2" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Blokuj szerokość: "/>
+                    <checkbox id="widthBlocker"/>
+
+                </panel>
+
+
+                <panel>
+                    <gridbagconstraints gridx="2" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
+                                        anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
+                                        insets="0,0,0,0" ipadx="0" ipady="0"/>
+                    <label text="Blokuj wysokość: "/>
+                    <checkbox id="heightBlocker"/>
+                </panel>
             </panel>
-            <panel>
-                <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Jeśli chcesz, zmień typ szafki: "/>
-                <combobox id="frontConfigElemType" preferredSize="150,25" initclass="model.ComboFrontConfigElemTypeModel"/>
-            </panel>
-            <panel>
-                <gridbagconstraints gridx="1" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Jeśli chcesz, zmień szerokość szafki [mm]: "/>
-                <spinner id="frontConfigElemWidth" preferredSize="150,25"/>
-            </panel>
-            <panel>
-                <gridbagconstraints gridx="1" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Jeśli chcesz, zmień wysokość szafki[mm]: "/>
-                <spinner id="frontConfigElemHeight" preferredSize="150,25"/>
-            </panel>
-            <panel>
-                <gridbagconstraints gridx="0" gridy="2" gridwidth="3" gridheight="1" weightx="1" weighty="1"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Ilość dodatkowych półek w środku: "/>
-                <spinner id="shelvesNumberDisplayer" preferredSize="125,25"/>
-                <label text="   Słoje wzdłuż wysokości: "/>
-                <checkbox id="growthRingOrientationDisplayer" />
-            </panel>
-
-            <panel>
-                <gridbagconstraints gridx="2" gridy="0" gridwidth="1" gridheight="1" weightx="0" weighty="1"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Blokuj szerokość: "/>
-                <checkbox id="widthBlocker"/>
-
-            </panel>
-
-
-            <panel>
-                <gridbagconstraints gridx="2" gridy="1" gridwidth="1" gridheight="1" weightx="0" weighty="1"
-                                    anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"
-                                    insets="0,0,0,0" ipadx="0" ipady="0"/>
-                <label text="Blokuj wysokość: "/>
-                <checkbox id="heightBlocker"/>
-            </panel>
-        </panel>
-    </frontconfigurationdisplayer>
-
+        </frontconfigurationdisplayer>
+    </panel>
     <panel background="white">
         <gridbagconstraints gridx="0" gridy="4" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                             anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.NONE"

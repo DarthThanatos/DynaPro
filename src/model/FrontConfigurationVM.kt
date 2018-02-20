@@ -2,7 +2,7 @@ package model
 
 import config.Config
 
-class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolean, frontConfiguration: List<ArrangementAggregate>, private val imgPathMapper: Map<String, String>){
+class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolean, frontConfiguration: List<ArrangementAggregate>, private val imgPathMapper: Map<String, String>, val furnitureWidth: Int, val furnitureHeight: Int){
 
     val columns: List<ConfigurationAggregateVM> = fillColumns(frontConfiguration)
 
@@ -11,11 +11,23 @@ class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolea
                 arrangementAggregate ->
                     ConfigurationAggregateVM().addAll_(
                             arrangementAggregate.map {
-                                element -> ConfigurationElementVM(element.name, imgPathMapper[element.type]!!, element.id, mountInitialTooltip(element), element.parentConfig.canBlockWidth(element.id), element.parentConfig.canBlockHeight(element.id))
+                                element ->
+                                    ConfigurationElementVM(
+                                            element.name,
+                                            imgPathMapper[element.type]!!,
+                                            element.id,
+                                            mountInitialTooltip(element),
+                                            element.parentConfig.canBlockWidth(element.id),
+                                            element.parentConfig.canBlockHeight(element.id),
+                                            (element.width.toDouble()) / element.parentConfig.parentFurniture.width,
+                                            (element.height.toDouble()) / element.parentConfig.parentFurniture.height
+                                    )
                             }
                     )
             }
 
+    val maxHeight: Double = 2500.0
+    val maxWidth : Double = 2500.0
     val maxElementsAmount = columns.maxBy { it.size }?.size ?: 0
 
     private fun mountInitialTooltip(element: Element) : String =
@@ -41,4 +53,4 @@ class ConfigurationAggregateVM : MutableList<ConfigurationElementVM> by ArrayLis
     }
 }
 
-class ConfigurationElementVM(val name: String, val imagePath: String, val modelElementKey: Any, val tooltip: String, val canBlockWidth: Boolean, val canBlockHeight: Boolean)
+class ConfigurationElementVM(val name: String, val imagePath: String, val modelElementKey: Any, val tooltip: String, val canBlockWidth: Boolean, val canBlockHeight: Boolean, val widthX: Double, val widthY: Double)

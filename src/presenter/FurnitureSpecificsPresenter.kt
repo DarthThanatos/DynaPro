@@ -90,7 +90,7 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
     private fun changeFrontConfigurationDisplay(furniture: Furniture){
         val frontConfiguration = fetchFrontConfigurationFromFurniture(furniture)
         view.displayFrontConfiguration(
-                FrontConfigurationVM(furniture.name, frontConfiguration.columnOriented, frontConfiguration.getConfiguration(), typeToImgMapper),
+                FrontConfigurationVM(furniture.name, frontConfiguration.columnOriented, frontConfiguration.getConfiguration(), typeToImgMapper, furniture.width, furniture.height),
                 if(frontConfiguration.columnOriented) Config.COLUMN_ORIENTED else Config.ROW_ORIENTED
         )
 
