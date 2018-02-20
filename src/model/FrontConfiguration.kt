@@ -77,12 +77,17 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         val elementToRemove = fetchElementWithId(elementId)
         val aggregate = aggregateContainingElement(elementToRemove)
         aggregate.remove(elementToRemove)
-        if(aggregate.size == 0) aggregates.remove(aggregate)
+        removeAggregateIfEmpty(aggregate)
         keepOneNonFixedElemInAggregate(aggregate)
         keepOneNonBlockedOneElemAggregate()
         if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
+    }
+
+    private fun removeAggregateIfEmpty(aggregate: ArrangementAggregate){
+        if(aggregate.size == 0)
+            aggregates.remove(aggregate)
     }
 
     private fun keepOneNonBlockedOneElemAggregate(){
@@ -104,8 +109,8 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     private fun newElemWithCopiedBlocks(aggregate: ArrangementAggregate): Element{
         val newElem = defaultElementBuilder()
-        if(!columnOriented)newElem.blockedHeight = aggregate[0].blockedHeight // responsibility of a front configuration object, since it knows how to set blocking properties of its children
         if(columnOriented)newElem.blockedWidth = aggregate[0].blockedWidth
+        else newElem.blockedHeight = aggregate[0].blockedHeight // responsibility of a front configuration object, since it knows how to set blocking properties of its children
         if(columnOriented) newElem.width = aggregate[0].width
         else newElem.height = aggregate[0].height
         return newElem
@@ -233,13 +238,13 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
     }
 
     override fun canBlockWidth(elementId: String) : Boolean{
-        return if(columnOriented) aggregates.filter { !it[0].blockedWidth and (it[0].id != elementId)}.size >= 1
+        return if(columnOriented) aggregates.filter { !it[0].blockedWidth and (!(fetchElementWithId(elementId) in (it)))}.size >= 1
         else aggregateContainingElementWithId(elementId).filter { !it.blockedWidth and (it.id != elementId) }. size >= 1
     }
 
     override fun canBlockHeight(elementId: String): Boolean{
         return if (columnOriented) aggregateContainingElementWithId(elementId).filter { !it.blockedHeight and (it.id != elementId) }.size >= 1
-        else aggregates.filter { !it[0].blockedHeight and (it[0].id != elementId)}.size >= 1
+        else aggregates.filter { !it[0].blockedHeight and (!(fetchElementWithId(elementId) in (it)))}.size >= 1
     }
 
     override fun getMaxDimensionOf(elementId: String): Dimension {
