@@ -6,6 +6,7 @@ import java.util.*
 interface Element{
     var name: String
     val type: String
+    var parentConfig: FrontConfiguration
     var height: Int
     var width: Int
     var id: String
@@ -39,7 +40,7 @@ class DefaultCommonsSetter: ElementCommonDefaultsSetter{
 
 class Shelf(
         override var name: String = Config.SHELF_PL,
-        override val type: String = Config.SHELF_PL
+        override val type: String = Config.SHELF_PL, override var parentConfig: FrontConfiguration
 ) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(){
 
     override fun toString(): String = print(this)
@@ -47,7 +48,7 @@ class Shelf(
 
 class LeftDoor(
         override var name: String = Config.LEFT_DOOR_PL,
-        override val type: String = Config.LEFT_DOOR_PL
+        override val type: String = Config.LEFT_DOOR_PL, override var parentConfig: FrontConfiguration
 ) : Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
 
     override fun toString(): String = print(this)
@@ -55,7 +56,7 @@ class LeftDoor(
 
 class RightDoor(
         override var name: String = Config.RIGHT_DOOR_PL,
-        override val type: String = Config.RIGHT_DOOR_PL
+        override val type: String = Config.RIGHT_DOOR_PL, override var parentConfig: FrontConfiguration
 ) : Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
 
     override fun toString(): String = print(this)
@@ -63,7 +64,7 @@ class RightDoor(
 
 class Drawer(
         override var name: String= Config.DRAWER_PL,
-        override val type: String = Config.DRAWER_PL
+        override val type: String = Config.DRAWER_PL, override var parentConfig: FrontConfiguration
 ): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
 
     override fun toString(): String = print(this)

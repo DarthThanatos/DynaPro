@@ -81,9 +81,7 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFa
         return newNameCorrect
     }
 
-
     override fun getFurnitureByName(name: String) : Furniture? = furnituresList.singleOrNull() { it.name == name }
-
 
     override fun removeFrontElementFromFurniture(furnitureName: String, elementId: String) {
         getFurnitureByName(furnitureName)?.frontConfiguration?.removeElement(elementId)

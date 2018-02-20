@@ -80,7 +80,7 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
     private fun onDisplayModelInformation(furniture: Furniture){
         changeFrontConfigurationDisplay(furniture)
         view.displaySpecifics(
-                if(furniture.hasPedestal) Config.NO_PEDESTAL else Config.PEDESTAL_EXISTS,
+                if(!furniture.hasPedestal) Config.NO_PEDESTAL else Config.PEDESTAL_EXISTS,
                 if(furniture.backInserted) Config.BACK_INSERTED else Config.BACK_HPV,
                 if(furniture.roofInserted) Config.ROOF_INSERTED else Config.ROOF_NOT_INSERTED,
                 furniture.pedestalHeight
@@ -107,7 +107,6 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
         if(model.isProject(furnitureName)) return
         currentlyDisplayed = model.getFurnitureByName(furnitureName)
         if(currentlyDisplayed==null) return
-        System.out.println("Refreshing")
         registerSubscribers(currentlyDisplayed!!)
         onDisplayModelInformation(currentlyDisplayed!!)
     }
@@ -149,7 +148,6 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
     }
 
     override fun onModifyFrontConfigElement(furnitureName: String, elementId: String, selectedType: String, width: Int, height: Int, elemName: String, widthBlocked: Boolean, heightBlocked: Boolean, growthRingVertical: Boolean, shelvesNumber: Int) {
-        println("$furnitureName, $elementId, $selectedType, $width, $height, $elemName")
         val configElem = fetchConfigElem(furnitureName, elementId)
         val shouldNotifyViewAboutChange =
                 (configElem.width != width) or (configElem.height != height) or  (configElem.name != elemName) or (configElem.type != selectedType) or

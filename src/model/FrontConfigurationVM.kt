@@ -11,7 +11,7 @@ class FrontConfigurationVM(val furnitureName: String, val columnOriented: Boolea
                 arrangementAggregate ->
                     ConfigurationAggregateVM().addAll_(
                             arrangementAggregate.map {
-                                element -> ConfigurationElementVM(element.name, imgPathMapper[element.type]!!, element.id, mountInitialTooltip(element))
+                                element -> ConfigurationElementVM(element.name, imgPathMapper[element.type]!!, element.id, mountInitialTooltip(element), element.parentConfig.canBlockWidth(element.id), element.parentConfig.canBlockHeight(element.id))
                             }
                     )
             }
@@ -41,4 +41,4 @@ class ConfigurationAggregateVM : MutableList<ConfigurationElementVM> by ArrayLis
     }
 }
 
-class ConfigurationElementVM(val name: String, val imagePath: String, val modelElementKey: Any, val tooltip: String)
+class ConfigurationElementVM(val name: String, val imagePath: String, val modelElementKey: Any, val tooltip: String, val canBlockWidth: Boolean, val canBlockHeight: Boolean)

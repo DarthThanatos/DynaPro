@@ -4,6 +4,7 @@ public class FrontConfigViewElem extends ImageButton {
 
     private FrontConfigurationDisplayer frontConfigurationDisplayer;
     private String modelKey, furnitureName;
+    private boolean canBlockHeight, canBlockWidth;
 
     FrontConfigViewElem(String imagePath, String modelKey, String furnitureName){
         super(imagePath);
@@ -25,5 +26,21 @@ public class FrontConfigViewElem extends ImageButton {
 
     public String getModelKey(){
         return modelKey;
+    }
+
+    void setCanBlockHeight(boolean canBlockHeight) {
+        this.canBlockHeight = canBlockHeight;
+    }
+
+    void setCanBlockWidth(boolean canBlockWidth) {
+        this.canBlockWidth = canBlockWidth;
+    }
+
+    boolean getCanBlockWidth() {
+        return canBlockWidth;
+    }
+
+    boolean getCanBlockHeight() {
+        return canBlockHeight;
     }
 }

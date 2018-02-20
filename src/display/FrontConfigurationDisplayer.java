@@ -135,6 +135,8 @@ public class FrontConfigurationDisplayer extends JPanel {
                 configurationElementVM.getModelElementKey().toString(),
                 frontConfigurationVM.getFurnitureName()
         );
+        configElement.setCanBlockWidth(configurationElementVM.getCanBlockWidth());
+        configElement.setCanBlockHeight(configurationElementVM.getCanBlockHeight());
         configElement.setAction(DynProMain.modifyConfigElemAction);
         configElement.setToolTipText(configurationElementVM.getTooltip());
         idToComponentBinding.put(configurationElementVM.getModelElementKey().toString(), configElement);
@@ -180,7 +182,9 @@ public class FrontConfigurationDisplayer extends JPanel {
         frontConfigElemHeight.setModel(new SpinnerNumberModel(initialHeight,0,maxHeight,1));
         frontConfigElemName.setText(initialElemName);
         widthBlocker.setSelected(widthBlocked);
+        widthBlocker.setEnabled(idToComponentBinding.get(elementId).getCanBlockWidth());
         heightBlocker.setSelected(heightBlocked);
+        heightBlocker.setEnabled(idToComponentBinding.get(elementId).getCanBlockHeight());
         growthRingOrientationDisplayer.setSelected(growthRingVertically);
         shelvesNumberDisplayer.setValue(shelvesNumber);
         frontConfigElementDialogPanel.setVisible(true);

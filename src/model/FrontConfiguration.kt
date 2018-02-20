@@ -27,7 +27,8 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
     fun propagateAggragateSpecificDimen(elementId: String)
     fun propagateAggregateSpecificBlock(elementId: String, propertyBlocked: Boolean)
     fun getMaxDimensionOf(elementId: String): Dimension
-    fun getMinDimensionOf(elementId: String): Dimension
+    fun canBlockWidth(elementId: String): Boolean
+    fun canBlockHeight(elementId: String): Boolean
 }
 
 interface ArrangementAggregate : MutableList<Element>
@@ -49,7 +50,6 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
     abstract protected var aggregates: ArrayList<ArrangementAggregate>
     private val factoriesChain = AllFrontElementFactoriesChain()
 
-    override var columnOriented: Boolean = true
 
     override fun getConfiguration(): List<ArrangementAggregate> = ArrayList<ArrangementAggregate>(aggregates)
 
@@ -78,23 +78,36 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         val aggregate = aggregateContainingElement(elementToRemove)
         aggregate.remove(elementToRemove)
         if(aggregate.size == 0) aggregates.remove(aggregate)
+        keepOneNonFixedElemInAggregate(aggregate)
         if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
+    private fun keepOneNonFixedElemInAggregate(aggregate: ArrangementAggregate){
+        if(aggregate.size == 1) {
+            aggregate[0].blockedWidth = false
+            aggregate[0].blockedHeight = false
+        }
+    }
+
+    private fun newElemWithCopiedBlocks(aggregate: ArrangementAggregate): Element{
+        val newElem = defaultElementBuilder()
+        newElem.blockedHeight = aggregate[0].blockedHeight // responsibility of a front configuration object, since it knows how to set blocking properties of its children
+        newElem.blockedWidth = aggregate[0].blockedWidth
+        return newElem
+    }
+
     private fun onAddOneElement(elementId:String, indexModifier: (Int) -> Int){
-        if(columnOriented and (getRemainingColumnOrientedHeight(aggregateContainingElementWithId(elementId)) <= 0)) return
-        if(!columnOriented and (getRemainingRowOrientedWidth(aggregateContainingElementWithId(elementId)) <= 0)) return
+        val aggregate = aggregateContainingElementWithId(elementId)
         val indexOfBenchmarkElement = indexOfElementWithId(elementId)
-        aggregateContainingElementWithId(elementId).add(indexModifier(indexOfBenchmarkElement), defaultElementBuilder())
+        val newElem = newElemWithCopiedBlocks(aggregate)
+        aggregate.add(indexModifier(indexOfBenchmarkElement), newElem)
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
     private fun onAddAggregate(elementId: String, repeated: Boolean, indexModifier: (Int) -> Int){
-        if(columnOriented and (getRemainingColumnOrientedWidth() <= 0)) return
-        if(!columnOriented and (getRemainingRowOrientedHeight() <= 0)) return
         val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
         val newAggregate =
                 if(!repeated) Aggregate(defaultElementBuilder())
@@ -206,6 +219,16 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     }
 
+    override fun canBlockWidth(elementId: String) : Boolean{
+        return if(columnOriented) aggregates.filter { !it[0].blockedWidth and (it[0].id != elementId)}.size >= 1
+        else aggregateContainingElementWithId(elementId).filter { !it.blockedWidth and (it.id != elementId) }. size >= 1
+    }
+
+    override fun canBlockHeight(elementId: String): Boolean{
+        return if (columnOriented) aggregateContainingElementWithId(elementId).filter { !it.blockedHeight and (it.id != elementId) }.size >= 1
+        else aggregates.filter { !it[0].blockedHeight and (it[0].id != elementId)}.size >= 1
+    }
+
     override fun getMaxDimensionOf(elementId: String): Dimension {
         val element = fetchElementWithId(elementId)
         val currentWidth = if (element.blockedWidth) element.width else 0
@@ -214,24 +237,6 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         val dh = if(columnOriented) getRemainingColumnOrientedHeight(aggregateContainingElementWithId(elementId)) else getRemainingRowOrientedHeight()
         return Dimension(currentWidth + dw, currentHeight + dh)
 
-    }
-
-    private fun getNumberOfNonBlockedWidthElements(elementId: String): Int{
-        return if (!columnOriented) aggregateContainingElementWithId(elementId).filter { !it.blockedWidth and (it.id != elementId) }.size
-        else aggregates.filter { !it[0].blockedWidth }.size
-    }
-
-    private fun getNumberOfNonBlockedHeightElements(elementId:String) : Int{
-        return if (!columnOriented) aggregates.filter { !it[0].blockedHeight }.size
-        else aggregateContainingElementWithId(elementId).filter { !it.blockedHeight and (it.id != elementId) }.size
-    }
-
-    override fun getMinDimensionOf(elementId: String): Dimension{
-        val nonBlockedWidthElems = getNumberOfNonBlockedWidthElements(elementId)
-        val nonBlockedHeight = getNumberOfNonBlockedHeightElements(elementId)
-        val minWidth = 0
-        val minHeight = 0
-        return Dimension(minWidth, minHeight)
     }
 
     private fun getRemainingRowOrientedHeight(): Int{
@@ -277,24 +282,25 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
 class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
 
-    override val defaultElementBuilder = { Drawer() }
+    override var columnOriented: Boolean = true
+    override val defaultElementBuilder = { Drawer(parentConfig = this) }
 
     override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
-    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor()), Aggregate(Drawer()), Aggregate(Shelf()))
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this)), Aggregate(Drawer(parentConfig = this)), Aggregate(Shelf(parentConfig =  this)))
 
 }
 
 class BottomModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
 
-    override val defaultElementBuilder = { Shelf() }
+    override var columnOriented: Boolean = false
+    override val defaultElementBuilder = { Shelf(parentConfig = this) }
 
     override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
-    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor()), Aggregate(LeftDoor()))
-
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this)), Aggregate(LeftDoor(parentConfig = this)))
 }

@@ -10,7 +10,7 @@ class AllFrontElementFactoriesChain: FactoriesChain<FrontElemFactory>{
 }
 
 interface FrontElemFactory: TypedFactory{
-    fun createFrontElem(): Element
+    fun createFrontElem(parentConfig: FrontConfiguration): Element
     fun createFrontElem(oldElem: Element) : Element
 }
 
@@ -37,9 +37,9 @@ class LeftDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFro
 
     override fun typeCorrect(type: String): Boolean = type == Config.LEFT_DOOR_PL
 
-    override fun createFrontElem(): Element = LeftDoor()
+    override fun createFrontElem(parentConfig : FrontConfiguration): Element = LeftDoor(parentConfig = parentConfig)
 
-    override fun createFrontElem(oldElem: Element): Element = copied(LeftDoor(), oldElem)
+    override fun createFrontElem(oldElem: Element): Element = copied(LeftDoor(parentConfig = oldElem.parentConfig), oldElem)
 
 }
 
@@ -47,26 +47,26 @@ class RightDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFr
 
     override fun typeCorrect(type: String): Boolean = type == Config.RIGHT_DOOR_PL
 
-    override fun createFrontElem(): Element  = RightDoor()
+    override fun createFrontElem(parentConfig : FrontConfiguration): Element  = RightDoor(parentConfig = parentConfig)
 
-    override fun createFrontElem(oldElem: Element): Element = copied(RightDoor(), oldElem)
+    override fun createFrontElem(oldElem: Element): Element = copied(RightDoor(parentConfig = oldElem.parentConfig), oldElem)
 }
 
 class ShelfFactory : FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
 
     override fun typeCorrect(type: String): Boolean = type == Config.SHELF_PL
 
-    override fun createFrontElem(): Element = Shelf()
+    override fun createFrontElem(parentConfig : FrontConfiguration): Element = Shelf(parentConfig = parentConfig)
 
-    override fun createFrontElem(oldElem: Element): Element = copied(Shelf(), oldElem)
+    override fun createFrontElem(oldElem: Element): Element = copied(Shelf(parentConfig = oldElem.parentConfig), oldElem)
 }
 
 class DrawerFactory : FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
 
     override fun typeCorrect(type: String): Boolean = type == Config.DRAWER_PL
 
-    override fun createFrontElem(): Element = Drawer()
+    override fun createFrontElem(parentConfig : FrontConfiguration): Element = Drawer(parentConfig = parentConfig)
 
-    override fun createFrontElem(oldElem: Element): Element = copied(Drawer(), oldElem)
+    override fun createFrontElem(oldElem: Element): Element = copied(Drawer(parentConfig = oldElem.parentConfig), oldElem)
 
 }
