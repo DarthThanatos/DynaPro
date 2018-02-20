@@ -45,8 +45,7 @@ public class FrontConfigurationDisplayer extends JPanel {
         int maxNumberInAggregate = frontConfigurationVM.getMaxElementsAmount();
         for(ConfigurationAggregateVM configurationAggregateVM: frontConfigurationVM.getColumns()){
             if(columnOriented)gridy = 0; else gridx=0;
-            if(configurationAggregateVM.getSize() == maxNumberInAggregate) mountStandaloneElementsGroup(gridx, gridy, configurationAggregateVM);
-            else mountPanelOfElements(gridx, gridy, configurationAggregateVM, maxNumberInAggregate);
+            mountPanelOfElements(gridx, gridy, configurationAggregateVM, maxNumberInAggregate);
             if(columnOriented) gridx++; else gridy++;
         }
         revalidate();
@@ -83,15 +82,11 @@ public class FrontConfigurationDisplayer extends JPanel {
         if(frontConfigurationVM.getColumnOriented()){
             gridBagConstraints.gridx = 0;
             gridBagConstraints.gridy = GridBagConstraints.RELATIVE;
-//            gridBagConstraints.weighty = 1;
-//            gridBagConstraints.ipadx = 50;
 
         }
         else{
             gridBagConstraints.gridx = GridBagConstraints.RELATIVE;
             gridBagConstraints.gridy = 0;
-//            gridBagConstraints.weightx = 1;
-//            gridBagConstraints.ipady = 75;
         }
         gridBagConstraints.weightx = configurationElementVM.getWidthX();
         gridBagConstraints.weighty = configurationElementVM.getWidthY();
@@ -107,28 +102,6 @@ public class FrontConfigurationDisplayer extends JPanel {
             );
         }
         add(aggregate, newAggregateConstraints(configurationAggregateVM.get(0), gridx, gridy, maxNumberInAggregate));
-    }
-
-    private GridBagConstraints newConfigElemConstraints(ConfigurationElementVM configurationElementVM, int gridx, int gridy){
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = gridx;
-        gridBagConstraints.gridy = gridy;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-//        gridBagConstraints.ipadx = 50;
-//        gridBagConstraints.ipady = 75;
-        gridBagConstraints.weightx = configurationElementVM.getWidthX();
-        gridBagConstraints.weighty = configurationElementVM.getWidthY();
-        return gridBagConstraints;
-    }
-
-    private void mountStandaloneElementsGroup(int gridx, int gridy, ConfigurationAggregateVM configurationAggregateVM){
-        for(ConfigurationElementVM configurationElementVM: configurationAggregateVM){
-            add(
-                    newFrontConfigElement(configurationElementVM),
-                    newConfigElemConstraints(configurationElementVM, gridx, gridy)
-            );
-            if(frontConfigurationVM.getColumnOriented()) gridy++; else gridx++;
-        }
     }
 
     private void initConfigurationDisplay(FrontConfigurationVM frontConfigurationVM){

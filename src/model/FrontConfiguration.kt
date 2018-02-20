@@ -78,7 +78,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         val aggregate = aggregateContainingElement(elementToRemove)
         aggregate.remove(elementToRemove)
         if(aggregate.size == 0) aggregates.remove(aggregate)
-        keepOneNonFixedElemInAggregate(aggregate)
+        else keepOneNonFixedElemInAggregate(aggregate)
         if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
@@ -86,15 +86,21 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     private fun keepOneNonFixedElemInAggregate(aggregate: ArrangementAggregate){
         if(aggregate.size == 1) {
-            aggregate[0].blockedWidth = false
-            aggregate[0].blockedHeight = false
+            if(!columnOriented) aggregate[0].blockedWidth = false
+            else aggregate[0].blockedHeight = false
+        }
+        if ((aggregates.size == 1) and (aggregate == aggregates[0])){
+            if(!columnOriented) aggregate[0].blockedHeight = false
+            else aggregate[0].blockedWidth = false
         }
     }
 
     private fun newElemWithCopiedBlocks(aggregate: ArrangementAggregate): Element{
         val newElem = defaultElementBuilder()
-        newElem.blockedHeight = aggregate[0].blockedHeight // responsibility of a front configuration object, since it knows how to set blocking properties of its children
-        newElem.blockedWidth = aggregate[0].blockedWidth
+        if(!columnOriented)newElem.blockedHeight = aggregate[0].blockedHeight // responsibility of a front configuration object, since it knows how to set blocking properties of its children
+        if(columnOriented)newElem.blockedWidth = aggregate[0].blockedWidth
+        if(columnOriented) newElem.width = aggregate[0].width
+        else newElem.height = aggregate[0].height
         return newElem
     }
 
