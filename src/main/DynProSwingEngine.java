@@ -3,6 +3,7 @@ package main;
 import actions.*;
 import contract.DynProContract;
 import display.*;
+import display._3d.FurniturePerspective;
 import model.*;
 import org.swixml.SwingEngine;
 import presenter.*;
@@ -18,6 +19,7 @@ class DynProSwingEngine extends SwingEngine {
         getTaglib().registerTag("imagepanel", ImagePanel.class);
         getTaglib().registerTag("projecttree", ProjectTree.class);
         getTaglib().registerTag("frontconfigurationdisplayer", FrontConfigurationDisplayer.class);
+        getTaglib().registerTag("cubecanvas", FurniturePerspective.class);
         DEBUG_MODE = true;
     }
 
@@ -33,6 +35,12 @@ class DynProSwingEngine extends SwingEngine {
     private void inject(){
         injectProjectTree();
         injectFrontConfigDisplayer();
+        injectViewSwitcher();
+    }
+
+    private void injectViewSwitcher() {
+        moveToFurniturePerspectiveAction.setViewSwitcherPanel(viewSwitcher);
+        moveToMainMenuAction.setViewSwitcherPanel(viewSwitcher);
     }
 
     private void setup(){
@@ -59,6 +67,12 @@ class DynProSwingEngine extends SwingEngine {
         initProjectActions();
         initFurnitureActions();
         initFrontConfigActions();
+        initMoveToActions();
+    }
+
+    private void initMoveToActions() {
+        moveToMainMenuAction = new MoveToMainMenuAction();
+        moveToFurniturePerspectiveAction = new MoveToFurniturePerspectiveAction();
     }
 
     private void initFurnitureActions(){

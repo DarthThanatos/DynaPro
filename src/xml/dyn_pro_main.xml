@@ -6,9 +6,8 @@
        defaultcloseoperation="JFrame.EXIT_ON_CLOSE"
        plaf="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
 
-    <panel id="cardLayoutPanel" Layout="CardLayout" >
+    <panel id="viewSwitcher" Layout="CardLayout" >
         <panel include="xml/input/input_main_panel.xml#inputMainPanel" constraints="input_main_panel" layout="BorderLayout" background="white"/>
-        <!--<panel include="xml/main_menu.xml#mainMenuPanel" constraints="mainmenu" layout="GridBagLayout" background="red"/>-->
-        <!--<panel include="xml/output_furniture_panel.xml#outputFurniturePanel" id="outputFurniturePanel" constraints="outputfurniturepanel" Layout="CardLayout"/>-->
+        <panel include="xml/output/output_3d.xml#output3D" id="output3D" constraints="output3D" Layout="BorderLayout"/>
     </panel>
 </frame>

@@ -6,8 +6,10 @@ import display.FrontConfigurationDisplayer
 import display.ProjectTree
 import main.DynProMain
 import model.Element
+import java.awt.CardLayout
 import java.awt.event.ActionEvent
 import javax.swing.AbstractAction
+import javax.swing.JPanel
 
 
 class NewFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() {
@@ -121,3 +123,17 @@ class ModifyConfigElemAction(private val dynProMain: DynProMain): AbstractAction
     }
 
 }
+
+abstract class MoveToAction : AbstractAction(){
+    abstract val childPanelId: String
+    lateinit var viewSwitcherPanel: JPanel
+
+    override fun actionPerformed(e: ActionEvent?) {
+        val viewSwitcherLayout = viewSwitcherPanel.layout as CardLayout
+        viewSwitcherLayout.show(viewSwitcherPanel, childPanelId)
+    }
+
+}
+
+class MoveToMainMenuAction(override val childPanelId: String = "input_main_panel") : MoveToAction()
+class MoveToFurniturePerspectiveAction(override val childPanelId: String = "output3D"): MoveToAction()

@@ -1,0 +1,9 @@
+<panel id="output3D" Layout="BorderLayout">
+
+    <panel constraints="BorderLayout.SOUTH">
+        <button text="Cofnij" action="moveToMainMenuAction"/>
+    </panel>
+
+    <cubecanvas constraints="BorderLayout.CENTER"/>
+
+</panel>

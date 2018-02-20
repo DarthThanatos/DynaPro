@@ -35,8 +35,11 @@ public class DynProMain implements DynProContract.View {
     @SuppressWarnings("unused") static JComboBox frontConfigElemType;
     @SuppressWarnings("unused") static JTextField frontConfigElemName;
 
-
+    @SuppressWarnings({"unused", "WeakerAccess"}) static JPanel viewSwitcher;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static MoveToAction moveToMainMenuAction, moveToFurniturePerspectiveAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static NewProjectAction newProjectAction;
+
+
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RemoveFurnitureAction removeFurnitureAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RenameProjectTreeFurnitureAction renameFurnitureAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static RenameProjectAction renameProjectAction;
@@ -49,6 +52,8 @@ public class DynProMain implements DynProContract.View {
 
     static JSpinner shelvesNumberDisplayer;
     static JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;
+
+
 
     public static void main(String args[]) throws Exception {
         renderer.initActions();
