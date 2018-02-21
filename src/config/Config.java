@@ -30,7 +30,7 @@ public class Config {
     public static final String COLUMN_ORIENTED = "Zorientowany kolumnami";
 
     public static final String BACK_INSERTED = "Wkładane";
-    public static final String BACK_HPV = "Przybijane";
+    public static final String BACK_HDF = "Przybijane";
 
     public static final String ROOF_NOT_INSERTED = "Nakładany";
     public static final String ROOF_INSERTED = "Wkładany";
@@ -43,4 +43,7 @@ public class Config {
     public static final String FRONT_CONFIG_ELEMENT_TIP_FORMAT = "<html>Nazwa: %s<br/>Typ: %s<br/>Szerokość: %d<br/>Wysokość: %d<br/>Szerokość zablokowana: %s<br/> Wysokość zablokowana: %s<br/>Orientacja słojów wzdłuż wysokości: %s<br/>Ilość dodatkowych półek: %d</html>";
 
     public static final int SLAB_WIDTH = 18, BETWEEN_ELEMENTS_HORIZONTAL_GAP = 3, BETWEEN_ELEMENTS_VERTICAL_GAP = 2;
+
+    public static float MESH_UNIT = 250.0f;
+    public static int HDF_BACK_THICKNESS = 3;
 }
