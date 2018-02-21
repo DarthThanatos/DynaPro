@@ -38,9 +38,9 @@ class DefaultCommonsSetter: ElementCommonDefaultsSetter{
 
 }
 
-class Shelf(
-        override var name: String = Config.SHELF_PL,
-        override val type: String = Config.SHELF_PL, override var parentConfig: FrontConfiguration
+class EmptySpace(
+        override var name: String = Config.EMPTY_SPACE,
+        override val type: String = Config.EMPTY_SPACE, override var parentConfig: FrontConfiguration
 ) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(){
 
     override fun toString(): String = print(this)

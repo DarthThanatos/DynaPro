@@ -24,7 +24,7 @@ public class Config {
     public final static String DRAWER_PL = "szuflada";
     public final static String LEFT_DOOR_PL = "lewe drzwiczki";
     public final static String RIGHT_DOOR_PL = "prawe drzwiczki";
-    public final static String SHELF_PL = "półka";
+    public final static String EMPTY_SPACE = "pusta przestrzeń";
 
     public static final String ROW_ORIENTED = "Zorientowany wierszami";
     public static final String COLUMN_ORIENTED = "Zorientowany kolumnami";

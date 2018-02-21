@@ -29,7 +29,7 @@ class DynaProFurnitureSpecificsPresenter(override val model: DynProContract.Mode
             Pair(Config.DRAWER_PL, "icons/szuflada_front.png"),
             Pair(Config.LEFT_DOOR_PL, "icons/drzwiczki_klamka_prawo.png"),
             Pair(Config.RIGHT_DOOR_PL, "icons/drzwiczki_klamka_lewo.png"),
-            Pair(Config.SHELF_PL, "icons/shelf.png")
+            Pair(Config.EMPTY_SPACE, "icons/empty.jpg")
     )
 
     private fun fetchFrontConfigurationFromFurniture(furniture: Furniture) = fetchFrontConfigurationHavingName(furniture.name)

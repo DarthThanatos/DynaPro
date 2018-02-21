@@ -341,7 +341,7 @@ class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Fur
 class BottomModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
 
     override var columnOriented: Boolean = false
-    override val defaultElementBuilder = { Shelf(parentConfig = this) }
+    override val defaultElementBuilder = { Drawer(parentConfig = this) }
 
     override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)

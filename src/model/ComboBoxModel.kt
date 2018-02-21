@@ -8,4 +8,4 @@ class ComboFrontConfigurationModel: DefaultComboBoxModel<Any>(arrayOf<Any>(Confi
 class ComboBackTypeModel: DefaultComboBoxModel<Any>(arrayOf(Config.BACK_HDF, Config.BACK_INSERTED))
 class ComboRoofTypeModel: DefaultComboBoxModel<Any>(arrayOf(Config.ROOF_INSERTED, Config.ROOF_NOT_INSERTED))
 class ComboPedestalModel: DefaultComboBoxModel<Any>(arrayOf(Config.PEDESTAL_EXISTS, Config.NO_PEDESTAL))
-class ComboFrontConfigElemTypeModel: DefaultComboBoxModel<Any>(arrayOf(Config.LEFT_DOOR_PL, Config.RIGHT_DOOR_PL, Config.SHELF_PL, Config.DRAWER_PL))
+class ComboFrontConfigElemTypeModel: DefaultComboBoxModel<Any>(arrayOf(Config.LEFT_DOOR_PL, Config.RIGHT_DOOR_PL, Config.EMPTY_SPACE, Config.DRAWER_PL))
