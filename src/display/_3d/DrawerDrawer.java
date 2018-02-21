@@ -8,7 +8,7 @@ class DrawerDrawer extends CuboidDrawer{
 
     private boolean backInserted, lastToTheLeft, isLastToTheRight;
     private float slabMeshThickness = Config.SLAB_WIDTH / Config.MESH_UNIT;
-    private int aroundGap = 3, topGap = 10;
+    private float aroundMeshGap = 3/Config.MESH_UNIT, topMeshGap = 10/ Config.MESH_UNIT;
 
     DrawerDrawer(boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight){
         this.backInserted = backInserted;
@@ -26,21 +26,27 @@ class DrawerDrawer extends CuboidDrawer{
         drawBottom(gl, start, dimens);
     }
 
+    private float getLeftWallX(Point3D start){
+        float distToLeftSide = (lastToTheLeft ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP / Config.MESH_UNIT : 10/ Config.MESH_UNIT);
+        float leftSideX =  (float) (start.getX() - distToLeftSide);
+        return leftSideX + slabMeshThickness + 6/Config.MESH_UNIT;
+    }
+
     private void drawLeftWall(GL2 gl, Point3D start, Point3D dimens){
 
         float leftWallColor = 120 / 255f;
         float leftWallStartX, leftWallStartY, leftWallStartZ;
         float leftWallWidth, leftWallHeight, leftWallDepth;
 
-        leftWallStartX = (float) (start.getX() + slabMeshThickness + aroundGap) + (Config.BETWEEN_ELEMENTS_VERTICAL_GAP / (lastToTheLeft ? 1 : 2)) ;
-        leftWallStartY = (float) (start.getY() - topGap);
+        leftWallStartX =  getLeftWallX(start);
+        leftWallStartY = (float) (start.getY() - topMeshGap);
 
-        int t_track_depth = (int) (dimens.getZ() - (backInserted ? slabMeshThickness : 0) - aroundGap);
-        leftWallStartZ = (float) (t_track_depth % 50) + 10 + (backInserted ? slabMeshThickness : 0);
+        int t_track_depth = (int) (dimens.getZ() - (backInserted ? slabMeshThickness : 0) - aroundMeshGap);
+        leftWallStartZ = (float) (t_track_depth % 50) + 10/Config.MESH_UNIT + (backInserted ? slabMeshThickness : 0);
 
-        leftWallWidth = (float) slabMeshThickness;
-        leftWallHeight = (float) (dimens.getZ() - topGap - slabMeshThickness);
-        leftWallDepth = (float) (t_track_depth - (t_track_depth % 50)) - 10;
+        leftWallWidth = slabMeshThickness;
+        leftWallHeight = (float) (dimens.getZ() - topMeshGap - slabMeshThickness);
+        leftWallDepth = (float) (t_track_depth - (t_track_depth % 50)) - 10/Config.MESH_UNIT;
 
         drawCuboid(gl,
                 new Point3D(leftWallStartX,leftWallStartY,leftWallStartZ),
@@ -49,20 +55,27 @@ class DrawerDrawer extends CuboidDrawer{
         );
     }
 
+    private float getRightWallX(Point3D start, Point3D dimens){
+        float distToRightSide = (float) (dimens.getX() + (isLastToTheRight ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP / Config.MESH_UNIT : 10/ Config.MESH_UNIT));
+        float rightSideX = (float) (start.getX() - distToRightSide);
+        return (float) rightSideX - slabMeshThickness - 6/Config.MESH_UNIT - slabMeshThickness;
+    }
+
     private void drawRightWall(GL2 gl, Point3D start, Point3D dimens){
+
         float rightWallColor = 120 / 255f;
         float rightWallStartX, rightWallStartY, rightWallStartZ;
         float rightWallWidth, rightWallHeight, rightWallDepth;
 
-        rightWallStartX = (float) (start.getX() + dimens.getX() + 2 * Config.BETWEEN_ELEMENTS_VERTICAL_GAP - slabMeshThickness - aroundGap);
-        rightWallStartY = (float) (start.getY() - topGap);
+        rightWallStartX = getRightWallX(start, dimens);
+        rightWallStartY = (float) (start.getY() - topMeshGap);
 
-        int t_track_depth = (int) (dimens.getZ() - (backInserted ? slabMeshThickness : 0) - aroundGap);
-        rightWallStartZ = (float) (t_track_depth % 50) + 10 + (backInserted ? slabMeshThickness : 0);
+        int t_track_depth = (int) (dimens.getZ() - (backInserted ? slabMeshThickness : 0) - aroundMeshGap);
+        rightWallStartZ = (float) (t_track_depth % 50) + 10/Config.MESH_UNIT + (backInserted ? slabMeshThickness : 0);
 
-        rightWallWidth = (float) slabMeshThickness;
-        rightWallHeight = (float) (dimens.getZ() - topGap - slabMeshThickness);
-        rightWallDepth = (float) (t_track_depth - (t_track_depth % 50)) - 10;
+        rightWallWidth =  slabMeshThickness;
+        rightWallHeight = (float) (dimens.getZ() - topMeshGap - slabMeshThickness);
+        rightWallDepth = (float) (t_track_depth - (t_track_depth % 50)) - 10/Config.MESH_UNIT;
 
         drawCuboid(gl,
                 new Point3D(rightWallStartX,rightWallStartY,rightWallStartZ),
@@ -77,10 +90,44 @@ class DrawerDrawer extends CuboidDrawer{
     }
 
     private void drawBack(GL2 gl, Point3D start, Point3D dimens){
+        float backColor = 120 / 255f;
+        float backStartX, backStartY, backStartZ;
+        float backWidth, backHeight, backDepth;
+
+        backStartX =  getLeftWallX(start) + slabMeshThickness;
+        backStartY = (float) (start.getY() - topMeshGap);
+        backStartZ = (float) start.getZ();
+
+        backWidth = (float) dimens.getX();
+        backHeight = (float) dimens.getY();
+        backDepth = slabMeshThickness;
+
+        drawCuboid(gl,
+                new Point3D(backStartX,backStartY,backStartZ),
+                new Point3D(backWidth,backHeight,backDepth),
+                backColor
+        );
 
     }
 
     private void drawFront(GL2 gl, Point3D start, Point3D dimens){
+        float frontColor = 120 / 255f;
+        float frontStartX, frontStartY, frontStartZ;
+        float frontWidth, frontHeight, frontDepth;
+
+        frontStartX = (float) start.getX();
+        frontStartY = (float) start.getY();
+        frontStartZ = (float) start.getZ();
+
+        frontWidth = (float) dimens.getX();
+        frontHeight = (float) dimens.getY();
+        frontDepth = slabMeshThickness;
+
+        drawCuboid(gl,
+                new Point3D(frontStartX,frontStartY,frontStartZ),
+                new Point3D(frontWidth,frontHeight,frontDepth),
+                frontColor
+        );
 
     }
 }
