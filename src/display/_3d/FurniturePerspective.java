@@ -11,8 +11,6 @@ import javafx.geometry.Point3D;
 
 import java.awt.event.*;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.jogamp.opengl.GL.*;
 
@@ -83,9 +81,9 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         gl.glRotatef(rotationX, 1, 0, 0.0f);
         gl.glRotatef(rotationY, 0, 1, 0);
 
-        float furnitureHeight = 1500, furnitureWidth = 1000, furnitureDepth = 250, pedestalHeight = 50;
+        float furnitureHeight = 1500, furnitureWidth = 1000, furnitureDepth = 350, pedestalHeight = 100;
         float furnitureStartX = - furnitureWidth / (2 * Config.MESH_UNIT), furnitureStartY = furnitureHeight / (2 * Config.MESH_UNIT), furnitureStartZ = - furnitureDepth / (2 * Config.MESH_UNIT);
-        new ModuleSkeletonDrawer(false, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
+        new ModuleSkeletonDrawer(true, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
                 gl,
                 new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
                 new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
