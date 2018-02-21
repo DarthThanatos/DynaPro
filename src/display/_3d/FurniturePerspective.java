@@ -83,14 +83,14 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
 
         float furnitureHeight = 1500, furnitureWidth = 1000, furnitureDepth = 350, pedestalHeight = 100;
         float furnitureStartX = - furnitureWidth / (2 * Config.MESH_UNIT), furnitureStartY = -5 + furnitureHeight / (Config.MESH_UNIT) , furnitureStartZ = - furnitureDepth / (2 * Config.MESH_UNIT);
-        new ModuleSkeletonDrawer(true, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
-                gl,
-                new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
-                new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
-        );
+//        new ModuleSkeletonDrawer(true, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
+//                gl,
+//                new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
+//                new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
+//        );
         new DrawerDrawer(true, true, true).drawDrawer(
                 gl,
-                new Point3D(furnitureStartX + 2/Config.MESH_UNIT, furnitureStartY - 3 / Config.MESH_UNIT, furnitureStartZ + furnitureDepth / Config.MESH_UNIT),
+                new Point3D(furnitureStartX + 2/Config.MESH_UNIT, furnitureStartY - 3 / Config.MESH_UNIT, 3), //furnitureStartZ + furnitureDepth / Config.MESH_UNIT
                 new Point3D(furnitureWidth/Config.MESH_UNIT - 4/Config.MESH_UNIT, 200/Config.MESH_UNIT, furnitureDepth / Config.MESH_UNIT)
         );
         new MeshDrawer().drawMesh(gl, new Point3D(-5,-5,-5), new Point3D(10,10,10));
