@@ -85,7 +85,7 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
 
         float furnitureHeight = 1500, furnitureWidth = 1000, furnitureDepth = 250, pedestalHeight = 50;
         float furnitureStartX = - furnitureWidth / (2 * Config.MESH_UNIT), furnitureStartY = furnitureHeight / (2 * Config.MESH_UNIT), furnitureStartZ = - furnitureDepth / (2 * Config.MESH_UNIT);
-        new ModuleSkeletonDrawer(true, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
+        new ModuleSkeletonDrawer(false, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
                 gl,
                 new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
                 new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
