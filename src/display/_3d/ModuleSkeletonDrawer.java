@@ -26,7 +26,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
     }
 
     private void drawRoof(GL2 gl, Point3D furnitureStart, Point3D furnitureDimens){
-        float roofTopColor = 240 / 255f;
+        float roofTopColor = 180 / 255f;
         float roofStartX, roofStartY, roofStartZ;
         float roofWidth, roofHeight, roofDepth;
 
@@ -99,9 +99,6 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
                 hasPedestal
                         ? (float) (furnitureStart.getX() +  slabThickness)
                         : (float) (roofInserted ? furnitureStart.getX() +  slabThickness : furnitureStart.getX());
-//                roofInserted
-//                        ? (float) (furnitureStart.getX() + slabThickness)
-//                        : (float) furnitureStart.getX();
 
         bottomStartY =
                 hasPedestal
