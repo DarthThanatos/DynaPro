@@ -10,12 +10,14 @@ class DrawerDrawer extends CuboidDrawer{
     private float slabMeshThickness = Config.SLAB_WIDTH / Config.MESH_UNIT;
     private float aroundMeshGap = 3/Config.MESH_UNIT, topMeshGap = 10/ Config.MESH_UNIT;
     private boolean lastToTheBottom;
+    private int shelvesAtFrontBottomNumber;
 
-    DrawerDrawer(boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom){
+    DrawerDrawer(boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber){
         this.backInserted = backInserted;
         this.lastToTheLeft = lastToTheLeft;
         this.isLastToTheRight = lastToTheRight;
         this.lastToTheBottom = lastToTheBottom;
+        this.shelvesAtFrontBottomNumber = shelvesAtFrontBottomNumber;
     }
 
     void drawDrawer(GL2 gl, Point3D start, Point3D dimens){
@@ -88,7 +90,6 @@ class DrawerDrawer extends CuboidDrawer{
 
         rightWallWidth =  slabMeshThickness;
         rightWallHeight = (float) (dimens.getY() - topMeshGap - slabMeshThickness) - (lastToTheBottom ? slabMeshThickness : 0);
-        System.out.println("Wall Height " + rightWallHeight * Config.MESH_UNIT);
         rightWallDepth =  getTTrackEndDepth(dimens) / Config.MESH_UNIT;
 
         drawCuboid(gl,
@@ -112,7 +113,6 @@ class DrawerDrawer extends CuboidDrawer{
         bottomHeight = slabMeshThickness;
         bottomDepth = getTTrackEndDepth(dimens)/ Config.MESH_UNIT ;
 
-        System.out.println("Width: " + (bottomWidth * Config.MESH_UNIT) + ", height: " + (bottomHeight * Config.MESH_UNIT) + ", depth: " + (bottomDepth * Config.MESH_UNIT) + ", ttrackrest: " + getTTrackEndDepth(dimens) + ", Z: " + bottomStartZ * Config.MESH_UNIT + ", " + (start.getZ()) * Config.MESH_UNIT +  ", " + (start.getZ() - dimens.getZ()) * Config.MESH_UNIT);
         drawCuboid(gl,
                 new Point3D(bottomStartX,bottomStartY,bottomStartZ),
                 new Point3D(bottomWidth,bottomHeight,bottomDepth),
@@ -159,6 +159,42 @@ class DrawerDrawer extends CuboidDrawer{
                 new Point3D(frontStartX,frontStartY,frontStartZ),
                 new Point3D(frontWidth,frontHeight,frontDepth),
                 frontColor
+        );
+        if(shelvesAtFrontBottomNumber > 0){
+            drawShelfAtBottom(gl, start, dimens);
+        }
+    }
+
+    private float getLeftSideX(Point3D start){
+        float distToLeftSide = (lastToTheLeft ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP / Config.MESH_UNIT : 10/ Config.MESH_UNIT);
+        return  (float) (start.getX() - distToLeftSide);
+
+    }
+
+    private float getRightSideX(Point3D start, Point3D dimens){
+        float distToRightSide = (float) (dimens.getX() + (isLastToTheRight ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP / Config.MESH_UNIT : 10/ Config.MESH_UNIT));
+        return (float) (start.getX() + distToRightSide);
+
+    }
+
+    private void drawShelfAtBottom(GL2 gl, Point3D start, Point3D dimens){
+        float shelfColor = 120 / 255f;
+        float shelfStartX, shelfStartY, shelfStartZ;
+        float shelfWidth, shelfHeight, shelfDepth;
+
+
+        shelfStartX = getLeftSideX(start) + slabMeshThickness;
+        shelfStartY = (float) (start.getY() - dimens.getY() + 8/Config.MESH_UNIT);
+        shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? slabMeshThickness : 0));
+
+        shelfWidth = getRightSideX(start, dimens) - getLeftSideX(start) - 2*slabMeshThickness;
+        shelfHeight = slabMeshThickness;
+        shelfDepth = (float) (dimens.getZ() - (backInserted ? slabMeshThickness : 0));
+
+        drawCuboid(gl,
+                new Point3D(shelfStartX,shelfStartY,shelfStartZ),
+                new Point3D(shelfWidth,shelfHeight,shelfDepth),
+                shelfColor
         );
 
     }
