@@ -3,21 +3,23 @@ package display._3d;
 import com.jogamp.opengl.GL2;
 import config.Config;
 import javafx.geometry.Point3D;
+import model.Drawer;
 
 class DrawerDrawer extends CuboidDrawer{
 
     private boolean backInserted, lastToTheLeft, isLastToTheRight;
-    private float slabMeshThickness = Config.SLAB_WIDTH / Config.MESH_UNIT;
     private float aroundMeshGap = 3/Config.MESH_UNIT, topMeshGap = 10/ Config.MESH_UNIT;
     private boolean lastToTheBottom;
     private int shelvesAtFrontBottomNumber;
+    private Drawer drawer;
 
-    DrawerDrawer(boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber){
+    DrawerDrawer(Drawer drawer, boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber){
         this.backInserted = backInserted;
         this.lastToTheLeft = lastToTheLeft;
         this.isLastToTheRight = lastToTheRight;
         this.lastToTheBottom = lastToTheBottom;
         this.shelvesAtFrontBottomNumber = shelvesAtFrontBottomNumber;
+        this.drawer = drawer;
     }
 
     void drawDrawer(GL2 gl, Point3D start, Point3D dimens){
@@ -165,17 +167,6 @@ class DrawerDrawer extends CuboidDrawer{
         }
     }
 
-    private float getLeftSideX(Point3D start){
-        float distToLeftSide = (lastToTheLeft ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP / Config.MESH_UNIT : 10/ Config.MESH_UNIT);
-        return  (float) (start.getX() - distToLeftSide);
-
-    }
-
-    private float getRightSideX(Point3D start, Point3D dimens){
-        float distToRightSide = (float) (dimens.getX() + (isLastToTheRight ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP / Config.MESH_UNIT : 10/ Config.MESH_UNIT));
-        return (float) (start.getX() + distToRightSide);
-
-    }
 
     private void drawShelfAtBottom(GL2 gl, Point3D start, Point3D dimens){
         float shelfColor = 120 / 255f;
@@ -183,11 +174,11 @@ class DrawerDrawer extends CuboidDrawer{
         float shelfWidth, shelfHeight, shelfDepth;
 
 
-        shelfStartX = getLeftSideX(start) + slabMeshThickness;
+        shelfStartX = getLeftSideX(start, lastToTheLeft) + slabMeshThickness;
         shelfStartY = (float) (start.getY() - dimens.getY() + 8/Config.MESH_UNIT);
         shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? slabMeshThickness : 0));
 
-        shelfWidth = getRightSideX(start, dimens) - getLeftSideX(start) - 2*slabMeshThickness;
+        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, lastToTheLeft) - 2*slabMeshThickness;
         shelfHeight = slabMeshThickness;
         shelfDepth = (float) (dimens.getZ() - (backInserted ? slabMeshThickness : 0));
 

@@ -8,6 +8,7 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import config.Config;
 import javafx.geometry.Point3D;
+import model.Furniture;
 
 import java.awt.event.*;
 import java.io.File;
@@ -22,7 +23,7 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
     private GLU glu = new GLU();
     private float rotationX, rotationY, buttonX, glButtonY, translationZ;
     private int texture;
-
+    private Furniture furniture;
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -72,8 +73,11 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         glButtonY = e.getY();
     }
 
+
+
     @Override
     public void display(GLAutoDrawable drawable) {
+        if(furniture == null) return;
         final GL2 gl = drawable.getGL().getGL2();
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
@@ -81,26 +85,18 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         gl.glRotatef(rotationX, 1, 0, 0.0f);
         gl.glRotatef(rotationY, 0, 1, 0);
 
-        float furnitureHeight = 1500, furnitureWidth = 1000, furnitureDepth = 500, pedestalHeight = 100;
+        float furnitureHeight = furniture.getHeight(), furnitureWidth = furniture.getWidth(), furnitureDepth = furniture.getDepth();
         float furnitureStartX = - furnitureWidth / (2 * Config.MESH_UNIT), furnitureStartY = -5 + furnitureHeight / (Config.MESH_UNIT) , furnitureStartZ = - furnitureDepth / (2 * Config.MESH_UNIT);
-//        new ModuleSkeletonDrawer(true, true, true, pedestalHeight / Config.MESH_UNIT).drawModuleSkeleton(
-//                gl,
-//                new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
-//                new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
-//        );
-        new DrawerDrawer(false, true, false, false, 1).drawDrawer(
+        Point3D furnitureStart = new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ);
+        Point3D furnitureDimens = new Point3D(furnitureWidth / Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth / Config.MESH_UNIT);
+        new ModuleSkeletonDrawer(furniture.getRoofInserted(), furniture.getHasPedestal(), furniture.getBackInserted(), furniture.getPedestalHeight() / Config.MESH_UNIT).drawModuleSkeleton(
                 gl,
-                new Point3D(furnitureStartX + 2/Config.MESH_UNIT, furnitureStartY - 3 / Config.MESH_UNIT, 3), //furnitureStartZ + furnitureDepth / Config.MESH_UNIT
-                new Point3D(364/Config.MESH_UNIT , 205/Config.MESH_UNIT, furnitureDepth / Config.MESH_UNIT)
+                furnitureStart,
+                furnitureDimens
         );
-
-        new DoorDrawer(false, true, false, true,false, 1).drawDoor(
-                gl,
-                new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
-                new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
-        );
+        if(furniture.getFrontConfiguration().getColumnOriented()) new ColumnPerspectiveDrawer().drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
+        else new RowPerspectiveDrawer().drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
         new MeshDrawer().drawMesh(gl, new Point3D(-5,-5,-5), new Point3D(10,10,10));
-
         gl.glFlush();
 
     }
@@ -167,5 +163,7 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
     }
 
 
-
+    public void setFurniture(Furniture furniture) {
+        this.furniture = furniture;
+    }
 }
