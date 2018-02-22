@@ -94,7 +94,7 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
                 new Point3D(364/Config.MESH_UNIT , 205/Config.MESH_UNIT, furnitureDepth / Config.MESH_UNIT)
         );
 
-        new DoorDrawer(false, true, false, false, 4).drawDoor(
+        new DoorDrawer(false, true, false, false, 5).drawDoor(
                 gl,
                 new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
                 new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)

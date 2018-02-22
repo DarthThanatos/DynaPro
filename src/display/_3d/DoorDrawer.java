@@ -4,7 +4,7 @@ import com.jogamp.opengl.GL2;
 import config.Config;
 import javafx.geometry.Point3D;
 
-public class DoorDrawer extends CuboidDrawer {
+class DoorDrawer extends CuboidDrawer {
 
     private final boolean backInserted;
     private int shelvesAmount;
@@ -14,7 +14,7 @@ public class DoorDrawer extends CuboidDrawer {
 
     DoorDrawer(boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight, boolean isLastToBottom,int shelvesAmount){
         this.shelvesAmount = shelvesAmount;
-        this.isLastToBottom = this.isLastToBottom;
+        this.isLastToBottom = isLastToBottom;
         this.isLastToTheLeft = isLastToTheLeft;
         this.isLastToTheRight = isLastToTheRight;
         this.backInserted = backInserted;
@@ -66,7 +66,7 @@ public class DoorDrawer extends CuboidDrawer {
 
 
         shelfStartX = getLeftSideX(start) + slabMeshThickness;
-        shelfStartY = (float) (start.getY() - (dimens.getY() * ((float)(index) / shelvesAmount) ) - (float)index / dimens.getY() );
+        shelfStartY = (float) (start.getY() - (dimens.getY() * ((float)(index) / (shelvesAmount + 1)) + (1.0f / (shelvesAmount + 1) * dimens.getY()))  );
         shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? slabMeshThickness : 0));
 
         shelfWidth = getRightSideX(start, dimens) - getLeftSideX(start) - 2*slabMeshThickness;
