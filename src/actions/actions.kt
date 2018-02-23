@@ -1,9 +1,11 @@
 package actions
 
 import config.Config
+import contract.DynProContract
 import display.FrontConfigViewElem
 import display.FrontConfigurationDisplayer
 import display.ProjectTree
+import display._3d.FurniturePerspective
 import main.DynProMain
 import model.Element
 import java.awt.CardLayout
@@ -136,4 +138,15 @@ abstract class MoveToAction : AbstractAction(){
 }
 
 class MoveToMainMenuAction(override val childPanelId: String = "input_main_panel") : MoveToAction()
-class MoveToFurniturePerspectiveAction(override val childPanelId: String = "output3D"): MoveToAction()
+
+class MoveToFurniturePerspectiveAction(private val dynProMain: DynProMain): MoveToAction(){
+    override val childPanelId: String = "output3D"
+    lateinit var furniturePerspective: FurniturePerspective
+
+    override fun actionPerformed(e: ActionEvent?) {
+        furniturePerspective.setFurniture(
+                dynProMain.presenter.model.getFurnitureByName(dynProMain.presenter.getCurrentDisplayedFurnitureName())
+        )
+        super.actionPerformed(e)
+    }
+}

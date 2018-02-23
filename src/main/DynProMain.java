@@ -6,6 +6,7 @@ import display.FrontConfigurationDisplayer;
 import display.ImagePanel;
 import display.MetadataDisplayer;
 import display.ProjectTree;
+import display._3d.FurniturePerspective;
 import model.FrontConfigurationVM;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +37,11 @@ public class DynProMain implements DynProContract.View {
     @SuppressWarnings("unused") static JTextField frontConfigElemName;
 
     @SuppressWarnings({"unused", "WeakerAccess"}) static JPanel viewSwitcher;
-    @SuppressWarnings({"unused", "WeakerAccess"}) public static MoveToAction moveToMainMenuAction, moveToFurniturePerspectiveAction;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static MoveToAction moveToMainMenuAction;
+
+    static FurniturePerspective furniturePerspective;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static MoveToFurniturePerspectiveAction moveToFurniturePerspectiveAction;
+
     @SuppressWarnings({"unused", "WeakerAccess"}) public static NewProjectAction newProjectAction;
 
 

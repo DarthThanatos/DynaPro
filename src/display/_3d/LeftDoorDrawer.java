@@ -1,8 +1,11 @@
 package display._3d;
 
-public class LeftDoorDrawer extends DoorDrawer {
+import model.Door;
+import model.LeftDoor;
 
-    LeftDoorDrawer(boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight, boolean isLastToBottom, int shelvesAmount) {
-        super(backInserted, isLastToTheLeft, isLastToTheRight, isLastToBottom, shelvesAmount);
+class LeftDoorDrawer extends DoorDrawer {
+
+    LeftDoorDrawer(LeftDoor leftDoor, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight) {
+        super(leftDoor, backInserted, isLastToTheLeft, isLastToTheRight);
     }
 }

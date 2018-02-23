@@ -3,21 +3,19 @@ package display._3d;
 import com.jogamp.opengl.GL2;
 import config.Config;
 import javafx.geometry.Point3D;
+import model.Door;
 
 abstract class DoorDrawer extends CuboidDrawer {
 
     private final boolean backInserted;
-    private int shelvesAmount;
-    private boolean isLastToBottom;
+    private final Door door;
     private boolean isLastToTheLeft, isLastToTheRight;
-    private float slabMeshThickness = Config.SLAB_WIDTH / Config.MESH_UNIT;
 
-    DoorDrawer(boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight, boolean isLastToBottom, int shelvesAmount){
-        this.shelvesAmount = shelvesAmount;
-        this.isLastToBottom = isLastToBottom;
+    DoorDrawer(Door door, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight){
         this.isLastToTheLeft = isLastToTheLeft;
         this.isLastToTheRight = isLastToTheRight;
         this.backInserted = backInserted;
+        this.door = door;
     }
 
     void drawDoor(GL2 gl, Point3D start, Point3D dimens){
@@ -32,7 +30,7 @@ abstract class DoorDrawer extends CuboidDrawer {
 
         frontWidth = (float) dimens.getX();
         frontHeight = (float) dimens.getY();
-        frontDepth = slabMeshThickness;
+        frontDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,
                 new Point3D(frontStartX,frontStartY,frontStartZ),
@@ -40,13 +38,13 @@ abstract class DoorDrawer extends CuboidDrawer {
                 frontColor
         );
 
-        for(int i = 0; i < shelvesAmount; i++){
+        for(int i = 0; i < door.getShelvesNumber(); i++){
             drawShelf(gl, start, dimens, i);
         }
 
-        if(!isLastToBottom){
-            drawShelfAtBottom(gl, start, dimens);
-        }
+//        if(!isLastToBottom){
+//            drawShelfAtBottom(gl, start, dimens);
+//        }
 
     }
 
@@ -56,35 +54,13 @@ abstract class DoorDrawer extends CuboidDrawer {
         float shelfWidth, shelfHeight, shelfDepth;
 
 
-        shelfStartX = getLeftSideX(start, isLastToTheLeft) + slabMeshThickness;
-        shelfStartY = (float) (start.getY() - (dimens.getY() * ((float)(index) / (shelvesAmount + 1)) + (1.0f / (shelvesAmount + 1) * dimens.getY()))  );
-        shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? slabMeshThickness : 0));
+        shelfStartX = getLeftSideX(start, isLastToTheLeft) + Config.SLAB_THICKNESS;
+        shelfStartY = (float) (start.getY() - (dimens.getY() * ((float)(index) / (door.getShelvesNumber() + 1)) + (1.0f / (door.getShelvesNumber() + 1) * dimens.getY()))  );
+        shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
 
-        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, isLastToTheLeft) - 2*slabMeshThickness;
-        shelfHeight = slabMeshThickness;
-        shelfDepth = (float) (dimens.getZ() - (backInserted ? slabMeshThickness : 0));
-
-        drawCuboid(gl,
-                new Point3D(shelfStartX,shelfStartY,shelfStartZ),
-                new Point3D(shelfWidth,shelfHeight,shelfDepth),
-                shelfColor
-        );
-
-    }
-
-    private void drawShelfAtBottom(GL2 gl, Point3D start, Point3D dimens){
-        float shelfColor = 120 / 255f;
-        float shelfStartX, shelfStartY, shelfStartZ;
-        float shelfWidth, shelfHeight, shelfDepth;
-
-
-        shelfStartX = getLeftSideX(start, isLastToTheLeft) + slabMeshThickness;
-        shelfStartY = (float) (start.getY() - dimens.getY() + 8/Config.MESH_UNIT);
-        shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? slabMeshThickness : 0));
-
-        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, isLastToTheLeft) - 2*slabMeshThickness;
-        shelfHeight = slabMeshThickness;
-        shelfDepth = (float) (dimens.getZ() - (backInserted ? slabMeshThickness : 0));
+        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, isLastToTheLeft) - 2*Config.SLAB_THICKNESS;
+        shelfHeight = Config.SLAB_THICKNESS;
+        shelfDepth = (float) (dimens.getZ() - (backInserted ? Config.SLAB_THICKNESS : 0));
 
         drawCuboid(gl,
                 new Point3D(shelfStartX,shelfStartY,shelfStartZ),
@@ -93,6 +69,28 @@ abstract class DoorDrawer extends CuboidDrawer {
         );
 
     }
+
+//    private void drawShelfAtBottom(GL2 gl, Point3D start, Point3D dimens){
+//        float shelfColor = 120 / 255f;
+//        float shelfStartX, shelfStartY, shelfStartZ;
+//        float shelfWidth, shelfHeight, shelfDepth;
+//
+//
+//        shelfStartX = getLeftSideX(start, isLastToTheLeft) + Config.SLAB_THICKNESS;
+//        shelfStartY = (float) (start.getY() - dimens.getY() + 8);
+//        shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
+//
+//        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, isLastToTheLeft) - 2*Config.SLAB_THICKNESS;
+//        shelfHeight = Config.SLAB_THICKNESS;
+//        shelfDepth = (float) (dimens.getZ() - (backInserted ? Config.SLAB_THICKNESS : 0));
+//
+//        drawCuboid(gl,
+//                new Point3D(shelfStartX,shelfStartY,shelfStartZ),
+//                new Point3D(shelfWidth,shelfHeight,shelfDepth),
+//                shelfColor
+//        );
+//
+//    }
 
 
 }

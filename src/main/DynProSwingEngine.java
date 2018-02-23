@@ -19,7 +19,7 @@ class DynProSwingEngine extends SwingEngine {
         getTaglib().registerTag("imagepanel", ImagePanel.class);
         getTaglib().registerTag("projecttree", ProjectTree.class);
         getTaglib().registerTag("frontconfigurationdisplayer", FrontConfigurationDisplayer.class);
-        getTaglib().registerTag("cubecanvas", FurniturePerspective.class);
+        getTaglib().registerTag("furnitureperspective", FurniturePerspective.class);
         DEBUG_MODE = true;
     }
 
@@ -36,6 +36,7 @@ class DynProSwingEngine extends SwingEngine {
         injectProjectTree();
         injectFrontConfigDisplayer();
         injectViewSwitcher();
+        injectFurniturePerspective();
     }
 
     private void injectViewSwitcher() {
@@ -72,7 +73,7 @@ class DynProSwingEngine extends SwingEngine {
 
     private void initMoveToActions() {
         moveToMainMenuAction = new MoveToMainMenuAction();
-        moveToFurniturePerspectiveAction = new MoveToFurniturePerspectiveAction();
+        moveToFurniturePerspectiveAction = new MoveToFurniturePerspectiveAction(dynProMain);
     }
 
     private void initFurnitureActions(){
@@ -86,6 +87,10 @@ class DynProSwingEngine extends SwingEngine {
         newProjectAction = new NewProjectAction(dynProMain);
         renameProjectAction = new RenameProjectAction(dynProMain);
 
+    }
+
+    private void injectFurniturePerspective(){
+        moveToFurniturePerspectiveAction.setFurniturePerspective(furniturePerspective);
     }
 
     private void initFrontConfigActions(){

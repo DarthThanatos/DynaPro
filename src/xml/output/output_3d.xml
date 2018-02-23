@@ -4,6 +4,6 @@
         <button text="Cofnij" action="moveToMainMenuAction"/>
     </panel>
 
-    <cubecanvas constraints="BorderLayout.CENTER"/>
+    <furnitureperspective constraints="BorderLayout.CENTER" id="furniturePerspective"/>
 
 </panel>

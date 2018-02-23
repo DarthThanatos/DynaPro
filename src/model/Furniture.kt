@@ -44,7 +44,7 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
 
     override var width: Int by Delegates.observable(1500){ _, _, _ -> frontConfiguration.recalculateElementsDimens();  parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
-    override var depth: Int = 75
+    override var depth: Int = 500
 
 
     override fun getElements(): List<Element> {

@@ -46,10 +46,12 @@ class EmptySpace(
     override fun toString(): String = print(this)
 }
 
+abstract class Door : Element
+
 class LeftDoor(
         override var name: String = Config.LEFT_DOOR_PL,
         override val type: String = Config.LEFT_DOOR_PL, override var parentConfig: FrontConfiguration
-) : Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
+) : PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(){
 
     override fun toString(): String = print(this)
 }
@@ -57,7 +59,7 @@ class LeftDoor(
 class RightDoor(
         override var name: String = Config.RIGHT_DOOR_PL,
         override val type: String = Config.RIGHT_DOOR_PL, override var parentConfig: FrontConfiguration
-) : Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
+): PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(){
 
     override fun toString(): String = print(this)
 }

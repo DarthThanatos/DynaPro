@@ -86,16 +86,17 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         gl.glRotatef(rotationY, 0, 1, 0);
 
         float furnitureHeight = furniture.getHeight(), furnitureWidth = furniture.getWidth(), furnitureDepth = furniture.getDepth();
-        float furnitureStartX = - furnitureWidth / (2 * Config.MESH_UNIT), furnitureStartY = -5 + furnitureHeight / (Config.MESH_UNIT) , furnitureStartZ = - furnitureDepth / (2 * Config.MESH_UNIT);
+        float furnitureStartX = - furnitureWidth / (2), furnitureStartY = -5 * Config.MESH_UNIT + furnitureHeight , furnitureStartZ = - furnitureDepth / (2);
         Point3D furnitureStart = new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ);
-        Point3D furnitureDimens = new Point3D(furnitureWidth / Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth / Config.MESH_UNIT);
-        new ModuleSkeletonDrawer(furniture.getRoofInserted(), furniture.getHasPedestal(), furniture.getBackInserted(), furniture.getPedestalHeight() / Config.MESH_UNIT).drawModuleSkeleton(
+        Point3D furnitureDimens = new Point3D(furnitureWidth, furnitureHeight, furnitureDepth );
+        new ModuleSkeletonDrawer(furniture).drawModuleSkeleton(
                 gl,
                 furnitureStart,
                 furnitureDimens
         );
         if(furniture.getFrontConfiguration().getColumnOriented()) new ColumnPerspectiveDrawer().drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
         else new RowPerspectiveDrawer().drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
+
         new MeshDrawer().drawMesh(gl, new Point3D(-5,-5,-5), new Point3D(10,10,10));
         gl.glFlush();
 

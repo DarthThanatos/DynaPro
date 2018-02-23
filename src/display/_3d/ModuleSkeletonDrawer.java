@@ -3,18 +3,14 @@ package display._3d;
 import com.jogamp.opengl.GL2;
 import config.Config;
 import javafx.geometry.Point3D;
+import model.Furniture;
 
 class ModuleSkeletonDrawer extends CuboidDrawer {
 
-    private boolean roofInserted, hasPedestal, backInserted;
-    private float slabMeshThickness = Config.SLAB_WIDTH / Config.MESH_UNIT;
-    private float pedestalMeshHeight;
+    private Furniture furniture;
 
-    ModuleSkeletonDrawer(boolean roofInserted, boolean hasPedestal, boolean backInserted, float pedestalMeshHeight){
-        this.roofInserted = roofInserted;
-        this.hasPedestal = hasPedestal;
-        this.backInserted = backInserted;
-        this.pedestalMeshHeight = pedestalMeshHeight;
+    ModuleSkeletonDrawer(Furniture furniture){
+        this.furniture = furniture;
     }
 
     void drawModuleSkeleton(GL2 gl, Point3D furnitureStart, Point3D furnitureDimens){
@@ -30,14 +26,14 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         float roofStartX, roofStartY, roofStartZ;
         float roofWidth, roofHeight, roofDepth;
 
-        roofStartX = roofInserted ? (float) (furnitureStart.getX() + slabMeshThickness) : (float) furnitureStart.getX();
+        roofStartX = furniture.getRoofInserted() ? (float) (furnitureStart.getX() + Config.SLAB_THICKNESS) : (float) furnitureStart.getX();
         roofStartY = (float) furnitureStart.getY();
-        roofStartZ = roofInserted ? ((float)  furnitureStart.getZ()) : (float) furnitureStart.getZ();
+        roofStartZ = furniture.getRoofInserted() ? ((float)  furnitureStart.getZ()) : (float) furnitureStart.getZ();
 
-        roofWidth = roofInserted ? (float) (furnitureDimens.getX() - 2 * slabMeshThickness) : (float) furnitureDimens.getX();
-        roofHeight = slabMeshThickness;
+        roofWidth = furniture.getRoofInserted() ? (float) (furnitureDimens.getX() - 2 * Config.SLAB_THICKNESS) : (float) furnitureDimens.getX();
+        roofHeight = Config.SLAB_THICKNESS;
         roofDepth =
-                roofInserted
+                furniture.getRoofInserted()
                         ? ((float) furnitureDimens.getZ())
                         : (float) furnitureDimens.getZ();
 
@@ -53,12 +49,12 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         float leftWallStartX, leftWallStartY, leftWallStartZ;
         float leftWallWidth, leftWallHeight, leftWallDepth;
 
-        leftWallStartX = (float) furnitureStart.getX();
-        leftWallStartY = roofInserted ? (float) furnitureStart.getY() : (float) (furnitureStart.getY() - slabMeshThickness);
+        leftWallStartX = (float) furnitureStart.getX() ;
+        leftWallStartY = furniture.getRoofInserted() ? (float) furnitureStart.getY() : (float) (furnitureStart.getY() - Config.SLAB_THICKNESS);
         leftWallStartZ = (float) furnitureStart.getZ();
 
-        leftWallWidth = slabMeshThickness;
-        leftWallHeight = (float) (furnitureDimens.getY() - (roofInserted ? 0 : slabMeshThickness) - (hasPedestal ? 0 : (roofInserted ? 0 : slabMeshThickness)));
+        leftWallWidth =  Config.SLAB_THICKNESS;
+        leftWallHeight = (float) (furnitureDimens.getY() - (furniture.getRoofInserted() ? 0 : Config.SLAB_THICKNESS) - (furniture.getHasPedestal() ? 0 : (furniture.getRoofInserted() ? 0 : Config.SLAB_THICKNESS)));
         leftWallDepth = (float) furnitureDimens.getZ();
 
         drawCuboid(gl,
@@ -74,12 +70,12 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         float rightWallStartX, rightWallStartY, rightWallStartZ;
         float rightWallWidth, rightWallHeight, rightWallDepth;
 
-        rightWallStartX = (float) (furnitureStart.getX() + furnitureDimens.getX() - slabMeshThickness);
-        rightWallStartY = roofInserted ? (float) furnitureStart.getY() : (float) (furnitureStart.getY() - slabMeshThickness);
+        rightWallStartX = (float) (furnitureStart.getX() + furnitureDimens.getX() - Config.SLAB_THICKNESS);
+        rightWallStartY = furniture.getRoofInserted() ? (float) furnitureStart.getY() : (float) (furnitureStart.getY() - Config.SLAB_THICKNESS);
         rightWallStartZ = (float) furnitureStart.getZ();
 
-        rightWallWidth = slabMeshThickness;
-        rightWallHeight = (float) (furnitureDimens.getY() - (roofInserted ? 0 : slabMeshThickness) - (hasPedestal ? 0 : (roofInserted ? 0 : slabMeshThickness)));
+        rightWallWidth =  Config.SLAB_THICKNESS;
+        rightWallHeight = (float) (furnitureDimens.getY() - (furniture.getRoofInserted() ? 0 : Config.SLAB_THICKNESS) - (furniture.getHasPedestal() ? 0 : (furniture.getRoofInserted() ? 0 : Config.SLAB_THICKNESS)));
         rightWallDepth = (float) furnitureDimens.getZ();
 
         drawCuboid(gl,
@@ -96,23 +92,23 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         float bottomWidth, bottomHeight, bottomDepth;
 
         bottomStartX =
-                hasPedestal
-                        ? (float) (furnitureStart.getX() + slabMeshThickness)
-                        : (float) (roofInserted ? furnitureStart.getX() + slabMeshThickness : furnitureStart.getX());
+                furniture.getHasPedestal()
+                        ? (float) (furnitureStart.getX() + Config.SLAB_THICKNESS)
+                        : (float) (furniture.getRoofInserted() ? furnitureStart.getX() + Config.SLAB_THICKNESS : furnitureStart.getX());
 
         bottomStartY =
-                hasPedestal
-                ? (float) (furnitureStart.getY() - furnitureDimens.getY() + pedestalMeshHeight + slabMeshThickness)
-                : (float) (furnitureStart.getY() - furnitureDimens.getY()  + slabMeshThickness);
+                furniture.getHasPedestal()
+                ? (float) (furnitureStart.getY() - furnitureDimens.getY() + furniture.getPedestalHeight() + Config.SLAB_THICKNESS)
+                : (float) (furnitureStart.getY() - furnitureDimens.getY()  + Config.SLAB_THICKNESS);
 
         bottomStartZ = (float) furnitureStart.getZ();
 
         bottomWidth =
-                hasPedestal
-                        ? (float) (furnitureDimens.getX() - 2 * slabMeshThickness)
-                        : (float) (roofInserted ? furnitureDimens.getX() - 2 * slabMeshThickness : furnitureDimens.getX());
+                furniture.getHasPedestal()
+                        ? (float) (furnitureDimens.getX() - 2 * Config.SLAB_THICKNESS)
+                        : (float) (furniture.getRoofInserted() ? furnitureDimens.getX() - 2 * Config.SLAB_THICKNESS : furnitureDimens.getX());
 
-        bottomHeight = slabMeshThickness;
+        bottomHeight = Config.SLAB_THICKNESS;
         bottomDepth =  (float) furnitureDimens.getZ();
 
         drawCuboid(gl,
@@ -121,7 +117,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
                 bottomColor
         );
 
-        if(hasPedestal) drawPedestal(gl, furnitureStart, furnitureDimens);
+        if(furniture.getHasPedestal()) drawPedestal(gl, furnitureStart, furnitureDimens);
     }
 
 
@@ -130,13 +126,13 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         float pedestalStartX, pedestalStartY, pedestalStartZ;
         float pedestalWidth, pedestalHeight, pedestalDepth;
 
-        pedestalStartX = (float) (furnitureStart.getX() + slabMeshThickness);
-        pedestalStartY = (float) (furnitureStart.getY() - furnitureDimens.getY() + pedestalMeshHeight);
-        pedestalStartZ = (float) (furnitureStart.getZ() + furnitureDimens.getZ() - 2 * slabMeshThickness);
+        pedestalStartX = (float) (furnitureStart.getX() + Config.SLAB_THICKNESS);
+        pedestalStartY = (float) (furnitureStart.getY() - furnitureDimens.getY() + furniture.getPedestalHeight());
+        pedestalStartZ = (float) (furnitureStart.getZ() + furnitureDimens.getZ() - 2 * Config.SLAB_THICKNESS);
 
-        pedestalWidth = (float) (furnitureDimens.getX() - 2 * slabMeshThickness);
-        pedestalHeight = pedestalMeshHeight;
-        pedestalDepth = slabMeshThickness;
+        pedestalWidth = (float) (furnitureDimens.getX() - 2 * Config.SLAB_THICKNESS);
+        pedestalHeight = furniture.getPedestalHeight();
+        pedestalDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,
                 new Point3D(pedestalStartX,pedestalStartY,pedestalStartZ),
@@ -150,18 +146,17 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         float backColor = 60 / 255f;
         float backStartX, backStartY, backStartZ;
         float backWidth, backHeight, backDepth;
-        float hdfThickness = Config.HDF_BACK_THICKNESS / Config.MESH_UNIT;
 
-        backStartX = backInserted ? (float) (furnitureStart.getX() + slabMeshThickness) : (float) furnitureStart.getX();
-        backStartY = backInserted ? (float) (furnitureStart.getY() - slabMeshThickness) : (float) furnitureStart.getY();
-        backStartZ = backInserted ? (float) furnitureStart.getZ() : (float) furnitureStart.getZ() - hdfThickness;
+        backStartX = furniture.getBackInserted() ? (float) (furnitureStart.getX() + Config.SLAB_THICKNESS) : (float) furnitureStart.getX();
+        backStartY = furniture.getBackInserted()  ? (float) (furnitureStart.getY() - Config.SLAB_THICKNESS) : (float) furnitureStart.getY();
+        backStartZ = furniture.getBackInserted()  ? (float) furnitureStart.getZ() : (float) furnitureStart.getZ() - Config.HDF_BACK_THICKNESS;
 
-        backWidth = backInserted ? (float) (furnitureDimens.getX() - 2 * slabMeshThickness) : (float) furnitureDimens.getX();
+        backWidth = furniture.getBackInserted()  ? (float) (furnitureDimens.getX() - 2 * Config.SLAB_THICKNESS) : (float) furnitureDimens.getX();
         backHeight =
-                backInserted
-                        ? ((float) (furnitureDimens.getY() - 2 * slabMeshThickness - (hasPedestal ? pedestalMeshHeight : 0) ))
-                        : (float) furnitureDimens.getY() - (hasPedestal ? pedestalMeshHeight : 0);
-        backDepth = backInserted ? slabMeshThickness : hdfThickness;
+                furniture.getBackInserted()
+                        ? ((float) (furnitureDimens.getY() - 2 * Config.SLAB_THICKNESS - (furniture.getHasPedestal() ? furniture.getPedestalHeight() : 0) ))
+                        : (float) furnitureDimens.getY() - (furniture.getHasPedestal() ? furniture.getPedestalHeight() : 0);
+        backDepth = furniture.getBackInserted()  ? Config.SLAB_THICKNESS : Config.HDF_BACK_THICKNESS;
 
         drawCuboid(gl,
                 new Point3D(backStartX,backStartY,backStartZ),

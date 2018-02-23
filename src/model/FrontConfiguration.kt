@@ -31,11 +31,27 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
     fun canBlockHeight(elementId: String): Boolean
     fun getBlockedHeight(): Int
     fun getBlockedWidth(): Int
+    fun isElemWithIdLastToTheLeft(elementId: String): Boolean
+    fun isElemWithIdLastToTheRight(elementId: String): Boolean
+    fun isElemWithIdLastToTheTop(elementId: String): Boolean
+    fun isElemWithIdLastToTheBottom(elementId: String): Boolean
 }
 
-interface ArrangementAggregate : MutableList<Element>
+interface ArrangementAggregate : MutableList<Element>{
+    fun getAggregateHeightWithGaps(columnOriented: Boolean): Int
+    fun getAggregateWidthWithGaps(columnOriented: Boolean): Int
+}
 
 class Aggregate(vararg elements: Element): ArrangementAggregate, MutableList<Element> by ArrayList(){
+    override fun getAggregateHeightWithGaps(columnOriented: Boolean): Int =
+        if(columnOriented) this.sumBy { it.height } + this.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+        else get(0).height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+
+    override fun getAggregateWidthWithGaps(columnOriented: Boolean): Int =
+            if(columnOriented) get(0).width + 2 * Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+            else  this.sumBy { it.width } + (this.size + 1) * Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+
+
     init{
         addAll(elements)
     }
@@ -92,10 +108,10 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
                 (aggregates.map {
                     val (blocked, nonBlocked) = it.partition{ it.blockedHeight }
                     blocked .sumBy { it.height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP } + nonBlocked.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP + nonBlocked.size
-                }.max()?:0) + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+                }.max()?:0)
             }else {
                 val( blocked, nonBlocked) = aggregates.partition{ it[0].blockedHeight}
-               blocked.map { it[0].height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP}.sum() + nonBlocked.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP + nonBlocked.size + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
+               blocked.map { it[0].height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP}.sum() + nonBlocked.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP + nonBlocked.size
             }
     }
 
@@ -286,7 +302,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     private fun getRemainingRowOrientedHeight(): Int{
         val blockedHeightRows = aggregates.filter { it[0].blockedHeight }
-        return parentFurniture.height - (aggregates.size + 1) * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP - blockedHeightRows.sumBy { it[0].height } - parentFurniture.pedestalHeight
+        return parentFurniture.height - (aggregates.size) * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP - blockedHeightRows.sumBy { it[0].height } - parentFurniture.pedestalHeight
     }
 
 
@@ -298,7 +314,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     private fun getRemainingColumnOrientedHeight(column: ArrangementAggregate) : Int{
         val blockedHeightElements = column.filter { it.blockedHeight }
-        return parentFurniture.height - (column.size + 1) * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP - blockedHeightElements.sumBy { it.height } - parentFurniture.pedestalHeight
+        return parentFurniture.height - (column.size) * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP - blockedHeightElements.sumBy { it.height } - parentFurniture.pedestalHeight
 
     }
 
@@ -323,6 +339,21 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         propagate(element){it.blockedHeight = heightBlocked}
     }
 
+    override fun isElemWithIdLastToTheLeft(elementId: String) : Boolean =
+            if(columnOriented) aggregateIndexContainingElementWithId(elementId) == 0
+            else indexOfElementWithId(elementId) == 0
+
+    override fun isElemWithIdLastToTheRight(elementId: String) : Boolean =
+            if(columnOriented) aggregateIndexContainingElementWithId(elementId) == aggregates.size - 1
+            else indexOfElementWithId(elementId) == aggregateContainingElementWithId(elementId).size - 1
+
+    override fun isElemWithIdLastToTheTop(elementId: String) : Boolean =
+        if(columnOriented) indexOfElementWithId(elementId) == 0
+        else aggregateIndexContainingElementWithId(elementId) == 0
+
+    override fun isElemWithIdLastToTheBottom(elementId: String) : Boolean =
+            if(columnOriented) indexOfElementWithId(elementId) == aggregateContainingElementWithId(elementId).size - 1
+            else aggregateIndexContainingElementWithId(elementId) == aggregates.size - 1
 }
 
 class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
