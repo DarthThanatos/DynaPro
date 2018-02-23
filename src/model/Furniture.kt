@@ -81,7 +81,7 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
 
     override var width : Int by Delegates.observable(1000){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
-    override var depth : Int = 10
+    override var depth : Int = 500
 
     override fun getElements(): List<Element> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

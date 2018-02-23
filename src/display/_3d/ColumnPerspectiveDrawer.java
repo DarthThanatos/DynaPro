@@ -10,6 +10,10 @@ import model.Furniture;
 
 class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
 
+    ColumnPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture) {
+        super(drawerTexture, leftDoorTexture, rightDoorTexture);
+    }
+
     @Override
     void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, Furniture furniture) {
         float separatorColor = 120 / 255f;

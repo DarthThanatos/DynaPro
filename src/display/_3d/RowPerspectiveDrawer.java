@@ -10,8 +10,13 @@ import model.Furniture;
 
 class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
 
+    RowPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture) {
+        super(drawerTexture, leftDoorTexture, rightDoorTexture);
+    }
+
     @Override
-    void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, Furniture furniture) {        //start x,y,z - coords of the front plane
+    void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, Furniture furniture) {
+        //start x,y,z - coords of the front plane
         //dimens - y - height of separator, z - depth of furniture, x - slabMeshThickness
         float separatorColor = 50 / 255f;
         float separatorStartX, separatorStartY, separatorStartZ;
@@ -81,7 +86,7 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
     Point3D calculateNextAggregatePosition(ArrangementAggregate currentAggregate, Point3D currentPoint, Point3D startPoint) {
         return new Point3D(
                 startPoint.getX(),
-                currentPoint.getY() + currentAggregate.get(0).getHeight() +  2 * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP,
+                currentPoint.getY() - currentAggregate.get(0).getHeight() -  2 * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP,
                 currentPoint.getZ()
         );
     }

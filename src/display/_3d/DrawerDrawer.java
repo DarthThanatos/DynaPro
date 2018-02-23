@@ -12,14 +12,16 @@ class DrawerDrawer extends CuboidDrawer{
     private boolean lastToTheBottom;
     private int shelvesAtFrontBottomNumber;
     private Drawer drawer;
+    private int drawerTexture;
 
-    DrawerDrawer(Drawer drawer, boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber){
+    DrawerDrawer(Drawer drawer, int drawerTexture, boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber){
         this.backInserted = backInserted;
         this.lastToTheLeft = lastToTheLeft;
         this.isLastToTheRight = lastToTheRight;
         this.lastToTheBottom = lastToTheBottom;
         this.shelvesAtFrontBottomNumber = shelvesAtFrontBottomNumber;
         this.drawer = drawer;
+        this.drawerTexture = drawerTexture;
     }
 
     void drawDrawer(GL2 gl, Point3D start, Point3D dimens){
@@ -163,6 +165,9 @@ class DrawerDrawer extends CuboidDrawer{
                 new Point3D(frontWidth,frontHeight,frontDepth),
                 frontColor
         );
+
+        drawTexturedFront(gl, start, dimens, drawerTexture);
+
         if(shelvesAtFrontBottomNumber > 0){
             drawShelfAtBottom(gl, start, dimens);
         }

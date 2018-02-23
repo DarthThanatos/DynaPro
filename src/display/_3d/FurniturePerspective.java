@@ -22,7 +22,7 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
 
     private GLU glu = new GLU();
     private float rotationX, rotationY, buttonX, glButtonY, translationZ;
-    private int texture;
+    private int drawerTexture, leftDoorTexture, rightDoorTexture;
     private Furniture furniture;
 
     @Override
@@ -94,8 +94,10 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
                 furnitureStart,
                 furnitureDimens
         );
-        if(furniture.getFrontConfiguration().getColumnOriented()) new ColumnPerspectiveDrawer().drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
-        else new RowPerspectiveDrawer().drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
+        if(furniture.getFrontConfiguration().getColumnOriented())
+            new ColumnPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
+        else
+            new RowPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
 
         new MeshDrawer().drawMesh(gl, new Point3D(-5,-5,-5), new Point3D(10,10,10));
         gl.glFlush();
@@ -125,6 +127,23 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
 
     private FPSAnimator animator;
 
+
+    private int newTextureKey(GL2 gl, String path){
+        int res = -1;
+        gl.glEnable(GL2.GL_TEXTURE_2D);
+        try{
+
+            File im = new File(path);
+            Texture t = TextureIO.newTexture(im, true);
+            res = t.getTextureObject(gl);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        gl.glDisable(GL2.GL_TEXTURE_2D);
+        return res;
+    }
+
     @Override
     public void init(GLAutoDrawable drawable) {
         final GL2 gl = drawable.getGL().getGL2();
@@ -137,17 +156,9 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
         gl.glHint(GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
 
-        gl.glEnable(GL2.GL_TEXTURE_2D);
-        try{
-
-            File im = new File("src/icons/szuflada_front.png ");
-            Texture t = TextureIO.newTexture(im, true);
-            texture= t.getTextureObject(gl);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        gl.glDisable(GL2.GL_TEXTURE_2D);
+        drawerTexture = newTextureKey(gl, "src/icons/szuflada_front.png");
+        leftDoorTexture = newTextureKey(gl, "src/icons/drzwiczki_klamka_prawo.png");
+        rightDoorTexture = newTextureKey(gl, "src/icons/drzwiczki_klamka_lewo.png");
 
         animator = new FPSAnimator(this, 300, true);
         animator.start();

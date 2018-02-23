@@ -42,9 +42,6 @@ abstract class DoorDrawer extends CuboidDrawer {
             drawShelf(gl, start, dimens, i);
         }
 
-//        if(!isLastToBottom){
-//            drawShelfAtBottom(gl, start, dimens);
-//        }
 
     }
 
@@ -69,28 +66,5 @@ abstract class DoorDrawer extends CuboidDrawer {
         );
 
     }
-
-//    private void drawShelfAtBottom(GL2 gl, Point3D start, Point3D dimens){
-//        float shelfColor = 120 / 255f;
-//        float shelfStartX, shelfStartY, shelfStartZ;
-//        float shelfWidth, shelfHeight, shelfDepth;
-//
-//
-//        shelfStartX = getLeftSideX(start, isLastToTheLeft) + Config.SLAB_THICKNESS;
-//        shelfStartY = (float) (start.getY() - dimens.getY() + 8);
-//        shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
-//
-//        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, isLastToTheLeft) - 2*Config.SLAB_THICKNESS;
-//        shelfHeight = Config.SLAB_THICKNESS;
-//        shelfDepth = (float) (dimens.getZ() - (backInserted ? Config.SLAB_THICKNESS : 0));
-//
-//        drawCuboid(gl,
-//                new Point3D(shelfStartX,shelfStartY,shelfStartZ),
-//                new Point3D(shelfWidth,shelfHeight,shelfDepth),
-//                shelfColor
-//        );
-//
-//    }
-
 
 }

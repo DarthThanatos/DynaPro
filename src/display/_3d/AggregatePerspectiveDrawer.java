@@ -9,6 +9,14 @@ import java.util.Iterator;
 
 abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
 
+    private int drawerTexture, leftDoorTexture, rightDoorTexture;
+
+    AggregatePerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture){
+        this.drawerTexture = drawerTexture;
+        this.leftDoorTexture = leftDoorTexture;
+        this.rightDoorTexture = rightDoorTexture;
+    }
+
     void drawFurniture(GL2 gl, Furniture furniture, Point3D start, Point3D dimens){
         Point3D currentPoint = new Point3D(start.getX(), start.getY(), start.getZ() + dimens.getZ());
         Iterator<ArrangementAggregate> aggregatesIter = furniture.getFrontConfiguration().getConfiguration().iterator();
@@ -49,6 +57,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             FrontConfiguration configuration = furniture.getFrontConfiguration();
             new DrawerDrawer(
                     (Drawer) element,
+                    drawerTexture,
                     furniture.getBackInserted(),
                     configuration.isElemWithIdLastToTheLeft(element.getId()),
                     configuration.isElemWithIdLastToTheRight(element.getId()),
@@ -63,11 +72,6 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             if(!furniture.getFrontConfiguration().getColumnOriented() && !isTheLastOne){
                 drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, furniture);
             }
-    //        new DrawerDrawer(false, true, false, false, 1).drawDrawer(
-    //                gl,
-    //                new Point3D(furnitureStartX + 2/Config.MESH_UNIT, furnitureStartY - 3 / Config.MESH_UNIT, 3), //furnitureStartZ + furnitureDepth / Config.MESH_UNIT
-    //                new Point3D(364/Config.MESH_UNIT , 205/Config.MESH_UNIT, furnitureDepth / Config.MESH_UNIT)
-    //        );
 
         }
     }
@@ -77,6 +81,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             FrontConfiguration configuration = furniture.getFrontConfiguration();
             new LeftDoorDrawer(
                     (LeftDoor) element,
+                    leftDoorTexture,
                     furniture.getBackInserted(),
                     configuration.isElemWithIdLastToTheLeft(element.getId()),
                     configuration.isElemWithIdLastToTheRight(element.getId())
@@ -90,12 +95,6 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             }
         }
 
-//        new DoorDrawer(false, true, false, true,true, 1).drawDoor(
-//                gl,
-//                new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ),
-//                new Point3D(furnitureWidth/ Config.MESH_UNIT, furnitureHeight / Config.MESH_UNIT, furnitureDepth/ Config.MESH_UNIT)
-//        );
-
     }
 
     private void tryDrawingRightDoor(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne){
@@ -103,6 +102,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             FrontConfiguration configuration = furniture.getFrontConfiguration();
             new RightDoorDrawer(
                     (RightDoor)element,
+                    rightDoorTexture,
                     furniture.getBackInserted(),
                     configuration.isElemWithIdLastToTheLeft(element.getId()),
                     configuration.isElemWithIdLastToTheRight(element.getId())
