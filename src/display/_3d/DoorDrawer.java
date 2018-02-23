@@ -35,7 +35,8 @@ abstract class DoorDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(frontStartX,frontStartY,frontStartZ),
                 new Point3D(frontWidth,frontHeight,frontDepth),
-                frontColor
+                frontColor,
+                true
         );
 
         for(int i = 0; i < door.getShelvesNumber(); i++){
@@ -46,7 +47,7 @@ abstract class DoorDrawer extends CuboidDrawer {
     }
 
     private void drawShelf(GL2 gl, Point3D start, Point3D dimens, int index){
-        float shelfColor = 120 / 255f;
+        float shelfColor = 0 / 255f;
         float shelfStartX, shelfStartY, shelfStartZ;
         float shelfWidth, shelfHeight, shelfDepth;
 
@@ -62,7 +63,8 @@ abstract class DoorDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(shelfStartX,shelfStartY,shelfStartZ),
                 new Point3D(shelfWidth,shelfHeight,shelfDepth),
-                shelfColor
+                shelfColor,
+                false
         );
 
     }

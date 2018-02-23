@@ -21,7 +21,7 @@ class CuboidDrawer {
     }
 
     float getTopSlabY(Point3D start, boolean isLastToTheTop){
-        float distToTop =  isLastToTheTop ? Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP  : 7;
+        float distToTop =  isLastToTheTop ? Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP  : 8;
         return (float) (start.getY() + distToTop);
     }
 
@@ -30,7 +30,7 @@ class CuboidDrawer {
         return (float) (start.getY() - distToBottom);
     }
 
-    void drawCuboid(GL2 gl, Point3D startPoint, Point3D dimens, float color){
+    void drawCuboid(GL2 gl, Point3D startPoint, Point3D dimens, float color, boolean transparentFront){
         float mox = (float) startPoint.getX() / Config.MESH_UNIT;
         float moy = (float) (startPoint.getY() - dimens.getY()) / Config.MESH_UNIT;
         float moz = (float) startPoint.getZ()/Config.MESH_UNIT;
@@ -57,7 +57,7 @@ class CuboidDrawer {
         gl.glEnd();
 
         gl.glEnable(GL_BLEND);
-        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_COLOR);
         gl.glBegin(GL2ES3.GL_QUADS);
         gl.glColor4f(color, color, color, 0.5f);
 

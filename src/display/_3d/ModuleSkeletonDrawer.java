@@ -40,7 +40,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(roofStartX,roofStartY,roofStartZ),
                 new Point3D(roofWidth,roofHeight,roofDepth),
-                roofTopColor
+                roofTopColor, false
         );
     }
 
@@ -60,7 +60,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(leftWallStartX,leftWallStartY,leftWallStartZ),
                 new Point3D(leftWallWidth,leftWallHeight,leftWallDepth),
-                leftWallColor
+                leftWallColor, false
         );
 
     }
@@ -81,7 +81,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(rightWallStartX,rightWallStartY,rightWallStartZ),
                 new Point3D(rightWallWidth,rightWallHeight,rightWallDepth),
-                rightWallColor
+                rightWallColor, false
         );
 
     }
@@ -114,7 +114,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(bottomStartX,bottomStartY,bottomStartZ),
                 new Point3D(bottomWidth,bottomHeight,bottomDepth),
-                bottomColor
+                bottomColor, false
         );
 
         if(furniture.getHasPedestal()) drawPedestal(gl, furnitureStart, furnitureDimens);
@@ -137,7 +137,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(pedestalStartX,pedestalStartY,pedestalStartZ),
                 new Point3D(pedestalWidth,pedestalHeight,pedestalDepth),
-                pedestalColor
+                pedestalColor, false
         );
     }
 
@@ -161,7 +161,7 @@ class ModuleSkeletonDrawer extends CuboidDrawer {
         drawCuboid(gl,
                 new Point3D(backStartX,backStartY,backStartZ),
                 new Point3D(backWidth,backHeight,backDepth),
-                backColor
+                backColor, false
         );
 
     }

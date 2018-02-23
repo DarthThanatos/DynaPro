@@ -40,7 +40,7 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
                 gl,
                 new Point3D(separatorStartX, separatorStartY, separatorStartZ),
                 new Point3D(separatorWidth, separatorHeight, separatorDepth),
-                separatorColor
+                separatorColor,false
         );
 
     }
@@ -55,7 +55,7 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
         separatorStartX = getLeftSideX(currentPointWithOffsets, true) + Config.SLAB_THICKNESS;
         separatorStartY = getBottomSlabY(
                 currentPointWithOffsets,
-                new Point3D(currentAggregate.getAggregateWidthWithGaps(false), 0, 0),
+                new Point3D(0, currentAggregate.getAggregateHeightWithGaps(false), 0),
                 configuration.isElemWithIdLastToTheBottom(currentAggregate.get(0).getId())
         );
         separatorStartZ = (float) (currentPointWithOffsets.getZ() - furnitureDimens.getZ() + (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
@@ -69,7 +69,7 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
         drawCuboid(gl,
                 new Point3D(separatorStartX,separatorStartY,separatorStartZ),
                 new Point3D(separatorWidth,separatorHeight,separatorDepth),
-                separatorColor
+                separatorColor,false
         );
     }
 

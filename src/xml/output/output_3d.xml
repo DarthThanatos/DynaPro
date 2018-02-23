@@ -2,6 +2,8 @@
 
     <panel constraints="BorderLayout.SOUTH">
         <button text="Cofnij" action="moveToMainMenuAction"/>
+        <label text="Rysuj pokrywę"/>
+        <checkbox />
     </panel>
 
     <furnitureperspective constraints="BorderLayout.CENTER" id="furniturePerspective"/>

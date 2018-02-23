@@ -32,7 +32,7 @@ class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
         drawCuboid(gl,
                 new Point3D(separatorStartX,separatorStartY,separatorStartZ),
                 new Point3D(separatorWidth,separatorHeight,separatorDepth),
-                separatorColor
+                separatorColor, false
         );
 
     }
@@ -58,7 +58,8 @@ class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
                 gl,
                 new Point3D(separatorStartX, separatorStartY, separatorStartZ),
                 new Point3D(separatorWidth, separatorHeight, separatorDepth),
-                separatorColor
+                separatorColor,
+                false
         );
 
     }
@@ -67,7 +68,7 @@ class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
     Point3D calculateNextElementPosition(Element currentElement, Point3D currentPoint) {
         return new Point3D(
                 currentPoint.getX(),
-                currentPoint.getY() - currentElement.getHeight() - 2 * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP,
+                currentPoint.getY() - currentElement.getHeight() -  Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP,
                 currentPoint.getZ()
         );
     }

@@ -24,9 +24,9 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
         while (true){
             drawAggregate(gl, currentPoint, dimens, arrangementAggregate, furniture);
             if(aggregatesIter.hasNext()) {
+                drawAggregateSeparator(gl, getPointWithOffsets(currentPoint), dimens, arrangementAggregate, furniture);
                 currentPoint = calculateNextAggregatePosition(arrangementAggregate, currentPoint, start);
                 arrangementAggregate = aggregatesIter.next();
-                drawAggregateSeparator(gl, currentPoint, dimens, arrangementAggregate, furniture);
             }
             else break;
         }
@@ -37,9 +37,9 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
         while (elementsIter.hasNext()){
             Element element = elementsIter.next();
             Point3D currentPointWithOffsets = getPointWithOffsets(currentPoint);
-            tryDrawingDrawer(gl, furniture, element, currentPointWithOffsets, furnitureDimens, elementsIter.hasNext());
-            tryDrawingLeftDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, elementsIter.hasNext());
-            tryDrawingRightDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, elementsIter.hasNext());
+            tryDrawingDrawer(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext());
+            tryDrawingLeftDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext());
+            tryDrawingRightDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext());
             currentPoint = calculateNextElementPosition(element, currentPoint);
         }
     }
@@ -62,7 +62,8 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     configuration.isElemWithIdLastToTheLeft(element.getId()),
                     configuration.isElemWithIdLastToTheRight(element.getId()),
                     configuration.isElemWithIdLastToTheBottom(element.getId()),
-                    element.getShelvesNumber()
+                    element.getShelvesNumber(),
+                    furniture
             ).drawDrawer(
                     gl,
                     currentPointWithOffsets,
