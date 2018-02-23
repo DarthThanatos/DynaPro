@@ -24,9 +24,9 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
         while (true){
             drawAggregate(gl, currentPoint, dimens, arrangementAggregate, furniture);
             if(aggregatesIter.hasNext()) {
+                currentPoint = calculateNextAggregatePosition(arrangementAggregate, currentPoint, start);
                 arrangementAggregate = aggregatesIter.next();
                 drawAggregateSeparator(gl, currentPoint, dimens, arrangementAggregate, furniture);
-                currentPoint = calculateNextAggregatePosition(arrangementAggregate, currentPoint, start);
             }
             else break;
         }
