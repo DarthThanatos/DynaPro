@@ -3,7 +3,7 @@ package display._3d;
 import com.jogamp.opengl.GL2;
 import config.Config;
 import javafx.geometry.Point3D;
-import model.Door;
+import model.SingleDoor;
 
 import static util.SlabSidePositionUtil.getLeftSideX;
 import static util.SlabSidePositionUtil.getRightSideX;
@@ -11,10 +11,10 @@ import static util.SlabSidePositionUtil.getRightSideX;
 abstract class DoorDrawer extends CuboidDrawer {
 
     private final boolean backInserted;
-    private final Door door;
+    private final SingleDoor door;
     private boolean isLastToTheLeft, isLastToTheRight;
 
-    DoorDrawer(Door door, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight){
+    DoorDrawer(SingleDoor door, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight){
         this.isLastToTheLeft = isLastToTheLeft;
         this.isLastToTheRight = isLastToTheRight;
         this.backInserted = backInserted;
@@ -31,8 +31,8 @@ abstract class DoorDrawer extends CuboidDrawer {
         frontStartY = (float) start.getY();
         frontStartZ = (float) start.getZ();
 
-        frontWidth = (float) dimens.getX();
-        frontHeight = (float) dimens.getY();
+        frontWidth = door.getDoorSlabSecondDimension();
+        frontHeight = door.getDoorSlabFirstDimension();
         frontDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,
@@ -59,9 +59,9 @@ abstract class DoorDrawer extends CuboidDrawer {
         shelfStartY = (float) (start.getY() - (dimens.getY() * ((float)(index) / (door.getShelvesNumber() + 1)) + (1.0f / (door.getShelvesNumber() + 1) * dimens.getY()))  );
         shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
 
-        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, isLastToTheLeft) - 2*Config.SLAB_THICKNESS;
+        shelfWidth = door.getShelfSlabFirstDimension();
         shelfHeight = Config.SLAB_THICKNESS;
-        shelfDepth = (float) (dimens.getZ() - (backInserted ? Config.SLAB_THICKNESS : 0));
+        shelfDepth = door.getShelfSlabSecondDimension();
 
         drawCuboid(gl,
                 new Point3D(shelfStartX,shelfStartY,shelfStartZ),

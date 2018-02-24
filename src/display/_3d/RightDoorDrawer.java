@@ -2,7 +2,6 @@ package display._3d;
 
 import com.jogamp.opengl.GL2;
 import javafx.geometry.Point3D;
-import model.Door;
 import model.RightDoor;
 
 class RightDoorDrawer extends DoorDrawer {

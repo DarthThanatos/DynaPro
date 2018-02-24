@@ -41,11 +41,6 @@ class DrawerDrawer extends CuboidDrawer{
         drawBottom(gl, start, dimens);
     }
 
-    private float getLeftWallX(Point3D start){
-        float distToLeftSide = (lastToTheLeft ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP  : 10);
-        float leftSideX =  (float) (start.getX() - distToLeftSide);
-        return leftSideX + Config.SLAB_THICKNESS + 6;
-    }
 
     private void drawLeftWall(GL2 gl, Point3D start, Point3D dimens){
 
@@ -54,15 +49,13 @@ class DrawerDrawer extends CuboidDrawer{
         float leftWallWidth, leftWallHeight, leftWallDepth;
 
         FrontConfiguration configuration = furniture.getFrontConfiguration();
-        leftWallStartX =  getLeftWallX(start);
+        leftWallStartX =  drawer.getLeftWallX(start);
         leftWallStartY = (float) (start.getY() - topGap);
-//        leftWallStartY = getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - Config.SLAB_THICKNESS - topGap;
         leftWallStartZ = getStartZ(start, dimens);
 
         leftWallWidth = Config.SLAB_THICKNESS;
-        leftWallHeight = drawer.getLeftWallHeight();//(float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ?  Config.SLAB_THICKNESS : 0);
-//        leftWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ?  Config.SLAB_THICKNESS : 0)- (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
-        leftWallDepth = drawer.getTTrackEndDepth();
+        leftWallHeight = drawer.getLeftWallFirstDimension();
+        leftWallDepth = drawer.getLeftWallSecondDimension();
 
         drawCuboid(gl,
                 new Point3D(leftWallStartX,leftWallStartY,leftWallStartZ),
@@ -70,12 +63,6 @@ class DrawerDrawer extends CuboidDrawer{
                 leftWallColor,
                 false
         );
-    }
-
-    private float getRightWallX(Point3D start, Point3D dimens){
-        float distToRightSide = (float) (dimens.getX() + (isLastToTheRight ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP  : 10));
-        float rightSideX = (float) (start.getX() + distToRightSide);
-        return  rightSideX - Config.SLAB_THICKNESS - 6/Config.MESH_UNIT - Config.SLAB_THICKNESS;
     }
 
 
@@ -91,15 +78,13 @@ class DrawerDrawer extends CuboidDrawer{
         float rightWallWidth, rightWallHeight, rightWallDepth;
 
         FrontConfiguration configuration = furniture.getFrontConfiguration();
-        rightWallStartX = getRightWallX(start, dimens);
+        rightWallStartX = drawer.getRightWallX(start, dimens);
         rightWallStartY = (float) (start.getY() - topGap);
-//        rightWallStartY = getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - Config.SLAB_THICKNESS - topGap;
         rightWallStartZ = getStartZ(start, dimens);
 
         rightWallWidth =  Config.SLAB_THICKNESS;
-        rightWallHeight = drawer.getRightWallHeight();
-//        rightWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0) - (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
-        rightWallDepth =  drawer.getTTrackEndDepth() ;
+        rightWallHeight = drawer.getRightWallFirstDimension();
+        rightWallDepth =  drawer.getRightWallSecondDimension();
 
         drawCuboid(gl,
                 new Point3D(rightWallStartX,rightWallStartY,rightWallStartZ),
@@ -116,14 +101,13 @@ class DrawerDrawer extends CuboidDrawer{
         float bottomWidth, bottomHeight, bottomDepth;
 
         FrontConfiguration configuration = furniture.getFrontConfiguration();
-        bottomStartX = getLeftWallX(start) + Config.SLAB_THICKNESS;
+        bottomStartX = drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
         bottomStartY = (float) (start.getY() - dimens.getY() + Config.SLAB_THICKNESS + 12 + 2*Config.SLAB_THICKNESS) + (lastToTheBottom ? Config.SLAB_THICKNESS: 0);
-//        bottomStartY = (float) (start.getY() - dimens.getY() + Config.SLAB_THICKNESS + 12 + 2*Config.SLAB_THICKNESS) + (lastToTheBottom ? Config.SLAB_THICKNESS: 0) + (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
         bottomStartZ = getStartZ(start, dimens);
 
-        bottomWidth = getRightWallX(start, dimens) - getLeftWallX(start) - Config.SLAB_THICKNESS;
+        bottomWidth = drawer.getBottomSlabSecondDimension();
         bottomHeight = Config.SLAB_THICKNESS;
-        bottomDepth = drawer.getBottomDepth();
+        bottomDepth = drawer.getBottomSlabFirstDimenstion();
 
         drawCuboid(gl,
                 new Point3D(bottomStartX,bottomStartY,bottomStartZ),
@@ -140,14 +124,12 @@ class DrawerDrawer extends CuboidDrawer{
         float backWidth, backHeight, backDepth;
 
         FrontConfiguration configuration = furniture.getFrontConfiguration();
-        backStartX =  getLeftWallX(start) + Config.SLAB_THICKNESS;
+        backStartX =  drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
         backStartY = (float) (start.getY() - topGap);
-//        backStartY = getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - Config.SLAB_THICKNESS - topGap;
         backStartZ = getStartZ(start, dimens);
 
-        backWidth = getRightWallX(start, dimens) - getLeftWallX(start) - Config.SLAB_THICKNESS;
-        backHeight = (float) (dimens.getY() - Config.SLAB_THICKNESS - 10 - 2 *Config.SLAB_THICKNESS - 12) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0);
-//        backHeight = (float) (dimens.getY() - Config.SLAB_THICKNESS - 10 - 2 *Config.SLAB_THICKNESS - 12) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0) - (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
+        backWidth = drawer.getBackSlabSecondDimension();
+        backHeight = drawer.getBackSlabFirstDimension();
         backDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,
@@ -168,8 +150,8 @@ class DrawerDrawer extends CuboidDrawer{
         frontStartY = (float) start.getY();
         frontStartZ = (float) start.getZ();
 
-        frontWidth = (float) dimens.getX();
-        frontHeight = (float) dimens.getY();
+        frontWidth = drawer.getFrontSlabSecondDimension();
+        frontHeight = drawer.getFrontSlabFirstDimension();
         frontDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,
@@ -197,9 +179,9 @@ class DrawerDrawer extends CuboidDrawer{
         shelfStartY = (float) (start.getY() - dimens.getY() + 8);
         shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
 
-        shelfWidth = getRightSideX(start, dimens, isLastToTheRight) - getLeftSideX(start, lastToTheLeft) - 2*Config.SLAB_THICKNESS;
+        shelfWidth = drawer.getShelfSlabSecondDimension();
         shelfHeight = Config.SLAB_THICKNESS;
-        shelfDepth = (float) (dimens.getZ() - (backInserted ? Config.SLAB_THICKNESS : 0));
+        shelfDepth = drawer.getShelfSlabFirstDimension();
 
         drawCuboid(gl,
                 new Point3D(shelfStartX,shelfStartY,shelfStartZ),

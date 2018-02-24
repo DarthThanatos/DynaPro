@@ -3,7 +3,8 @@ package model
 import config.Config
 import contract.DefaultSlabTree
 import contract.SlabTree
-import model.slab.Slab
+import javafx.geometry.Point3D
+import model.slab.*
 import java.util.*
 
 
@@ -53,15 +54,56 @@ class EmptySpace(
     override fun toString(): String = print(this)
 }
 
-abstract class Door : Element
+
+interface ShelfSlabFurnitureTree : SlabTree{
+    fun getShelfSlabFirstDimension(): Int
+    fun getShelfSlabSecondDimension(): Int
+}
+
+open class DefaultShelfSlabFurnitureTree(private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree()) : ShelfSlabFurnitureTree, SlabTree by defaultSlabTree{
+
+    override fun getShelfSlabFirstDimension(): Int = ShelfSlab(element).firstDimension
+
+    override fun getShelfSlabSecondDimension(): Int  = ShelfSlab(element).secondDimension
+
+    lateinit var element: Element
+
+    override fun listOfSlabs(): List<Slab> {
+        val slabs = mutableListOf<Slab>()
+        for( i in 0 until element.shelvesNumber) slabs.add(ShelfSlab(element))
+        return  slabs
+    }
+
+}
+
+interface SingleDoorSlabTree : SlabTree, ShelfSlabFurnitureTree{
+    fun getDoorSlabSecondDimension() :Int
+    fun getDoorSlabFirstDimension() : Int
+}
+
+class DefaultSingleDoorSlabTree : SingleDoorSlabTree, DefaultShelfSlabFurnitureTree(){
+
+    override fun getDoorSlabSecondDimension() : Int = DoorFrontSlab(element as SingleDoor).secondDimension
+
+    override fun getDoorSlabFirstDimension() : Int = DoorFrontSlab(element as SingleDoor).firstDimension
+
+    override fun listOfSlabs(): List<Slab> = listOf(DoorFrontSlab(element as SingleDoor)) + super.listOfSlabs()
+
+}
+
+abstract class SingleDoor(private val defaultSingleDoorSlabTree: DefaultSingleDoorSlabTree = DefaultSingleDoorSlabTree())
+    : Element, SingleDoorSlabTree by defaultSingleDoorSlabTree{
+
+    init{
+        defaultSingleDoorSlabTree.element = this
+    }
+}
 
 class LeftDoor(
         override var name: String = Config.LEFT_DOOR_PL,
         override val type: String = Config.LEFT_DOOR_PL, override var parentConfig: FrontConfiguration
-) : PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(), SlabTree by DefaultSlabTree(){
-    override fun getTreeSlabList(): List<Slab> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+) : PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SingleDoor(){
+
 
     override fun toString(): String = print(this)
 }
@@ -69,10 +111,7 @@ class LeftDoor(
 class RightDoor(
         override var name: String = Config.RIGHT_DOOR_PL,
         override val type: String = Config.RIGHT_DOOR_PL, override var parentConfig: FrontConfiguration
-): PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(), SlabTree by DefaultSlabTree(){
-    override fun getTreeSlabList(): List<Slab> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+): PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SingleDoor(){
 
     override fun toString(): String = print(this)
 }
@@ -81,14 +120,32 @@ class Drawer(
         override var name: String= Config.DRAWER_PL,
         override val type: String = Config.DRAWER_PL, override var parentConfig: FrontConfiguration
 ): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by DefaultSlabTree(){
-    override fun getTreeSlabList(): List<Slab> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     fun getTTrackRawDepth(): Int {
         val aroundGap = 3f
         return (parentConfig.parentFurniture.depth - (if (parentConfig.parentFurniture.backInserted) Config.SLAB_THICKNESS else 0).toDouble() - aroundGap.toDouble()).toInt()
     }
+
+
+    fun getLeftWallX(startX: Int) : Float = getLeftWallX(Point3D(startX.toDouble(), 0.0, 0.0))
+
+    fun getRightWallX(startX: Int, width: Int) : Float = getRightWallX(Point3D(startX.toDouble(), 0.0, 0.0), Point3D(width.toDouble(), 0.0, 0.0))
+
+    fun getLeftWallX(start: Point3D): Float {
+        val lastToTheLeft = parentConfig.isElemWithIdLastToTheLeft(id)
+        val distToLeftSide = (if (lastToTheLeft) Config.BETWEEN_ELEMENTS_VERTICAL_GAP else 10).toFloat()
+        val leftSideX = (start.x - distToLeftSide).toFloat()
+        return leftSideX + Config.SLAB_THICKNESS.toFloat() + 6f
+    }
+
+
+    fun getRightWallX(start: Point3D, dimens: Point3D): Float {
+        val isLastToTheRight = parentConfig.isElemWithIdLastToTheRight(id)
+        val distToRightSide = (dimens.x + if (isLastToTheRight) Config.BETWEEN_ELEMENTS_VERTICAL_GAP else 10).toFloat()
+        val rightSideX = (start.x + distToRightSide).toFloat()
+        return rightSideX - Config.SLAB_THICKNESS.toFloat() - 6 / Config.MESH_UNIT - Config.SLAB_THICKNESS.toFloat()
+    }
+
 
     fun getTTrackEndDepth(): Float
     {
@@ -96,19 +153,29 @@ class Drawer(
         return (t_track_depth - t_track_depth % 50 - 10).toFloat()
     }
 
-    fun getLeftWallHeight(): Float{
-        val topGap = 10
-        val lastToTheBottom = parentConfig.isElemWithIdLastToTheBottom(id)
-        return (height - topGap.toDouble() - Config.SLAB_THICKNESS.toDouble()).toFloat() - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
-    }
+    fun getLeftWallFirstDimension(): Int = DrawerLeftWallSlab(this).firstDimension
 
-    fun getRightWallHeight(): Float{
-        val topGap = 10
-        val lastToTheBottom = parentConfig.isElemWithIdLastToTheBottom(id)
-        return (height - topGap.toDouble() - Config.SLAB_THICKNESS.toDouble()).toFloat() - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
-    }
+    fun getLeftWallSecondDimension(): Int = DrawerLeftWallSlab(this).secondDimension
 
-    fun getBottomDepth() = getTTrackEndDepth()
+    fun getRightWallFirstDimension(): Int = DrawerRightWallSlab(this).firstDimension
+
+    fun getRightWallSecondDimension(): Int = DrawerRightWallSlab(this).secondDimension
+
+    fun getBottomSlabSecondDimension(): Int = DrawerBottomSlab(this).secondDimension
+
+    fun getBottomSlabFirstDimenstion(): Int = DrawerBottomSlab(this).firstDimension
+
+    fun getBackSlabSecondDimension(): Int = DrawerBackSlab(this).secondDimension
+
+    fun getBackSlabFirstDimension(): Int = DrawerBackSlab(this).firstDimension
+
+    fun getFrontSlabFirstDimension(): Int = DrawerFrontSlab(this).firstDimension
+
+    fun getFrontSlabSecondDimension(): Int = DrawerFrontSlab(this).secondDimension
+
+    fun getShelfSlabSecondDimension(): Int = DrawerShelfSlab(this).secondDimension
+
+    fun getShelfSlabFirstDimension(): Int = DrawerShelfSlab(this).firstDimension
 
     override fun toString(): String = print(this)
 }

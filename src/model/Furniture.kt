@@ -19,7 +19,6 @@ interface Furniture : SlabTree{
     var roofInserted : Boolean
     var backInserted: Boolean
     val hasPedestal: Boolean
-    fun getElements(): List<Element>
     var pedestalHeight: Int
     fun getRoofFirstDimension(): Int
     fun getRoofSecondDimension(): Int
@@ -115,10 +114,6 @@ class UpperModule(initialName: String, private val parentProject: Project, priva
     override var depth: Int = 500
 
 
-    override fun getElements(): List<Element> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     init{
         frontConfiguration.recalculateElementsDimens()
         furnitureSlabTree.furniture = this
@@ -151,10 +146,6 @@ class BottomModule(initialName: String, private val parentProject: Project, priv
     override var width : Int by Delegates.observable(1000){ _, _, _ -> frontConfiguration.recalculateElementsDimens(); parentProject.presenter?.onFrontConfigDimensChanged(name)}
 
     override var depth : Int = 500
-
-    override fun getElements(): List<Element> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     init{
         frontConfiguration.recalculateElementsDimens()
