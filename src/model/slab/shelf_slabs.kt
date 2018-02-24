@@ -7,10 +7,8 @@ import util.SlabSidePositionUtil
 import java.util.ArrayList
 
 class ShelfSlab(private val element: Element) : Slab {
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.SHELF
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
     override val firstDimension: Int
         get() {
             val startAbsoluteX = 0

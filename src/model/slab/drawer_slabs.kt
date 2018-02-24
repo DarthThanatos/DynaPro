@@ -6,10 +6,8 @@ import util.SlabSidePositionUtil
 import java.util.ArrayList
 
 class DrawerLeftWallSlab(private val drawer: Drawer) : Slab {
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.DRAWER_LEFT
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int
         get() {
             val topGap = 10
@@ -26,11 +24,9 @@ class DrawerLeftWallSlab(private val drawer: Drawer) : Slab {
 
 class DrawerRightWallSlab(private val drawer: Drawer): Slab {
 
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.DRAWER_RIGHT
 
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
 
     override val firstDimension: Int
         get() {
@@ -46,10 +42,8 @@ class DrawerRightWallSlab(private val drawer: Drawer): Slab {
 }
 
 class DrawerBottomSlab(private val drawer: Drawer): Slab{
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.DRAWER_BOTTOM
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int
         get() = drawer.getTTrackEndDepth().toInt()
     //        bottomStartY = (float) (start.getY() - dimens.getY() + Config.SLAB_THICKNESS + 12 + 2*Config.SLAB_THICKNESS) + (lastToTheBottom ? Config.SLAB_THICKNESS: 0) + (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
@@ -60,10 +54,8 @@ class DrawerBottomSlab(private val drawer: Drawer): Slab{
 }
 
 class DrawerBackSlab(private val drawer: Drawer): Slab{
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.DRAWER_BACK
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int
         get() {
             val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
@@ -81,10 +73,8 @@ class DrawerBackSlab(private val drawer: Drawer): Slab{
 
 
 class DrawerFrontSlab(private val drawer: Drawer): Slab {
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.DRAWER_FRONT
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(true, true, true, true)
     override val firstDimension: Int
         get() = drawer.height
     override val secondDimension: Int
@@ -93,10 +83,8 @@ class DrawerFrontSlab(private val drawer: Drawer): Slab {
 }
 
 class DrawerShelfSlab(private val drawer: Drawer): Slab{
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.DRAWER_SHELF
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
     override val firstDimension: Int
         get() = SlabSidePositionUtil.calculateElementMaxDepth(drawer.parentConfig.parentFurniture.depth.toDouble(), drawer.parentConfig.parentFurniture.backInserted).toInt()
     override val secondDimension: Int

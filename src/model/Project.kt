@@ -30,7 +30,7 @@ interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
 }
 
-class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by DefaultSlabTree(){
+class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree()) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by defaultSlabTree{
 
     override val factoriesChain: FactoriesChain<FurnitureFactory> = AllFurnitureTypesChain(this)
 
@@ -153,6 +153,10 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFa
 
     override fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String) {
         getFurnitureByName(furnitureName)?.frontConfiguration?.addMultiElementAggregateBefore(elementId)
+    }
+
+    init {
+        defaultSlabTree.actualSlabTree = this
     }
 }
 

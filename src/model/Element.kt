@@ -93,6 +93,7 @@ abstract class SingleDoor(private val defaultSingleDoorSlabTree: DefaultSingleDo
 
     init{
         defaultSingleDoorSlabTree.element = this
+        defaultSingleDoorSlabTree.actualSlabTree = this
     }
 }
 
@@ -115,8 +116,9 @@ class RightDoor(
 
 class Drawer(
         override var name: String= Config.DRAWER_PL,
-        override val type: String = Config.DRAWER_PL, override var parentConfig: FrontConfiguration
-): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by DefaultSlabTree(){
+        override val type: String = Config.DRAWER_PL, override var parentConfig: FrontConfiguration,
+        private val slabTree: DefaultSlabTree = DefaultSlabTree()
+): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by slabTree{
 
     fun getTTrackRawDepth(): Int {
         val aroundGap = 3f
@@ -180,6 +182,11 @@ class Drawer(
     )
 
     override fun toString(): String = print(this)
+
+    init {
+
+        slabTree.actualSlabTree = this
+    }
 }
 
 interface PrintableElement{

@@ -106,9 +106,9 @@ class Aggregate(vararg elements: Element, override val parentConfiguration: Fron
         return arrayDefaultDelegate.remove(element)
     }
 
-    override fun listOfSlabs() : List<Slab> {
+    override fun listOfSlabs(): List<Slab> {
         val separators = mutableListOf<Slab>()
-        for( i in 0 until size) separators.add(
+        for( i in 0 until size - 1) separators.add(
                 if(parentConfiguration.columnOriented) ColumnOrientedElementSeparatorSlab(this, i)
                 else RowOrientedElementSeparatorSlab(this, i)
         )
@@ -118,6 +118,7 @@ class Aggregate(vararg elements: Element, override val parentConfiguration: Fron
 
     init{
         addAll(elements)
+        slabTreeDefaultDelegate.actualSlabTree = this
     }
 
     override fun toString(): String = this.map { it.toString() }.reduce { acc, s -> acc + s + ", " }
@@ -444,6 +445,16 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
     override fun isElemWithIdLastToTheBottom(elementId: String) : Boolean =
             if(columnOriented) indexOfElementWithId(elementId) == aggregateContainingElementWithId(elementId).size - 1
             else aggregateIndexContainingElementWithId(elementId) == aggregates.size - 1
+
+    protected fun defaultsAddedToChildren() : ArrayList<ArrangementAggregate>{
+        val res = getDefaultAggregates()
+        res.forEach{addChild(it.id, it)}
+        return res
+
+    }
+    init {
+        slabTreeDefaultDelegate.actualSlabTree = this
+    }
 }
 
 class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Furniture): DynProFrontConfiguration(parentProject, parentFurniture){
@@ -451,7 +462,7 @@ class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Fur
     override var columnOriented: Boolean = true
     override val defaultElementBuilder = { Drawer(parentConfig = this) }
 
-    override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){
+    override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(defaultsAddedToChildren()){
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
@@ -464,7 +475,7 @@ class BottomModuleFrontConfiguration(parentProject: Project, parentFurniture: Fu
     override var columnOriented: Boolean = false
     override val defaultElementBuilder = { Drawer(parentConfig = this) }
 
-    override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(getDefaultAggregates()){
+    override var aggregates: ArrayList<ArrangementAggregate> by Delegates.observable(defaultsAddedToChildren()){
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 

@@ -117,6 +117,8 @@ class UpperModule(initialName: String, private val parentProject: Project, priva
     init{
         frontConfiguration.recalculateElementsDimens()
         furnitureSlabTree.furniture = this
+        furnitureSlabTree.actualSlabTree = this
+        addChild("yolo", frontConfiguration)
     }
 
 }
@@ -150,5 +152,7 @@ class BottomModule(initialName: String, private val parentProject: Project, priv
     init{
         frontConfiguration.recalculateElementsDimens()
         furnitureSlabTree.furniture = this
+        furnitureSlabTree.actualSlabTree = this
+        addChild("yolo", frontConfiguration)
     }
 }

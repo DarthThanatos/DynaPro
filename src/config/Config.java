@@ -51,4 +51,19 @@ public class Config {
     public static String SEPARATOR = "Separator";
 
     public static final String ROOF = "Dach";
+    public static final String LEFT_SKELETON_WALL = "Lewa ściana korpusu";
+    public static final String RIGHT_SKELETON_WALL = "Prawa ściana korpusu";
+    public static final String BOTTOM_OF_SKELETON = "Spód korpusu";
+
+    public static final String PEDESTAL = "Cokół";
+    public static final String BACK = "Plecy";
+    public static final String SHELF = "Półka";
+    public static final String DOOR="Drzwiczki";
+
+    public static final String DRAWER_LEFT = "Lewa ściana szuflady";
+    public static final String DRAWER_RIGHT = "Prawa ściana szuflady";
+    public static final String DRAWER_BOTTOM = "Spód szuflady";
+    public static final String DRAWER_BACK = "Plecy szuflady";
+    public static final String DRAWER_FRONT = "Front szuflady";
+    public static final String DRAWER_SHELF = "Półka szuflady";
 }

@@ -4,6 +4,7 @@ import model.slab.Slab
 
 
 interface SlabTree{
+    var actualSlabTree: SlabTree
     fun getTreeSlabList(): List<Slab>
     fun addChild(childIdentifier: String, slabTree: SlabTree)
     fun getSpecificChildSlabList(childIdentifier:String): List<Slab>
@@ -15,7 +16,11 @@ interface SlabTree{
 
 open class DefaultSlabTree: SlabTree {
 
-    override fun listOfSlabs(): List<Slab> = listOf<Slab>()
+    override lateinit var actualSlabTree: SlabTree
+
+    override fun listOfSlabs(): List<Slab> {
+        return listOf<Slab>()
+    }
 
     override fun changeChildId(oldId: String, newId: String) {
         val child = children.remove(oldId)!!
@@ -38,10 +43,11 @@ open class DefaultSlabTree: SlabTree {
     }
 
     override fun getSpecificChildSlabList(childIdentifier: String): List<Slab> =
-            children.filter { entry -> entry.key == childIdentifier }.values.single().getTreeSlabList()
+        children.filter { entry -> entry.key == childIdentifier }.values.single().getTreeSlabList()
 
-    override fun getTreeSlabList(): List<Slab> =
-            listOfSlabs() + children.values.map { it.getTreeSlabList() }.flatMap { it }
+    override fun getTreeSlabList(): List<Slab>  {
+        return actualSlabTree.listOfSlabs() + children.values.map { it.getTreeSlabList() }.flatMap { it }
+    }
 
 
 

@@ -7,8 +7,7 @@ import java.util.ArrayList
 class RoofSlab(private val furniture: Furniture) : Slab {
     override val name: String = Config.ROOF
 
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val scaleboard: ArrayList<Boolean> = if (furniture.roofInserted) arrayListOf(false, false, false, false) else  arrayListOf(true, true, true, true)
 
     override val firstDimension: Int
         get() = if (furniture.roofInserted) (furniture.width - 2 * Config.SLAB_THICKNESS) else furniture.width
@@ -18,10 +17,8 @@ class RoofSlab(private val furniture: Furniture) : Slab {
 }
 
 class LeftSkeletonWallSlab(private val furniture: Furniture) : Slab {
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.LEFT_SKELETON_WALL
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
     override val firstDimension: Int
         get() = (furniture.height - (if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) 0 else if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS))
     override val secondDimension: Int
@@ -30,10 +27,8 @@ class LeftSkeletonWallSlab(private val furniture: Furniture) : Slab {
 
 
 class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.RIGHT_SKELETON_WALL
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
     override val firstDimension: Int
         get() = (furniture.height - (if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) 0 else if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS))
     override val secondDimension: Int
@@ -42,10 +37,8 @@ class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
 }
 
 class BottomOfSkeletonSlab(private val furniture: Furniture): Slab{
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.BOTTOM_OF_SKELETON
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int
         get() =
             if (furniture.hasPedestal)
@@ -59,10 +52,8 @@ class BottomOfSkeletonSlab(private val furniture: Furniture): Slab{
 }
 
 class PedestalSlab( private val furniture: Furniture): Slab{
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.PEDESTAL
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int
         get() = (furniture.width - 2 * Config.SLAB_THICKNESS)
     override val secondDimension: Int
@@ -71,10 +62,8 @@ class PedestalSlab( private val furniture: Furniture): Slab{
 }
 
 class BackSkeletonSlab( private val furniture: Furniture): Slab{
-    override val name: String
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-    override val scaleboard: ArrayList<Boolean>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val name: String = Config.BACK
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int
         get() = if (furniture.backInserted)
             furniture.height - (2 * Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) furniture.pedestalHeight else 0)
