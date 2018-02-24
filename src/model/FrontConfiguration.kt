@@ -2,12 +2,17 @@ package model
 
 import config.Config
 import contract.DefaultFactoryChooser
+import contract.DefaultSlabTree
+import contract.SlabTree
 import contract.TypedFactoryChooser
+import model.slab.*
 import java.awt.Dimension
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
-interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
+interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>, SlabTree{
     var parentFurniture: Furniture
     var columnOriented : Boolean
     val defaultElementBuilder: () -> Element
@@ -37,19 +42,78 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>{
     fun isElemWithIdLastToTheBottom(elementId: String): Boolean
 }
 
-interface ArrangementAggregate : MutableList<Element>{
+interface ArrangementAggregate : MutableList<Element>, SlabTree{
+    val id : String
+    fun getAggregateSeparatorFirstDimension(): Int
+    val parentConfiguration: FrontConfiguration
     fun getAggregateHeightWithGaps(columnOriented: Boolean): Int
     fun getAggregateWidthWithGaps(columnOriented: Boolean): Int
+    fun getAggregateSeparatorSecondDimension(): Int
+    fun getElementSeparatorFirstDimension(): Int
+    fun getElementSeparatorSecondDimension(): Int
 }
 
-class Aggregate(vararg elements: Element): ArrangementAggregate, MutableList<Element> by ArrayList(){
+class Aggregate(vararg elements: Element, override val parentConfiguration: FrontConfiguration, private val arrayDefaultDelegate: ArrayList<Element>  = ArrayList(), private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree()):
+        ArrangementAggregate, MutableList<Element> by arrayDefaultDelegate, SlabTree by slabTreeDefaultDelegate{
+
+    override fun getAggregateSeparatorFirstDimension(): Int {
+        if(parentConfiguration.columnOriented) return ColumnOrientedAggregateSeparatorSlab(this, 0).firstDimension
+        else return RowOrientedAggregateSeparatorSlab(this, 0).firstDimension
+    }
+
+    override fun getAggregateSeparatorSecondDimension():Int{
+        if(parentConfiguration.columnOriented) return ColumnOrientedAggregateSeparatorSlab(this, 0).secondDimension
+        else return RowOrientedAggregateSeparatorSlab(this, 0).secondDimension
+    }
+
+    override fun getElementSeparatorFirstDimension(): Int{
+        if(parentConfiguration.columnOriented) return ColumnOrientedElementSeparatorSlab(this, 0).firstDimension
+        else return RowOrientedElementSeparatorSlab(this, 0).firstDimension
+    }
+
+    override fun getElementSeparatorSecondDimension(): Int{
+        if(parentConfiguration.columnOriented) return ColumnOrientedElementSeparatorSlab(this, 0).secondDimension
+        else return RowOrientedElementSeparatorSlab(this, 0).secondDimension
+    }
+
+    override val id: String = UUID.randomUUID().toString()
+
     override fun getAggregateHeightWithGaps(columnOriented: Boolean): Int =
         if(columnOriented) this.sumBy { it.height } + this.size * Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
         else get(0).height + Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP
 
     override fun getAggregateWidthWithGaps(columnOriented: Boolean): Int =
-            if(columnOriented) get(0).width + 2 * Config.BETWEEN_ELEMENTS_VERTICAL_GAP
-            else  this.sumBy { it.width } + (this.size + 1) * Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+        if(columnOriented) get(0).width + 2 * Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+        else  this.sumBy { it.width } + (this.size + 1) * Config.BETWEEN_ELEMENTS_VERTICAL_GAP
+
+    override fun add(element: Element): Boolean {
+        addChild(element.id, element)
+        return arrayDefaultDelegate.add(element)
+    }
+
+    override fun addAll(elements: Collection<Element>): Boolean {
+        elements.forEach { this.addChild(it.id, it) }
+        return arrayDefaultDelegate.addAll(elements)
+    }
+
+    override fun add(index: Int, element: Element) {
+        addChild(element.id, element)
+        return arrayDefaultDelegate.add(index, element)
+    }
+
+    override fun remove(element: Element): Boolean {
+        removeChild(element.id)
+        return arrayDefaultDelegate.remove(element)
+    }
+
+    override fun listOfSlabs() : List<Slab> {
+        val separators = mutableListOf<Slab>()
+        for( i in 0 until size) separators.add(
+                if(parentConfiguration.columnOriented) ColumnOrientedElementSeparatorSlab(this, i)
+                else RowOrientedElementSeparatorSlab(this, i)
+        )
+        return separators
+    }
 
 
     init{
@@ -64,10 +128,21 @@ class Aggregate(vararg elements: Element): ArrangementAggregate, MutableList<Ele
     }
 }
 
-abstract class DynProFrontConfiguration(private val parentProject: Project, override var parentFurniture: Furniture): FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(){
+abstract class DynProFrontConfiguration(private val parentProject: Project, override var parentFurniture: Furniture, private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree()):
+        FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(), SlabTree by slabTreeDefaultDelegate {
+
     abstract protected var aggregates: ArrayList<ArrangementAggregate>
+
     private val factoriesChain = AllFrontElementFactoriesChain()
 
+    override fun listOfSlabs(): List<Slab>{
+        val separators = mutableListOf<Slab>()
+        for( i in 0 until aggregates.size - 1) separators.add(
+                if(columnOriented) ColumnOrientedAggregateSeparatorSlab(aggregates[i], i)
+                else RowOrientedAggregateSeparatorSlab(aggregates[i], i)
+        )
+        return separators
+    }
 
     override fun getConfiguration(): List<ArrangementAggregate> = ArrayList<ArrangementAggregate>(aggregates)
 
@@ -98,9 +173,24 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         removeAggregateIfEmpty(aggregate)
         keepOneNonFixedElemInAggregate(aggregate)
         keepOneNonBlockedOneElemAggregate()
-        if(aggregates.size == 0) aggregates.add(Aggregate(defaultElementBuilder()))
+        if(aggregates.size == 0) addToAggregates(Aggregate(defaultElementBuilder(), parentConfiguration = this))
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
+    }
+
+    private fun addToAggregates(aggregate: ArrangementAggregate){
+        aggregates.add(aggregate)
+        addChild(aggregate.id, aggregate)
+    }
+
+    private fun addToAggregates(index: Int, aggregate: ArrangementAggregate){
+        aggregates.add(index, aggregate)
+        addChild(aggregate.id, aggregate)
+    }
+
+    private fun removeAggregate(aggregate: ArrangementAggregate){
+        aggregates.remove(aggregate)
+        removeChild(aggregate.id)
     }
 
     override fun getBlockedHeight(): Int {
@@ -130,7 +220,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     private fun removeAggregateIfEmpty(aggregate: ArrangementAggregate){
         if(aggregate.size == 0)
-            aggregates.remove(aggregate)
+            removeAggregate(aggregate)
     }
 
     private fun keepOneNonBlockedOneElemAggregate(){
@@ -171,12 +261,12 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
     private fun onAddAggregate(elementId: String, repeated: Boolean, indexModifier: (Int) -> Int){
         val indexOfAggregate: Int = aggregateIndexContainingElementWithId(elementId)
         val newAggregate =
-                if(!repeated) Aggregate(defaultElementBuilder())
-                else Aggregate().filledWithRepeatingDefault(
+                if(!repeated) Aggregate(defaultElementBuilder(), parentConfiguration =  this)
+                else Aggregate(parentConfiguration = this).filledWithRepeatingDefault(
                         times = maxElementsNumberInAggregates(),
                         builder = defaultElementBuilder
                 )
-        aggregates.add(indexModifier(indexOfAggregate), newAggregate)
+        addToAggregates(indexModifier(indexOfAggregate), newAggregate)
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
@@ -365,7 +455,7 @@ class UpperModuleFrontConfiguration(parentProject: Project, parentFurniture: Fur
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
-    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this)), Aggregate(RightDoor(parentConfig = this)))
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(LeftDoor(parentConfig = this), parentConfiguration = this), Aggregate(RightDoor(parentConfig = this), parentConfiguration = this))
 
 }
 
@@ -378,5 +468,5 @@ class BottomModuleFrontConfiguration(parentProject: Project, parentFurniture: Fu
         _, _, _ -> parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
     }
 
-    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Drawer(parentConfig = this)), Aggregate(Drawer(parentConfig = this)))
+    override fun getDefaultAggregates(): ArrayList<ArrangementAggregate> = arrayListOf(Aggregate(Drawer(parentConfig = this), parentConfiguration =  this), Aggregate(Drawer(parentConfig = this), parentConfiguration = this))
 }

@@ -1,9 +1,13 @@
 package model
 
 import config.Config
+import contract.DefaultSlabTree
+import contract.SlabTree
+import model.slab.Slab
 import java.util.*
 
-interface Element{
+
+interface Element : SlabTree{
     var name: String
     val type: String
     var parentConfig: FrontConfiguration
@@ -41,7 +45,10 @@ class DefaultCommonsSetter: ElementCommonDefaultsSetter{
 class EmptySpace(
         override var name: String = Config.EMPTY_SPACE,
         override val type: String = Config.EMPTY_SPACE, override var parentConfig: FrontConfiguration
-) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(){
+) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by DefaultSlabTree() {
+    override fun getTreeSlabList(): List<Slab> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun toString(): String = print(this)
 }
@@ -51,7 +58,10 @@ abstract class Door : Element
 class LeftDoor(
         override var name: String = Config.LEFT_DOOR_PL,
         override val type: String = Config.LEFT_DOOR_PL, override var parentConfig: FrontConfiguration
-) : PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(){
+) : PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(), SlabTree by DefaultSlabTree(){
+    override fun getTreeSlabList(): List<Slab> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun toString(): String = print(this)
 }
@@ -59,7 +69,10 @@ class LeftDoor(
 class RightDoor(
         override var name: String = Config.RIGHT_DOOR_PL,
         override val type: String = Config.RIGHT_DOOR_PL, override var parentConfig: FrontConfiguration
-): PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(){
+): PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), Door(), SlabTree by DefaultSlabTree(){
+    override fun getTreeSlabList(): List<Slab> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun toString(): String = print(this)
 }
@@ -67,7 +80,35 @@ class RightDoor(
 class Drawer(
         override var name: String= Config.DRAWER_PL,
         override val type: String = Config.DRAWER_PL, override var parentConfig: FrontConfiguration
-): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
+): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by DefaultSlabTree(){
+    override fun getTreeSlabList(): List<Slab> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun getTTrackRawDepth(): Int {
+        val aroundGap = 3f
+        return (parentConfig.parentFurniture.depth - (if (parentConfig.parentFurniture.backInserted) Config.SLAB_THICKNESS else 0).toDouble() - aroundGap.toDouble()).toInt()
+    }
+
+    fun getTTrackEndDepth(): Float
+    {
+        val t_track_depth = getTTrackRawDepth()
+        return (t_track_depth - t_track_depth % 50 - 10).toFloat()
+    }
+
+    fun getLeftWallHeight(): Float{
+        val topGap = 10
+        val lastToTheBottom = parentConfig.isElemWithIdLastToTheBottom(id)
+        return (height - topGap.toDouble() - Config.SLAB_THICKNESS.toDouble()).toFloat() - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+    }
+
+    fun getRightWallHeight(): Float{
+        val topGap = 10
+        val lastToTheBottom = parentConfig.isElemWithIdLastToTheBottom(id)
+        return (height - topGap.toDouble() - Config.SLAB_THICKNESS.toDouble()).toFloat() - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+    }
+
+    fun getBottomDepth() = getTTrackEndDepth()
 
     override fun toString(): String = print(this)
 }

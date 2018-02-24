@@ -7,6 +7,9 @@ import model.Drawer;
 import model.FrontConfiguration;
 import model.Furniture;
 
+import static util.SlabSidePositionUtil.getLeftSideX;
+import static util.SlabSidePositionUtil.getRightSideX;
+
 class DrawerDrawer extends CuboidDrawer{
 
     private boolean backInserted, lastToTheLeft, isLastToTheRight;
@@ -57,9 +60,9 @@ class DrawerDrawer extends CuboidDrawer{
         leftWallStartZ = getStartZ(start, dimens);
 
         leftWallWidth = Config.SLAB_THICKNESS;
-        leftWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ?  Config.SLAB_THICKNESS : 0);
+        leftWallHeight = drawer.getLeftWallHeight();//(float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ?  Config.SLAB_THICKNESS : 0);
 //        leftWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ?  Config.SLAB_THICKNESS : 0)- (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
-        leftWallDepth = getTTrackEndDepth(dimens);
+        leftWallDepth = drawer.getTTrackEndDepth();
 
         drawCuboid(gl,
                 new Point3D(leftWallStartX,leftWallStartY,leftWallStartZ),
@@ -76,18 +79,8 @@ class DrawerDrawer extends CuboidDrawer{
     }
 
 
-    private int getTTrackRawDepth(Point3D dimens){
-        float aroundGap = 3;
-        return (int) ((dimens.getZ() - (backInserted ? Config.SLAB_THICKNESS : 0) - aroundGap));
-    }
-
-    private float getTTrackEndDepth(Point3D dimens){
-        int t_track_depth = getTTrackRawDepth(dimens);
-        return  t_track_depth - (t_track_depth % 50) - 10;
-    }
-
     private float getStartZ(Point3D start, Point3D dimens){
-        return (float) (start.getZ() - getTTrackEndDepth(dimens));
+        return (float) (start.getZ() - drawer.getTTrackEndDepth());
 
     }
 
@@ -104,9 +97,9 @@ class DrawerDrawer extends CuboidDrawer{
         rightWallStartZ = getStartZ(start, dimens);
 
         rightWallWidth =  Config.SLAB_THICKNESS;
-        rightWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0);
+        rightWallHeight = drawer.getRightWallHeight();
 //        rightWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0) - (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
-        rightWallDepth =  getTTrackEndDepth(dimens) ;
+        rightWallDepth =  drawer.getTTrackEndDepth() ;
 
         drawCuboid(gl,
                 new Point3D(rightWallStartX,rightWallStartY,rightWallStartZ),
@@ -130,7 +123,7 @@ class DrawerDrawer extends CuboidDrawer{
 
         bottomWidth = getRightWallX(start, dimens) - getLeftWallX(start) - Config.SLAB_THICKNESS;
         bottomHeight = Config.SLAB_THICKNESS;
-        bottomDepth = getTTrackEndDepth(dimens);
+        bottomDepth = drawer.getBottomDepth();
 
         drawCuboid(gl,
                 new Point3D(bottomStartX,bottomStartY,bottomStartZ),

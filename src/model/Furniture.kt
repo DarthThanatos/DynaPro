@@ -1,10 +1,13 @@
 package model
 
 import config.Config
+import contract.DefaultSlabTree
+import contract.SlabTree
+import model.slab.*
 import kotlin.properties.Delegates
 
 
-interface Furniture{
+interface Furniture : SlabTree{
     var type: String
     var name: String
     var height: Int
@@ -18,10 +21,75 @@ interface Furniture{
     val hasPedestal: Boolean
     fun getElements(): List<Element>
     var pedestalHeight: Int
+    fun getRoofFirstDimension(): Int
+    fun getRoofSecondDimension(): Int
+    fun getLeftSkeletonWallFirstDimension(): Int
+    fun getLeftSkeletonWallSecondDimension(): Int
+    fun getRightSkeletonWallFirstDimension(): Int
+    fun getRightSkeletonWallSecondDimension(): Int
+    fun getBottomOfSkeletonFirstDimension(): Int
+    fun getBottomOfSkeletonSecondDimension(): Int
+    fun getPedestalSlabFirstDimension(): Int
+    fun getPedestalSlabSecondDimension(): Int
+    fun getBackSkeletonSlabSecondDimension(): Int
+    fun getBackSkeletonSlabFirstDimension(): Int
 }
 
+interface FurnitureSlabTree : SlabTree {
 
-class UpperModule(initialName: String, private val parentProject: Project): Furniture {
+    var furniture: Furniture
+    fun getRoofFirstDimension(): Int
+    fun getRoofSecondDimension(): Int
+    fun getLeftSkeletonWallFirstDimension(): Int
+    fun getLeftSkeletonWallSecondDimension(): Int
+    fun getRightSkeletonWallFirstDimension(): Int
+    fun getRightSkeletonWallSecondDimension(): Int
+    fun getBottomOfSkeletonFirstDimension(): Int
+    fun getBottomOfSkeletonSecondDimension(): Int
+    fun getPedestalSlabFirstDimension(): Int
+    fun getPedestalSlabSecondDimension(): Int
+    fun getBackSkeletonSlabSecondDimension(): Int
+    fun getBackSkeletonSlabFirstDimension(): Int
+}
+
+class DefaultFurnitureSlabTree : SlabTree by DefaultSlabTree(), FurnitureSlabTree{
+
+    override lateinit var furniture : Furniture
+
+   override fun getRoofFirstDimension(): Int = RoofSlab(furniture).firstDimension
+
+   override fun getRoofSecondDimension(): Int = RoofSlab(furniture).secondDimension
+
+    override fun getLeftSkeletonWallFirstDimension(): Int = LeftSkeletonWallSlab(furniture).firstDimension
+
+    override fun getLeftSkeletonWallSecondDimension(): Int = LeftSkeletonWallSlab(furniture).secondDimension
+
+    override fun getRightSkeletonWallFirstDimension(): Int = RightSkeletonWallSlab(furniture).firstDimension
+
+    override fun getRightSkeletonWallSecondDimension(): Int = RightSkeletonWallSlab(furniture).secondDimension
+
+    override fun getBottomOfSkeletonFirstDimension(): Int = BottomOfSkeletonSlab(furniture).firstDimension
+
+    override fun getBottomOfSkeletonSecondDimension(): Int = BottomOfSkeletonSlab(furniture).secondDimension
+
+    override fun getPedestalSlabFirstDimension(): Int = PedestalSlab(furniture).firstDimension
+
+    override fun getPedestalSlabSecondDimension(): Int = PedestalSlab(furniture).secondDimension
+
+    override fun getBackSkeletonSlabSecondDimension(): Int = BackSkeletonSlab(furniture).secondDimension
+
+    override fun getBackSkeletonSlabFirstDimension(): Int  = BackSkeletonSlab(furniture).firstDimension
+
+    override fun listOfSlabs(): List<Slab> {
+        val listOfSlabs = listOf(
+                RoofSlab(furniture), LeftSkeletonWallSlab(furniture), RightSkeletonWallSlab(furniture),
+                BottomOfSkeletonSlab(furniture), BackSkeletonSlab(furniture)
+        )
+        return if(furniture.hasPedestal) listOfSlabs +  PedestalSlab(furniture) else listOfSlabs
+    }
+}
+
+class UpperModule(initialName: String, private val parentProject: Project, private val furnitureSlabTree: FurnitureSlabTree = DefaultFurnitureSlabTree()): Furniture, FurnitureSlabTree by furnitureSlabTree {
     override var pedestalHeight: Int = 0
 
     override val hasPedestal: Boolean = false
@@ -53,11 +121,12 @@ class UpperModule(initialName: String, private val parentProject: Project): Furn
 
     init{
         frontConfiguration.recalculateElementsDimens()
+        furnitureSlabTree.furniture = this
     }
 
 }
 
-class BottomModule(initialName: String, private val parentProject: Project): Furniture{
+class BottomModule(initialName: String, private val parentProject: Project, private val furnitureSlabTree: FurnitureSlabTree = DefaultFurnitureSlabTree()): Furniture, FurnitureSlabTree by furnitureSlabTree{
 
     override val hasPedestal: Boolean = true
 
@@ -89,5 +158,6 @@ class BottomModule(initialName: String, private val parentProject: Project): Fur
 
     init{
         frontConfiguration.recalculateElementsDimens()
+        furnitureSlabTree.furniture = this
     }
 }

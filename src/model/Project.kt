@@ -1,10 +1,7 @@
 package model
 
 import config.Config
-import contract.DefaultFactoryChooser
-import contract.DynProContract
-import contract.FactoriesChain
-import contract.TypedFactoryChooser
+import contract.*
 import kotlin.properties.Delegates
 
 interface Project: TypedFactoryChooser<FurnitureFactory> {
@@ -33,7 +30,7 @@ interface Project: TypedFactoryChooser<FurnitureFactory> {
     fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
 }
 
-class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(){
+class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by DefaultSlabTree(){
 
     override val factoriesChain: FactoriesChain<FurnitureFactory> = AllFurnitureTypesChain(this)
 

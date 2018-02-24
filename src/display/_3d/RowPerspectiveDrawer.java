@@ -8,6 +8,8 @@ import model.Element;
 import model.FrontConfiguration;
 import model.Furniture;
 
+import static util.SlabSidePositionUtil.*;
+
 class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
 
     RowPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture) {
@@ -15,7 +17,7 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
     }
 
     @Override
-    void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, Furniture furniture) {
+    void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, ArrangementAggregate currentAggregate, Furniture furniture) {
         //start x,y,z - coords of the front plane
         //dimens - y - height of separator, z - depth of furniture, x - slabMeshThickness
         float separatorColor = 50 / 255f;
@@ -23,18 +25,14 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
         float separatorWidth, separatorHeight, separatorDepth;
 
         FrontConfiguration configuration = furniture.getFrontConfiguration();
-        separatorStartX = getRightSideX(
-                currentPointWithOffsets,
-                new Point3D(currentElement.getWidth(), 0,0),
-                configuration.isElemWithIdLastToTheRight(currentElement.getId())
-        ) - Config.SLAB_THICKNESS;
+        separatorStartX = getRightSideX((int) currentPointWithOffsets.getX(),currentElement.getWidth(), configuration.isElemWithIdLastToTheRight(currentElement.getId())) - Config.SLAB_THICKNESS;
 
         separatorStartY = getTopSlabY(currentPointWithOffsets, configuration.isElemWithIdLastToTheTop(currentElement.getId())) - Config.SLAB_THICKNESS;
-        separatorStartZ = (float) (currentPointWithOffsets.getZ() - furnitureDimens.getZ() + (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorStartZ = calculateFrontZ(currentPointWithOffsets.getZ(),  furnitureDimens.getZ(), furniture.getBackInserted());
 
         separatorWidth = Config.SLAB_THICKNESS;
-        separatorHeight = separatorStartY - getBottomSlabY(currentPointWithOffsets, new Point3D(0, currentElement.getHeight(), 0), configuration.isElemWithIdLastToTheBottom(currentElement.getId()));
-        separatorDepth = (float) (furnitureDimens.getZ() - (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorHeight = currentAggregate.getElementSeparatorFirstDimension();
+        separatorDepth = currentAggregate.getElementSeparatorSecondDimension();
 
         drawCuboid(
                 gl,
@@ -54,17 +52,15 @@ class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
         FrontConfiguration configuration = furniture.getFrontConfiguration();
         separatorStartX = getLeftSideX(currentPointWithOffsets, true) + Config.SLAB_THICKNESS;
         separatorStartY = getBottomSlabY(
-                currentPointWithOffsets,
-                new Point3D(0, currentAggregate.getAggregateHeightWithGaps(false), 0),
+                (int) currentPointWithOffsets.getY(),
+                currentAggregate.getAggregateHeightWithGaps(false),
                 configuration.isElemWithIdLastToTheBottom(currentAggregate.get(0).getId())
         );
-        separatorStartZ = (float) (currentPointWithOffsets.getZ() - furnitureDimens.getZ() + (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorStartZ = calculateFrontZ(currentPointWithOffsets.getZ(),  furnitureDimens.getZ(), furniture.getBackInserted());
 
-        separatorWidth =
-                getRightSideX(currentPointWithOffsets, new Point3D(currentAggregate.getAggregateWidthWithGaps(false), 0, 0),true)
-                        - getLeftSideX(currentPointWithOffsets, true) - 2*Config.SLAB_THICKNESS;
+        separatorWidth = currentAggregate.getAggregateSeparatorFirstDimension();
         separatorHeight = Config.SLAB_THICKNESS;
-        separatorDepth = (float) (furnitureDimens.getZ() - (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorDepth = currentAggregate.getAggregateSeparatorSecondDimension();
 
         drawCuboid(gl,
                 new Point3D(separatorStartX,separatorStartY,separatorStartZ),

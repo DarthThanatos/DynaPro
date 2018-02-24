@@ -7,6 +7,9 @@ import model.ArrangementAggregate;
 import model.Element;
 import model.FrontConfiguration;
 import model.Furniture;
+import util.SlabSidePositionUtil;
+
+import static util.SlabSidePositionUtil.*;
 
 class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
 
@@ -15,7 +18,7 @@ class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
     }
 
     @Override
-    void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, Furniture furniture) {
+    void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, ArrangementAggregate currentAgreagate, Furniture furniture) {
         float separatorColor = 120 / 255f;
         float separatorStartX, separatorStartY, separatorStartZ;
         float separatorWidth, separatorHeight, separatorDepth;
@@ -23,11 +26,11 @@ class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
         FrontConfiguration configuration = furniture.getFrontConfiguration();
         separatorStartX = getLeftSideX(currentPointWithOffsets, configuration.isElemWithIdLastToTheLeft(currentElement.getId())) + Config.SLAB_THICKNESS;
         separatorStartY = getBottomSlabY(currentPointWithOffsets, new Point3D(0,currentElement.getHeight(), 0), configuration.isElemWithIdLastToTheBottom(currentElement.getId()));
-        separatorStartZ = (float) (currentPointWithOffsets.getZ() - furnitureDimens.getZ() + (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorStartZ = calculateFrontZ(currentPointWithOffsets.getZ(),furnitureDimens.getZ(), furniture.getBackInserted());
 
-        separatorWidth = getRightSideX(currentPointWithOffsets, new Point3D(currentElement.getWidth(),0, 0), configuration.isElemWithIdLastToTheRight(currentElement.getId())) - getLeftSideX(currentPointWithOffsets, configuration.isElemWithIdLastToTheLeft(currentElement.getId())) - 2*Config.SLAB_THICKNESS;
+        separatorWidth = currentAgreagate.getElementSeparatorFirstDimension();
         separatorHeight = Config.SLAB_THICKNESS;
-        separatorDepth = (float) (furnitureDimens.getZ() - (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorDepth = currentAgreagate.getElementSeparatorSecondDimension();
 
         drawCuboid(gl,
                 new Point3D(separatorStartX,separatorStartY,separatorStartZ),
@@ -48,11 +51,11 @@ class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
         FrontConfiguration configuration = furniture.getFrontConfiguration();
         separatorStartX = getRightSideX(currentPointWithOffsets, new Point3D(currentAggregate.get(0).getWidth(), 0,0), configuration.isElemWithIdLastToTheRight(currentAggregate.get(0).getId())) - Config.SLAB_THICKNESS;
         separatorStartY = getTopSlabY(currentPointWithOffsets, configuration.isElemWithIdLastToTheTop(currentAggregate.get(0).getId())) - Config.SLAB_THICKNESS;
-        separatorStartZ = (float) (currentPointWithOffsets.getZ() - furnitureDimens.getZ() + (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorStartZ = calculateFrontZ(currentPointWithOffsets.getZ(),furnitureDimens.getZ(), furniture.getBackInserted());
 
         separatorWidth = Config.SLAB_THICKNESS;
-        separatorHeight = separatorStartY - getBottomSlabY(currentPointWithOffsets, new Point3D(0, currentAggregate.getAggregateHeightWithGaps(true), 0), true);
-        separatorDepth = (float) (furnitureDimens.getZ() - (furniture.getBackInserted() ? Config.SLAB_THICKNESS : 0));
+        separatorHeight = currentAggregate.getAggregateSeparatorFirstDimension();
+        separatorDepth = currentAggregate.getAggregateSeparatorSecondDimension();
 
         drawCuboid(
                 gl,

@@ -1,5 +1,7 @@
 package config;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Config {
     public final static String UPPER_MODULE = "Upper Module";
     public final static String UPPER_MODULE_PL = "Korpus Górny";
@@ -46,4 +48,7 @@ public class Config {
 
     public static float MESH_UNIT = 250.0f;
     public static int HDF_BACK_THICKNESS = 3;
+    public static String SEPARATOR = "Separator";
+
+    public static final String ROOF = "Dach";
 }

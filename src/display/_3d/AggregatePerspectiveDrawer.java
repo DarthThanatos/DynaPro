@@ -37,9 +37,9 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
         while (elementsIter.hasNext()){
             Element element = elementsIter.next();
             Point3D currentPointWithOffsets = getPointWithOffsets(currentPoint);
-            tryDrawingDrawer(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext());
-            tryDrawingLeftDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext());
-            tryDrawingRightDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext());
+            tryDrawingDrawer(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
+            tryDrawingLeftDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
+            tryDrawingRightDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             currentPoint = calculateNextElementPosition(element, currentPoint);
         }
     }
@@ -52,7 +52,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
         );
     }
 
-    private void tryDrawingDrawer(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne){
+    private void tryDrawingDrawer(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne, ArrangementAggregate currentAggregate){
         if (element.getType().equals(Config.DRAWER_PL)){
             FrontConfiguration configuration = furniture.getFrontConfiguration();
             new DrawerDrawer(
@@ -71,13 +71,13 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             );
 
             if(!furniture.getFrontConfiguration().getColumnOriented() && !isTheLastOne){
-                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, furniture);
+                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, currentAggregate, furniture);
             }
 
         }
     }
 
-    private void tryDrawingLeftDoor(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne){
+    private void tryDrawingLeftDoor(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne, ArrangementAggregate currentAggregate){
         if(element.getType().equals(Config.LEFT_DOOR_PL)){
             FrontConfiguration configuration = furniture.getFrontConfiguration();
             new LeftDoorDrawer(
@@ -92,13 +92,13 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     new Point3D(element.getWidth(), element.getHeight(), furnitureDimens.getZ())
             );
             if(!isTheLastOne){
-                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, furniture);
+                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, currentAggregate,  furniture);
             }
         }
 
     }
 
-    private void tryDrawingRightDoor(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne){
+    private void tryDrawingRightDoor(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne, ArrangementAggregate currentAggregate){
         if(element.getType().equals(Config.RIGHT_DOOR_PL)){
             FrontConfiguration configuration = furniture.getFrontConfiguration();
             new RightDoorDrawer(
@@ -114,12 +114,12 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             );
 
             if(!isTheLastOne){
-                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, furniture);
+                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, currentAggregate, furniture);
             }
         }
     }
 
-    abstract void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, Furniture furniture);
+    abstract void drawElementSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, Element currentElement, ArrangementAggregate currentAggregate, Furniture furniture);
     abstract void drawAggregateSeparator(GL2 gl, Point3D currentPointWithOffsets, Point3D furnitureDimens, ArrangementAggregate currentAggregate, Furniture furniture);
     abstract Point3D calculateNextElementPosition(Element currentElement, Point3D currentPoint);
     abstract Point3D calculateNextAggregatePosition(ArrangementAggregate currenctAggregate, Point3D currentPoint, Point3D startPoint);

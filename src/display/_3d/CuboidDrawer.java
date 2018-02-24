@@ -9,26 +9,6 @@ import static com.jogamp.opengl.GL.*;
 
 class CuboidDrawer {
 
-    float getLeftSideX(Point3D start, boolean isLastToTheLeft){
-        float distToLeftSide = (isLastToTheLeft ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP : 10);
-        return  (float) (start.getX() - distToLeftSide);
-    }
-
-    float getRightSideX(Point3D start, Point3D dimens, boolean isLastToTheRight){
-        float distToRightSide = (float) (dimens.getX() + (isLastToTheRight ? Config.BETWEEN_ELEMENTS_VERTICAL_GAP : 10));
-        return (float) (start.getX() + distToRightSide);
-
-    }
-
-    float getTopSlabY(Point3D start, boolean isLastToTheTop){
-        float distToTop =  isLastToTheTop ? Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP  : 8;
-        return (float) (start.getY() + distToTop);
-    }
-
-    float getBottomSlabY(Point3D start, Point3D dimens, boolean isLastToTheBottom){
-        float distToBottom = (float) (dimens.getY() - (isLastToTheBottom ? Config.SLAB_THICKNESS - Config.BETWEEN_ELEMENTS_HORIZONTAL_GAP :  8));
-        return (float) (start.getY() - distToBottom);
-    }
 
     void drawCuboid(GL2 gl, Point3D startPoint, Point3D dimens, float color, boolean transparentFront){
         float mox = (float) startPoint.getX() / Config.MESH_UNIT;

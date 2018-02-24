@@ -5,6 +5,9 @@ import config.Config;
 import javafx.geometry.Point3D;
 import model.Door;
 
+import static util.SlabSidePositionUtil.getLeftSideX;
+import static util.SlabSidePositionUtil.getRightSideX;
+
 abstract class DoorDrawer extends CuboidDrawer {
 
     private final boolean backInserted;

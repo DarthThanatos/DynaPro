@@ -65,4 +65,5 @@ interface DynProContract {
         fun addOneFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
         fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
     }
+
 }
