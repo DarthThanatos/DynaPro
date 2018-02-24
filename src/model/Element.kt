@@ -47,9 +47,6 @@ class EmptySpace(
         override var name: String = Config.EMPTY_SPACE,
         override val type: String = Config.EMPTY_SPACE, override var parentConfig: FrontConfiguration
 ) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by DefaultSlabTree() {
-    override fun getTreeSlabList(): List<Slab> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun toString(): String = print(this)
 }
@@ -176,6 +173,11 @@ class Drawer(
     fun getShelfSlabSecondDimension(): Int = DrawerShelfSlab(this).secondDimension
 
     fun getShelfSlabFirstDimension(): Int = DrawerShelfSlab(this).firstDimension
+
+    override fun listOfSlabs(): List<Slab> = listOf(
+            DrawerLeftWallSlab(this), DrawerRightWallSlab(this), DrawerBottomSlab(this),
+            DrawerBackSlab(this), DrawerFrontSlab(this), DrawerShelfSlab(this)
+    )
 
     override fun toString(): String = print(this)
 }

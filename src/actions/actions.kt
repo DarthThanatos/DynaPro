@@ -1,9 +1,9 @@
 package actions
 
 import config.Config
-import contract.DynProContract
 import display.FrontConfigViewElem
 import display.FrontConfigurationDisplayer
+import display.FurnitureDisembowelmentDisplay
 import display.ProjectTree
 import display._3d.FurniturePerspective
 import main.DynProMain
@@ -149,4 +149,24 @@ class MoveToFurniturePerspectiveAction(private val dynProMain: DynProMain): Move
         )
         super.actionPerformed(e)
     }
+}
+
+abstract class MoveToDisembowelmentAction(private val dynProMain: DynProMain): MoveToAction(){
+    override val childPanelId: String = "outputDisembowelment"
+    lateinit var furnitureDisembowelmentDisplay: FurnitureDisembowelmentDisplay
+    abstract val disembowelAction : (FurnitureDisembowelmentDisplay ) -> Unit
+
+    override fun actionPerformed(e: ActionEvent?) {
+        disembowelAction(furnitureDisembowelmentDisplay)
+        super.actionPerformed(e)
+    }
+}
+
+class MoveToProjectDisembowelmentAction(dynProMain: DynProMain): MoveToDisembowelmentAction(dynProMain){
+    override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject())}
+}
+
+class MoveToFurnitureDisembowelmentAction(dynProMain: DynProMain): MoveToDisembowelmentAction(dynProMain){
+    override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayFurnitureSlabs(dynProMain.presenter.model.getFurnitureByName(dynProMain.presenter.getCurrentDisplayedFurnitureName()))}
+
 }

@@ -4,7 +4,7 @@ import config.Config
 import contract.*
 import kotlin.properties.Delegates
 
-interface Project: TypedFactoryChooser<FurnitureFactory> {
+interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     var presenter: DynProContract.Presenter?
     fun reset(name: String, presenter: DynProContract.Presenter)
     fun getName(): String
@@ -36,6 +36,7 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFa
 
     override fun reset(name: String, presenter: DynProContract.Presenter) {
         this.projectName = name
+        resetChildren()
         this.furnituresList.removeAll { true }
         this.presenter = presenter
     }
@@ -52,7 +53,7 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFa
 
     override fun addChildFurniture(childName: String, childFurnitureType: String) : Boolean{
         if(furnitureNotExist( childName)){
-            chooseFactoryTo(childFurnitureType, {furnituresList.add(it.createFurnitureChild(childName))}, factoriesChain)
+            chooseFactoryTo(childFurnitureType, {val furniture = it.createFurnitureChild(childName); furnituresList.add(furniture); addChild(childName, furniture)}, factoriesChain)
             presenter?.onFurnitureAdded(childName)
             return true
         }
@@ -108,6 +109,7 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFa
     override fun removeFurniture(oldChildName: String) : Boolean{
         val success = furnituresList.removeIf { it.name == oldChildName }
         if(success) {
+            removeChild(oldChildName)
             keepAtLeastOneFurniture()
             presenter?.onFurnitureRemoved(oldChildName)
         }
@@ -120,6 +122,7 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL) : Project, TypedFa
     override fun renameFurniture(oldName: String, newName: String) :Boolean{
         if (furnitureNotExist(newName) and (newName != projectName) and (newName != "")){
             furnituresList.single { it.name == oldName }.name= newName
+            changeChildId(oldName, newName)
             presenter?.onFurnitureNameChanged(newName)
             return true
         }

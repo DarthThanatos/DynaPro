@@ -31,7 +31,7 @@
         </popupmenu>
     </projecttree>
 
-    <button text="Rozrys całości projektu">
+    <button text="Rozrys całości projektu" action="moveToProjectDisembowelmentAction">
         <gridbagconstraints gridx="0" gridy="2" gridwidth="1" gridheight="1" weightx="0" weighty="0"
                             anchor="GridBagConstraints.FIRST_LINE_START" fill="GridBagConstraints.NONE"
                             insets="0,0,0,0" ipadx="0" ipady="0"/>

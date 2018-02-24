@@ -9,13 +9,25 @@ interface SlabTree{
     fun getSpecificChildSlabList(childIdentifier:String): List<Slab>
     fun removeChild(childIdentifier: String)
     fun listOfSlabs(): List<Slab>
+    fun resetChildren()
+    fun changeChildId(oldId: String, newId: String)
 }
 
 open class DefaultSlabTree: SlabTree {
 
     override fun listOfSlabs(): List<Slab> = listOf<Slab>()
 
-    val children: MutableMap<String, SlabTree> = mutableMapOf()
+    override fun changeChildId(oldId: String, newId: String) {
+        val child = children.remove(oldId)!!
+        children[newId] = child
+    }
+
+    var children: MutableMap<String, SlabTree> = mutableMapOf()
+
+
+    override fun resetChildren() {
+        children = mutableMapOf()
+    }
 
     override fun removeChild(childIdentifier: String) {
         children.remove(childIdentifier)

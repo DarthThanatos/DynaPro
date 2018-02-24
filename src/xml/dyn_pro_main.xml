@@ -9,5 +9,6 @@
     <panel id="viewSwitcher" Layout="CardLayout" >
         <panel include="xml/input/input_main_panel.xml#inputMainPanel" constraints="input_main_panel" layout="BorderLayout" background="white"/>
         <panel include="xml/output/output_3d.xml#output3D" id="output3D" constraints="output3D" Layout="BorderLayout"/>
+        <panel include="xml/output/output_disembowelment.xml#outputDisembowelment" id="outputDisembowelment" constraints="outputDisembowelment" Layout="BorderLayout"/>
     </panel>
 </frame>

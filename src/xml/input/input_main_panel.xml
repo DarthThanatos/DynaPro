@@ -7,7 +7,7 @@
             layout="GridBagLayout"/>
 
     <panel constraints="BorderLayout.SOUTH" background="white">
-        <button text="Rozrys tego mebla"/>
+        <button text="Rozrys tego mebla" action="moveToFurnitureDisembowelmentAction"/>
         <button text="Pokaż w perspektywie" action="moveToFurniturePerspectiveAction"/>
     </panel>
 

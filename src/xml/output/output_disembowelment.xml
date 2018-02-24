@@ -1,25 +1,10 @@
-<panel id="cubeLayout" Layout="BorderLayout">
+<panel id="outputDisembowelment" Layout="BorderLayout">
 
-    <panel layout="GridBagLayout" constraints = "BorderLayout.WEST">
-
-        <tree >
-
-            <gridbagconstraints gridx="0" gridy="0" gridwidth="1" gridheight="1" weightx="1" weighty="1"
-                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
-                                insets="0,0,0,0" ipadx="0" ipady="50"/>
-        </tree>
-        <imagepanel initclass="java.lang.String(resources/icon.png)" >
-
-            <gridbagconstraints gridx="0" gridy="1" gridwidth="1" gridheight="1" weightx="1" weighty="0"
-                                anchor="GridBagConstraints.CENTER" fill="GridBagConstraints.HORIZONTAL"
-                                insets="0,0,0,0" ipadx="0" ipady="50"/>
-        </imagepanel>
-    </panel>
 
     <panel constraints="BorderLayout.SOUTH">
-        <button text="Exit" action="moveToMainMenu"/>
+        <button text="Cofnij" action="moveToMainMenuAction"/>
     </panel>
 
-    <cubecanvas constraints="BorderLayout.CENTER"/>
+    <furnituredisembowelmentdisplay id="furnitureDisembowelmentDisplay" constraints="BorderLayout.CENTER"/>
 
 </panel>

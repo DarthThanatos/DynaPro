@@ -20,6 +20,7 @@ class DynProSwingEngine extends SwingEngine {
         getTaglib().registerTag("projecttree", ProjectTree.class);
         getTaglib().registerTag("frontconfigurationdisplayer", FrontConfigurationDisplayer.class);
         getTaglib().registerTag("furnitureperspective", FurniturePerspective.class);
+        getTaglib().registerTag("furnituredisembowelmentdisplay", FurnitureDisembowelmentDisplay.class);
         DEBUG_MODE = true;
     }
 
@@ -37,11 +38,14 @@ class DynProSwingEngine extends SwingEngine {
         injectFrontConfigDisplayer();
         injectViewSwitcher();
         injectFurniturePerspective();
+        injectDisembowelmentDisplay();
     }
 
     private void injectViewSwitcher() {
         moveToFurniturePerspectiveAction.setViewSwitcherPanel(viewSwitcher);
         moveToMainMenuAction.setViewSwitcherPanel(viewSwitcher);
+        moveToFurnitureDisembowelmentAction.setViewSwitcherPanel(viewSwitcher);
+        moveToProjectDisembowelmentAction.setViewSwitcherPanel(viewSwitcher);
     }
 
     private void setup(){
@@ -74,6 +78,13 @@ class DynProSwingEngine extends SwingEngine {
     private void initMoveToActions() {
         moveToMainMenuAction = new MoveToMainMenuAction();
         moveToFurniturePerspectiveAction = new MoveToFurniturePerspectiveAction(dynProMain);
+        moveToFurnitureDisembowelmentAction = new MoveToFurnitureDisembowelmentAction(dynProMain);
+        moveToProjectDisembowelmentAction = new MoveToProjectDisembowelmentAction(dynProMain);
+    }
+
+    private void injectDisembowelmentDisplay(){
+        moveToFurnitureDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
+        moveToProjectDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
     }
 
     private void initFurnitureActions(){

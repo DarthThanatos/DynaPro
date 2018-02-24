@@ -2,10 +2,7 @@ package main;
 
 import actions.*;
 import contract.DynProContract;
-import display.FrontConfigurationDisplayer;
-import display.ImagePanel;
-import display.MetadataDisplayer;
-import display.ProjectTree;
+import display.*;
 import display._3d.FurniturePerspective;
 import model.FrontConfigurationVM;
 import org.jetbrains.annotations.NotNull;
@@ -54,11 +51,12 @@ public class DynProMain implements DynProContract.View {
             addElementBeforeAction, addOneElementAggregateNextToAction, addMultiElementAggragateNextToAction,
             addOneElementAggregateBeforeAction, addMultiElementAggregateBeforeAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static ModifyConfigElemAction modifyConfigElemAction;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static MoveToDisembowelmentAction moveToFurnitureDisembowelmentAction, moveToProjectDisembowelmentAction;
 
     static JSpinner shelvesNumberDisplayer;
     static JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;
 
-
+    @SuppressWarnings({"unused", "WeakerAccess"}) static FurnitureDisembowelmentDisplay furnitureDisembowelmentDisplay;
 
     public static void main(String args[]) throws Exception {
         renderer.initActions();
