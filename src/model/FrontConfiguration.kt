@@ -302,7 +302,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         aggregates.map { it.toString() }.reduce { acc, arrangementAggregateString -> acc + arrangementAggregateString + "\n"}
 
     override fun updateOrientation(columnOriented: Boolean) {
-        aggregates = getDefaultAggregates()
+        aggregates = defaultsAddedToChildren()
         this.columnOriented = columnOriented
         recalculateElementsDimens()
         parentProject.presenter?.onFrontConfigurationChanged(parentFurniture.name)
@@ -447,6 +447,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
             else aggregateIndexContainingElementWithId(elementId) == aggregates.size - 1
 
     protected fun defaultsAddedToChildren() : ArrayList<ArrangementAggregate>{
+        resetChildren()
         val res = getDefaultAggregates()
         res.forEach{addChild(it.id, it)}
         return res
