@@ -8,6 +8,7 @@
         <textfield id="scaleBoardLengthDisplay" preferredsize="150,25" enabled="false"/>
         <label text="Wycena (bez uwzględnienia okleiny)"/>
         <textfield id="assessmentDisplay" preferredsize="150,25" enabled="false"/>
+        <button text="Drukuj"/>
         <button text="Cofnij" action="moveToMainMenuAction"/>
     </panel>
 
@@ -15,6 +16,6 @@
         <furnituredisembowelmentdisplay
                 id="furnitureDisembowelmentDisplay"
                 constraints="BorderLayout.CENTER"
-                layout="GridLayout(0,9)"/>
+                layout="GridBagLayout"/>
     </scrollpane>
 </panel>
