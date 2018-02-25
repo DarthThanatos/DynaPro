@@ -9,6 +9,9 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.List;
 import java.util.Map;
 
@@ -117,6 +120,41 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         slabTreePanel.add(new NoBorderJTextField(Integer.toString(slabs.size())), newRowElementConstraints(7, gridy));
     }
 
+    public void printComponenet(){
+
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setJobName(" Print Component ");
+
+        pj.setPrintable ((pg, pf, pageNum) -> {
+            double scaleFactor = 0.7;
+            Component[] components = FurnitureDisembowelmentDisplay.this.getComponents();
+            int blockHeight = (int) ((components[0].getHeight() + components[1].getHeight()) * scaleFactor);
+            int blocksOnPage = (int) (pf.getImageableHeight() / blockHeight);
+            if((pageNum) * blocksOnPage > components.length/2){return Printable.NO_SUCH_PAGE;}
+            Graphics2D g2 = (Graphics2D) pg;
+            g2.scale( pf.getImageableWidth()/FurnitureDisembowelmentDisplay.this.getComponents()[1].getWidth(), scaleFactor);
+            g2.translate(pf.getImageableX() + 2, pf.getImageableY() + 2);
+            g2.drawRect(0,4, components[1].getWidth() - 2, (int)pf.getImageableHeight()/10);
+            g2.translate(0, pf.getImageableHeight()/10 + 4);
+            for (int i = pageNum * blocksOnPage * 2; i < Math.min(pageNum * blocksOnPage * 2 + 2 * blocksOnPage, components.length); i+=2) {
+                g2.translate(components[i+1].getWidth()/2 - components[i].getWidth()/2,0);
+                components[i].printAll(g2);
+                g2.translate(-components[i+1].getWidth()/2 + components[i].getWidth()/2,components[i].getHeight());
+                components[i+1].printAll(g2);
+                g2.translate(0,components[i+1].getHeight());
+            }
+            return Printable.PAGE_EXISTS;
+        });
+        if (!pj.printDialog())
+            return;
+
+        try {
+            pj.print();
+        } catch (PrinterException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     class NoBorderJTextField extends JTextField{
         NoBorderJTextField(String text){
             super(text, text.length());
@@ -128,4 +166,5 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         }
         @Override public void setBorder(Border border) { }
     }
+
 }

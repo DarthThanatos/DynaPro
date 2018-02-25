@@ -52,6 +52,7 @@ public class DynProMain implements DynProContract.View {
             addOneElementAggregateBeforeAction, addMultiElementAggregateBeforeAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static ModifyConfigElemAction modifyConfigElemAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) public static MoveToDisembowelmentAction moveToFurnitureDisembowelmentAction, moveToProjectDisembowelmentAction;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static PrintDisembowelmentAction printDisembowelmentAction;
 
     static JSpinner shelvesNumberDisplayer;
     static JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;

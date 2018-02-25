@@ -85,6 +85,7 @@ class DynProSwingEngine extends SwingEngine {
     private void injectDisembowelmentDisplay(){
         moveToFurnitureDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
         moveToProjectDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
+        printDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
     }
 
     private void initFurnitureActions(){
@@ -92,6 +93,7 @@ class DynProSwingEngine extends SwingEngine {
         renameFurnitureAction = new RenameProjectTreeFurnitureAction(dynProMain);
         renameMetadataFurnitureAction = new RenameMetadataFurnitureAction(dynProMain);
         newFurnitureAction = new NewFurnitureAction(dynProMain);
+        printDisembowelmentAction = new PrintDisembowelmentAction();
     }
 
     private void initProjectActions(){

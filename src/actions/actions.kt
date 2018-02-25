@@ -12,6 +12,7 @@ import java.awt.CardLayout
 import java.awt.event.ActionEvent
 import javax.swing.AbstractAction
 import javax.swing.JPanel
+import javax.swing.JTable
 
 
 class NewFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() {
@@ -169,4 +170,12 @@ class MoveToProjectDisembowelmentAction(dynProMain: DynProMain): MoveToDisembowe
 class MoveToFurnitureDisembowelmentAction(dynProMain: DynProMain): MoveToDisembowelmentAction(dynProMain){
     override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayFurnitureSlabs(dynProMain.presenter.model.getFurnitureByName(dynProMain.presenter.getCurrentDisplayedFurnitureName()))}
 
+}
+
+class PrintDisembowelmentAction: AbstractAction() {
+    lateinit var furnitureDisembowelmentDisplay: FurnitureDisembowelmentDisplay
+    override fun actionPerformed(e: ActionEvent?) {
+        furnitureDisembowelmentDisplay.printComponenet()
+//        furnitureDisembowelmentDisplay.components.forEach { println(it) }
+    }
 }
