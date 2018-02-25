@@ -1,6 +1,7 @@
 package contract
 
 import model.slab.Slab
+import java.awt.Dimension
 
 
 interface SlabTree{
@@ -11,7 +12,9 @@ interface SlabTree{
     fun removeChild(childIdentifier: String)
     fun listOfSlabs(): List<Slab>
     fun resetChildren()
+    fun slabsGroupedBySize(listOfSlabs: List<Slab>): Map<Dimension, List<Slab>>
     fun changeChildId(oldId: String, newId: String)
+    var children: MutableMap<String, SlabTree>
 }
 
 open class DefaultSlabTree: SlabTree {
@@ -27,7 +30,7 @@ open class DefaultSlabTree: SlabTree {
         children[newId] = child
     }
 
-    var children: MutableMap<String, SlabTree> = mutableMapOf()
+    override var children: MutableMap<String, SlabTree> = mutableMapOf()
 
 
     override fun resetChildren() {
@@ -50,5 +53,7 @@ open class DefaultSlabTree: SlabTree {
     }
 
 
+    override fun slabsGroupedBySize(listOfSlabs: List<Slab>): Map<Dimension, List<Slab>> =
+            listOfSlabs.groupBy { Dimension(it.firstDimension, it.secondDimension) }
 
 }
