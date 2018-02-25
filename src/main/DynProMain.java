@@ -56,6 +56,7 @@ public class DynProMain implements DynProContract.View {
 
     static JSpinner shelvesNumberDisplayer;
     static JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;
+    static JTextField assessmentDisplay, scaleBoardLengthDisplay, cutLengthDisplay;
 
     @SuppressWarnings({"unused", "WeakerAccess"}) static FurnitureDisembowelmentDisplay furnitureDisembowelmentDisplay;
 

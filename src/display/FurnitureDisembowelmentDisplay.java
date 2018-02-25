@@ -19,24 +19,47 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
 
     private static int PREFERRED_NAME_JTEXT_WIDTH = 50;
 
+    private JTextField assessmentDisplay, scaleBoardLengthDisplay, cutLengthDisplay;
+
     public void displayFurnitureSlabs(Furniture furniture){
         init();
-        System.out.println("Displaying furniture slabs");
-        furniture.getTreeSlabList().forEach(slab -> System.out.println(slab.getName() + ", " + slab.getFirstDimension() + ", " + slab.getSecondDimension()));
         displayFurnitureTree(furniture, 0);
+        displayFurnitureSummary(furniture);
     }
 
     public void displayAllProjectSlabs(Project project){
         init();
-        System.out.println("Displaying project slabs");
-        project.getTreeSlabList().forEach(slab -> System.out.println(slab.getName() + ", " + slab.getFirstDimension() + ", " + slab.getSecondDimension()));
         int gridy = 0;
         for(SlabTree slabTree: project.getChildren().values()){
             displayFurnitureTree(slabTree, gridy);
             gridy += 2;
         }
+        displayProjectSummary(project);
     }
 
+    private void displayFurnitureSummary(SlabTree furnitureSlabTree){
+        displayAssessment(furnitureSlabTree.getAssessment(furnitureSlabTree.getTreeSlabList()));
+        displayCutLength(furnitureSlabTree.getCutLength(furnitureSlabTree.getTreeSlabList()));
+        displayScaleBoardLength(furnitureSlabTree.getScaleBoardLength(furnitureSlabTree.getTreeSlabList()));
+    }
+
+    private void displayProjectSummary(SlabTree projectSlabTree){
+        displayAssessment(projectSlabTree.getAssessment(projectSlabTree.getTreeSlabList()));
+        displayCutLength(projectSlabTree.getCutLength(projectSlabTree.getTreeSlabList()));
+        displayScaleBoardLength(projectSlabTree.getScaleBoardLength(projectSlabTree.getTreeSlabList()));
+    }
+
+    private void displayAssessment(int assessment){
+        assessmentDisplay.setText(String.valueOf(assessment));
+    }
+
+    private void displayScaleBoardLength(int scaleBoardLength){
+        scaleBoardLengthDisplay.setText(String.valueOf(scaleBoardLength));
+    }
+
+    private void displayCutLength(int cutLength){
+        cutLengthDisplay.setText(String.valueOf(cutLength));
+    }
 
     private GridBagConstraints newFurnitureNameConstraints(int gridy){
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -120,11 +143,9 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         slabTreePanel.add(new NoBorderJTextField(Integer.toString(slabs.size())), newRowElementConstraints(7, gridy));
     }
 
-    public void printComponenet(){
-
+    public void printComponent(){
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName(" Print Component ");
-
         pj.setPrintable ((pg, pf, pageNum) -> {
             double scaleFactor = 0.7;
             Component[] components = FurnitureDisembowelmentDisplay.this.getComponents();
@@ -153,6 +174,18 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         } catch (PrinterException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void setCutLengthDisplay(JTextField cutLengthDisplay) {
+        this.cutLengthDisplay = cutLengthDisplay;
+    }
+
+    public void setScaleBoardLengthDisplay(JTextField scaleBoardLengthDisplay) {
+        this.scaleBoardLengthDisplay = scaleBoardLengthDisplay;
+    }
+
+    public void setAssessmentDisplay(JTextField assessmentDisplay) {
+        this.assessmentDisplay = assessmentDisplay;
     }
 
     class NoBorderJTextField extends JTextField{

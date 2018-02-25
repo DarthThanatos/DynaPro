@@ -52,6 +52,13 @@ class DynProSwingEngine extends SwingEngine {
         setupMetadataDisplayer();
         setupFrontConfigDisplayer();
         setupProjectTree();
+        setupFurnitureDisembowelmentDisplay();
+    }
+
+    private void setupFurnitureDisembowelmentDisplay() {
+        furnitureDisembowelmentDisplay.setAssessmentDisplay(assessmentDisplay);
+        furnitureDisembowelmentDisplay.setCutLengthDisplay(cutLengthDisplay);
+        furnitureDisembowelmentDisplay.setScaleBoardLengthDisplay(scaleBoardLengthDisplay);
     }
 
     private void initPresenter(){
