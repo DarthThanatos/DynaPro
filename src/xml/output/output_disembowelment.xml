@@ -1,6 +1,5 @@
 <panel id="outputDisembowelment" Layout="BorderLayout">
 
-
     <panel constraints="BorderLayout.SOUTH">
         <label text="Długość cięcia"/>
         <textfield id="cutLengthDisplay" preferredsize="150,25" enabled="false"/>

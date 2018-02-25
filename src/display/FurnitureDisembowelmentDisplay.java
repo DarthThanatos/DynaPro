@@ -6,6 +6,7 @@ import model.Project;
 import model.slab.Slab;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.util.List;
@@ -58,11 +59,17 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     }
 
 
-    private void displayFurnitureTree(SlabTree furnitureSlabTree, int furniturePanelGridy){
-        mountFurnitureNamePanel(furnitureSlabTree, 2*furniturePanelGridy);
+    private JPanel newSlabTreePanel(){
         JPanel slabTreePanel = new JPanel(new GridBagLayout());
         slabTreePanel.setBorder(new EtchedBorder());
+        slabTreePanel.setBackground(Color.WHITE);
+        return  slabTreePanel;
+    }
+
+    private void displayFurnitureTree(SlabTree furnitureSlabTree, int furniturePanelGridy){
+        mountFurnitureNamePanel(furnitureSlabTree, 2*furniturePanelGridy);
         int gridy = 0;
+        JPanel slabTreePanel = newSlabTreePanel();
         for(Map.Entry<Dimension, List<Slab>> slabtree: furnitureSlabTree.slabsGroupedBySize(furnitureSlabTree.getTreeSlabList()).entrySet()){
             mountSlabRow(slabtree.getKey(), slabtree.getValue(), slabTreePanel, gridy ++);
         }
@@ -70,26 +77,27 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     }
 
     private void mountFurnitureNamePanel(SlabTree slabTree,  int gridy){
-        add(new JTextField(((Furniture) slabTree).getName()), newFurnitureNameConstraints( gridy));
+        add(new NoBorderJTextField(((Furniture) slabTree).getName()), newFurnitureNameConstraints( gridy));
     }
 
     private void mountSlabRow(Dimension dimension, List<Slab> slabs, JPanel slabTreePanel, int gridy) {
         displayConcatenationOfSlabsNames(slabs, slabTreePanel, gridy);
-        slabTreePanel.add(new JTextField("("), newRowElementConstraints(1, gridy));
+        slabTreePanel.add(new NoBorderJTextField("("), newRowElementConstraints(1, gridy));
         displayDimension(dimension, slabTreePanel, gridy);
-        slabTreePanel.add(new JTextField(")"), newRowElementConstraints(5, gridy));
+        slabTreePanel.add(new NoBorderJTextField(")"), newRowElementConstraints(5, gridy));
         displayNumberOfSlabs(slabs, slabTreePanel, gridy);
         slabTreePanel.add(new ElementScaleboardDisplay(slabs.get(0).getScaleboard()), newRowElementConstraints(8, gridy));
     }
 
     private void init(){
         removeAll();
+        setBackground(Color.white);
         getParent().repaint();
     }
 
 
     private void displayConcatenationOfSlabsNames(List<Slab> slabs, JPanel slabTreePanel, int gridy){
-        slabs.stream().map(Slab::getName).reduce((acc, slab) -> acc + ", " + slab).ifPresent(s -> slabTreePanel.add(new JTextField(s, PREFERRED_JTEXT_WIDTH), newRowElementConstraints(0, gridy)));
+        slabs.stream().map(Slab::getName).reduce((acc, slab) -> acc + ", " + slab).ifPresent(s -> slabTreePanel.add(new NoBorderJTextField(s, PREFERRED_JTEXT_WIDTH), newRowElementConstraints(0, gridy)));
     }
 
     private String mmToCmText(int dimensionInMm){
@@ -97,13 +105,23 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     }
 
     private void displayDimension(Dimension dimension, JPanel slabTreePanel, int gridy){
-        slabTreePanel.add(new JTextField(mmToCmText(dimension.width), PREFERRED_JTEXT_WIDTH), newRowElementConstraints(2, gridy));
-        slabTreePanel.add(new JTextField("x"), newRowElementConstraints(3, gridy));
-        slabTreePanel.add(new JTextField(mmToCmText(dimension.height), PREFERRED_JTEXT_WIDTH), newRowElementConstraints(4, gridy));
+        slabTreePanel.add(new NoBorderJTextField(mmToCmText(dimension.width), PREFERRED_JTEXT_WIDTH), newRowElementConstraints(2, gridy));
+        slabTreePanel.add(new NoBorderJTextField("x"), newRowElementConstraints(3, gridy));
+        slabTreePanel.add(new NoBorderJTextField(mmToCmText(dimension.height), PREFERRED_JTEXT_WIDTH), newRowElementConstraints(4, gridy));
     }
 
     private void displayNumberOfSlabs(List<Slab> slabs, JPanel slabTreePanel, int gridy){
-        slabTreePanel.add(new JTextField("x"), newRowElementConstraints(6, gridy));
-        slabTreePanel.add(new JTextField(Integer.toString(slabs.size()), PREFERRED_JTEXT_WIDTH), newRowElementConstraints(7, gridy));
+        slabTreePanel.add(new NoBorderJTextField("x"), newRowElementConstraints(6, gridy));
+        slabTreePanel.add(new NoBorderJTextField(Integer.toString(slabs.size()), PREFERRED_JTEXT_WIDTH), newRowElementConstraints(7, gridy));
+    }
+
+    class NoBorderJTextField extends JTextField{
+        NoBorderJTextField(String text){
+            super(text);
+        }
+        NoBorderJTextField(String text, int columns){
+            super(text, columns);
+        }
+        @Override public void setBorder(Border border) { }
     }
 }
