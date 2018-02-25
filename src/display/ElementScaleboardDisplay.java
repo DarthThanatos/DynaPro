@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ElementScaleboardDisplay extends JPanel {
 
     private ArrayList<Boolean> scaleBoardConfig;
-    private static final int OFFSET_X = 2, OFFSET_Y=2;
+    private static final int OFFSET_X = 10, OFFSET_Y=10;
     private static final int MARK_SIZE = 10;
     private static final int PREFERRED_WIDTH = 100, PREFERRED_HEIGHT = 50;
 
