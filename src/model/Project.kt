@@ -63,7 +63,7 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaul
 
     override fun getFurnitureWithChangedType(name: String, newType: String) : Furniture{
         val furnitureIndex = furnituresList.indexOf(furnituresList.filter { it.name == name }.single())
-        return changeType(newType,furnituresList,furnitureIndex, {furnitureFactory, furniture -> furnitureFactory.createFurnitureChild(furniture) }, factoriesChain)
+        return changeType(newType,furnituresList,furnitureIndex, {furnitureFactory, furniture -> val res = furnitureFactory.createFurnitureChild(furniture); addChild(res.name, res) ;res}, factoriesChain)
     }
 
     override fun getDefaultFurniture(): Furniture =  furnituresList.last()
