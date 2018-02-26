@@ -176,10 +176,14 @@ class MoveToFurnitureDisembowelmentAction(dynProMain: DynProMain): MoveToDisembo
 
 class PrintDisembowelmentAction: AbstractAction() {
     lateinit var furnitureDisembowelmentDisplay: FurnitureDisembowelmentDisplay
+    lateinit var drevitDisembowelment: DrevitDisembowelment
     override fun actionPerformed(e: ActionEvent?) {
-        furnitureDisembowelmentDisplay.printComponent()
+        if(furnitureDisembowelmentDisplay.isVisible) furnitureDisembowelmentDisplay.printComponent()
+        if(drevitDisembowelment.isVisible) drevitDisembowelment.printComponent()
     }
 }
+
+
 
 class SwitchDisembowelmentAction(private val dynProMain: DynProMain): AbstractAction(){
     lateinit var furnitureDisembowelmentDisplay: FurnitureDisembowelmentDisplay

@@ -60,6 +60,10 @@ class DynProSwingEngine extends SwingEngine {
         furnitureDisembowelmentDisplay.setAssessmentDisplay(assessmentDisplay);
         furnitureDisembowelmentDisplay.setCutLengthDisplay(cutLengthDisplay);
         furnitureDisembowelmentDisplay.setScaleBoardLengthDisplay(scaleBoardLengthDisplay);
+
+        drevitDisembowelmentDisplay.setAssessmentDisplay(assessmentDisplay);
+        drevitDisembowelmentDisplay.setCutLengthDisplay(cutLengthDisplay);
+        drevitDisembowelmentDisplay.setScaleBoardLengthDisplay(scaleBoardLengthDisplay);
     }
 
     private void initPresenter(){
@@ -101,6 +105,7 @@ class DynProSwingEngine extends SwingEngine {
         moveToProjectDisembowelmentAction.setDisembowelmentSwitcher(disembowelmentSwitcher);
 
         printDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
+        printDisembowelmentAction.setDrevitDisembowelment(drevitDisembowelmentDisplay);
 
         switchDisembowelmentAction.setDisembowelmentContainer(disembowelmentContainer);
         switchDisembowelmentAction.setDrevitDisembowelment(drevitDisembowelmentDisplay);
