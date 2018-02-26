@@ -8,7 +8,7 @@ import java.util.ArrayList
 
 class ShelfSlab(private val element: Element) : Slab {
     override val name: String = Config.SHELF
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension >= secondDimension, false)
     override val firstDimension: Int
         get() {
             val startAbsoluteX = 0

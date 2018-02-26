@@ -81,8 +81,7 @@ class DefaultFurnitureSlabTree : SlabTree by DefaultSlabTree(), FurnitureSlabTre
 
     override fun listOfSlabs(): List<Slab> {
         val listOfSlabs = listOf(
-                RoofSlab(furniture), LeftSkeletonWallSlab(furniture), RightSkeletonWallSlab(furniture),
-                BottomOfSkeletonSlab(furniture)
+                BottomOfSkeletonSlab(furniture), RoofSlab(furniture), LeftSkeletonWallSlab(furniture), RightSkeletonWallSlab(furniture)
         )
         val pedestalCoveredRes = (if(furniture.hasPedestal)  listOfSlabs +  PedestalSlab(furniture)  else listOfSlabs)
         return if (furniture.backInserted) pedestalCoveredRes + BackSkeletonSlab(furniture) else pedestalCoveredRes

@@ -7,7 +7,7 @@ import java.util.ArrayList
 
 class DrawerLeftWallSlab(private val drawer: Drawer) : Slab {
     override val name: String = Config.DRAWER_LEFT
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, firstDimension > secondDimension, secondDimension >= firstDimension, false)
     override val firstDimension: Int
         get() {
             val topGap = 10
@@ -26,7 +26,7 @@ class DrawerRightWallSlab(private val drawer: Drawer): Slab {
 
     override val name: String = Config.DRAWER_RIGHT
 
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, firstDimension > secondDimension, secondDimension >= firstDimension, false)
 
     override val firstDimension: Int
         get() {
@@ -55,7 +55,7 @@ class DrawerBottomSlab(private val drawer: Drawer): Slab{
 
 class DrawerBackSlab(private val drawer: Drawer): Slab{
     override val name: String = Config.DRAWER_BACK
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false,  firstDimension > secondDimension, secondDimension >= firstDimension, false)
     override val firstDimension: Int
         get() {
             val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
@@ -84,7 +84,7 @@ class DrawerFrontSlab(private val drawer: Drawer): FrontSlab {
 
 class DrawerShelfSlab(private val drawer: Drawer): Slab{
     override val name: String = Config.DRAWER_SHELF
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension >= secondDimension, false)
     override val firstDimension: Int
         get()  {
             val isLastToTheRight = drawer.parentConfig.isElemWithIdLastToTheRight(drawer.id)

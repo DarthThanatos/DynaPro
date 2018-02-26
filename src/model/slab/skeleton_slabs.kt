@@ -18,7 +18,7 @@ class RoofSlab(private val furniture: Furniture) : Slab {
 
 class LeftSkeletonWallSlab(private val furniture: Furniture) : Slab {
     override val name: String = Config.LEFT_SKELETON_WALL
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, (secondDimension > firstDimension) ,  (firstDimension > secondDimension), false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, (secondDimension > firstDimension) or furniture.roofInserted,  (firstDimension >= secondDimension) or furniture.roofInserted, false)
     override val firstDimension: Int
         get() = (furniture.height - (if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) 0 else if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS))
     override val secondDimension: Int
@@ -28,7 +28,7 @@ class LeftSkeletonWallSlab(private val furniture: Furniture) : Slab {
 
 class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
     override val name: String = Config.RIGHT_SKELETON_WALL
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false,  (secondDimension > firstDimension) or furniture.roofInserted,  (firstDimension >= secondDimension) or furniture.roofInserted, false)
     override val firstDimension: Int
         get() = (furniture.height - (if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) 0 else if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS))
     override val secondDimension: Int
@@ -38,7 +38,13 @@ class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
 
 class BottomOfSkeletonSlab(private val furniture: Furniture): Slab{
     override val name: String = Config.BOTTOM_OF_SKELETON
-    override val scaleboard: ArrayList<Boolean> = if(furniture.hasPedestal) arrayListOf(false, false, false, false) else if (furniture.roofInserted) arrayListOf(false, false, false, false) else  arrayListOf(true, true, true, true)
+
+    override val scaleboard: ArrayList<Boolean> =
+            if(furniture.hasPedestal) arrayListOf(false, (secondDimension > firstDimension) , firstDimension >= secondDimension, false)
+            else
+                if (furniture.roofInserted) arrayListOf(false, secondDimension > firstDimension,  firstDimension >= secondDimension, false)
+                else  arrayListOf(true, true, true, true)
+
     override val firstDimension: Int
         get() =
             if (furniture.hasPedestal)
