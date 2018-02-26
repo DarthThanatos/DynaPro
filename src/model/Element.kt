@@ -43,21 +43,16 @@ class DefaultCommonsSetter: ElementCommonDefaultsSetter{
 
 }
 
-class EmptySpace(
-        override var name: String = Config.EMPTY_SPACE,
-        override val type: String = Config.EMPTY_SPACE, override var parentConfig: FrontConfiguration
-) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by DefaultSlabTree() {
-
-    override fun toString(): String = print(this)
-}
 
 
 interface ShelfSlabFurnitureTree : SlabTree{
     fun getShelfSlabFirstDimension(): Int
     fun getShelfSlabSecondDimension(): Int
+    fun getTreeShelvesNumber(): Int
 }
 
 open class DefaultShelfSlabFurnitureTree(private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree()) : ShelfSlabFurnitureTree, SlabTree by defaultSlabTree{
+    override fun getTreeShelvesNumber(): Int = 0
 
     override fun getShelfSlabFirstDimension(): Int = ShelfSlab(element).firstDimension
 
@@ -73,13 +68,26 @@ open class DefaultShelfSlabFurnitureTree(private val defaultSlabTree: DefaultSla
 
 }
 
+class EmptySpace(
+        override var name: String = Config.EMPTY_SPACE,
+        override val type: String = Config.EMPTY_SPACE, override var parentConfig: FrontConfiguration,
+        private val defaultShelfSlabFurnitureTree: DefaultShelfSlabFurnitureTree = DefaultShelfSlabFurnitureTree()
+) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(), ShelfSlabFurnitureTree by defaultShelfSlabFurnitureTree {
+    override fun getTreeShelvesNumber(): Int = shelvesNumber
+    override fun toString(): String = print(this)
+
+    init{
+        defaultShelfSlabFurnitureTree.element = this
+        defaultShelfSlabFurnitureTree.actualSlabTree = this
+    }
+}
+
 interface SingleDoorSlabTree : SlabTree, ShelfSlabFurnitureTree{
     fun getDoorSlabSecondDimension() :Int
     fun getDoorSlabFirstDimension() : Int
 }
 
 class DefaultSingleDoorSlabTree : SingleDoorSlabTree, DefaultShelfSlabFurnitureTree(){
-
     override fun getDoorSlabSecondDimension() : Int = DoorFrontSlab(element as SingleDoor).secondDimension
 
     override fun getDoorSlabFirstDimension() : Int = DoorFrontSlab(element as SingleDoor).firstDimension
@@ -90,6 +98,9 @@ class DefaultSingleDoorSlabTree : SingleDoorSlabTree, DefaultShelfSlabFurnitureT
 
 abstract class SingleDoor(private val defaultSingleDoorSlabTree: DefaultSingleDoorSlabTree = DefaultSingleDoorSlabTree())
     : Element, SingleDoorSlabTree by defaultSingleDoorSlabTree{
+
+
+    override fun getTreeShelvesNumber(): Int = shelvesNumber
 
     init{
         defaultSingleDoorSlabTree.element = this

@@ -40,7 +40,26 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             tryDrawingDrawer(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             tryDrawingLeftDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             tryDrawingRightDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
+            tryDrawingEmptySpace(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             currentPoint = calculateNextElementPosition(element, currentPoint);
+        }
+    }
+
+    private void tryDrawingEmptySpace(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne, ArrangementAggregate currentAggregate) {
+        if(element.getType().equals(Config.EMPTY_SPACE)){
+            FrontConfiguration configuration = furniture.getFrontConfiguration();
+            new EmptySpaceDrawer(
+                    (EmptySpace)element,
+                    furniture.getBackInserted(),
+                    configuration.isElemWithIdLastToTheLeft(element.getId())
+            ).draw(gl,
+                    currentPointWithOffsets,
+                    new Point3D(element.getWidth(), element.getHeight(), furnitureDimens.getZ())
+            );
+
+            if(!isTheLastOne){
+                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, currentAggregate,  furniture);
+            }
         }
     }
 
@@ -84,8 +103,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     (LeftDoor) element,
                     leftDoorTexture,
                     furniture.getBackInserted(),
-                    configuration.isElemWithIdLastToTheLeft(element.getId()),
-                    configuration.isElemWithIdLastToTheRight(element.getId())
+                    configuration.isElemWithIdLastToTheLeft(element.getId())
             ).drawDoor(
                     gl,
                     currentPointWithOffsets,
@@ -105,8 +123,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     (RightDoor)element,
                     rightDoorTexture,
                     furniture.getBackInserted(),
-                    configuration.isElemWithIdLastToTheLeft(element.getId()),
-                    configuration.isElemWithIdLastToTheRight(element.getId())
+                    configuration.isElemWithIdLastToTheLeft(element.getId())
             ).drawDoor(
                     gl,
                     currentPointWithOffsets,

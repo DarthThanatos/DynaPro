@@ -8,8 +8,8 @@ class RightDoorDrawer extends DoorDrawer {
 
     private int rightDoorTexture;
 
-    RightDoorDrawer(RightDoor rightDoor, int rightDoorTexture, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight) {
-        super(rightDoor, backInserted, isLastToTheLeft, isLastToTheRight);
+    RightDoorDrawer(RightDoor rightDoor, int rightDoorTexture, boolean backInserted, boolean isLastToTheLeft) {
+        super(rightDoor, backInserted, isLastToTheLeft);
         this.rightDoorTexture = rightDoorTexture;
     }
 

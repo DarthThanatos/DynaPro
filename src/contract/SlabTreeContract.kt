@@ -70,14 +70,11 @@ open class DefaultSlabTree: SlabTree {
             (listOfSlabs.sumBy {
                 val northFirstDimension = it.firstDimension >= it.secondDimension
 
-                val res =
-                        ((if(it.scaleboard[0]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension) +
-                                ((if(it.scaleboard[1]) 1 else 0) * if(northFirstDimension) it.secondDimension else it.firstDimension) +
-                                ((if(it.scaleboard[2]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension) +
-                                ((if(it.scaleboard[3]) 1 else 0) * if(northFirstDimension)it.secondDimension else it.firstDimension)
+                ((if(it.scaleboard[0]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension) +
+                        ((if(it.scaleboard[1]) 1 else 0) * if(northFirstDimension) it.secondDimension else it.firstDimension) +
+                        ((if(it.scaleboard[2]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension) +
+                        ((if(it.scaleboard[3]) 1 else 0) * if(northFirstDimension)it.secondDimension else it.firstDimension)
 
-                println("Scaleboard slab ${it.name}: $res")
-                res
             } * 0.8).toInt()
 
 

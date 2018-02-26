@@ -89,11 +89,11 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         float furnitureStartX = - furnitureWidth / (2), furnitureStartY = -5 * Config.MESH_UNIT + furnitureHeight , furnitureStartZ = - furnitureDepth / (2);
         Point3D furnitureStart = new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ);
         Point3D furnitureDimens = new Point3D(furnitureWidth, furnitureHeight, furnitureDepth );
-        new ModuleSkeletonDrawer(furniture).drawModuleSkeleton(
-                gl,
-                furnitureStart,
-                furnitureDimens
-        );
+//        new ModuleSkeletonDrawer(furniture).drawModuleSkeleton(
+//                gl,
+//                furnitureStart,
+//                furnitureDimens
+//        );
         if(furniture.getFrontConfiguration().getColumnOriented())
             new ColumnPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
         else
