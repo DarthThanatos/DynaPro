@@ -129,12 +129,12 @@ public class DrevitDisembowelment extends JPanel {
             double scaleFactor = 0.7;
             Component[] components = DrevitDisembowelment.this.getComponents();
             int blockHeight = (int) ((components[0].getHeight()) * scaleFactor);
-            int blocksOnPage = (int) (pf.getImageableHeight() / blockHeight);
+            int blocksOnPage = (int) ((pf.getImageableHeight() - (int)pf.getImageableHeight()/10) / blockHeight);
             if((pageNum) * blocksOnPage > components.length){return Printable.NO_SUCH_PAGE;}
             Graphics2D g2 = (Graphics2D) pg;
             g2.scale( pf.getImageableWidth()/DrevitDisembowelment.this.getComponents()[0].getWidth(), scaleFactor);
             g2.translate(pf.getImageableX() + 2, pf.getImageableY() + 2);
-            g2.drawRect(0,4, components[0].getWidth() - 4, (int)pf.getImageableHeight()/10);
+            g2.drawRect(0,4, components[0].getWidth() - 10, (int)pf.getImageableHeight()/10);
             g2.translate(0, pf.getImageableHeight()/10 + 4);
             g2.scale( 0.4, 1);
             for (int i = pageNum * blocksOnPage; i < Math.min(pageNum * blocksOnPage  +  blocksOnPage, components.length); i++) {
