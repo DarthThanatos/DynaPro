@@ -1,6 +1,7 @@
 package display;
 
 import contract.SlabTree;
+import kotlin.Pair;
 import model.Furniture;
 import model.Project;
 import model.slab.Slab;
@@ -12,6 +13,7 @@ import java.awt.*;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,8 +100,8 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         mountFurnitureNamePanel(furnitureSlabTree, 2*furniturePanelGridy);
         int gridy = 0;
         JPanel slabTreePanel = newSlabTreePanel();
-        for(Map.Entry<Dimension, List<Slab>> slabtree: furnitureSlabTree.slabsGroupedBySize(furnitureSlabTree.getTreeSlabList()).entrySet()){
-            mountSlabRow(slabtree.getKey(), slabtree.getValue(), slabTreePanel, gridy ++);
+        for(Map.Entry<Pair<Dimension, ArrayList<Boolean>>, List<Slab>> slabtree: furnitureSlabTree.slabsGroupedBySizeAndScaleboard(furnitureSlabTree.getTreeSlabList()).entrySet()){
+            mountSlabRow(slabtree.getKey().component1(), slabtree.getValue(), slabTreePanel, gridy ++);
         }
         add(slabTreePanel, newRowConstraints(2*furniturePanelGridy + 1));
     }

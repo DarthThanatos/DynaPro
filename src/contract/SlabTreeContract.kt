@@ -3,6 +3,7 @@ package contract
 import model.slab.FrontSlab
 import model.slab.Slab
 import java.awt.Dimension
+import java.util.ArrayList
 
 
 interface SlabTree{
@@ -19,6 +20,7 @@ interface SlabTree{
     fun getCutLength(listOfSlabs: List<Slab>): Int
     fun getScaleBoardLength(listOfSlabs: List<Slab>): Int
     fun getAssessment(frontPrice: Int, commonSlabPrice: Int, listOfSlabs: List<Slab>): Int
+    fun slabsGroupedBySizeAndScaleboard(listOfSlabs: List<Slab>): Map<Pair<Dimension, ArrayList<Boolean>>, List<Slab>>
 }
 
 open class DefaultSlabTree: SlabTree {
@@ -60,7 +62,8 @@ open class DefaultSlabTree: SlabTree {
     override fun slabsGroupedBySize(listOfSlabs: List<Slab>): Map<Dimension, List<Slab>> =
             listOfSlabs.groupBy { Dimension(it.firstDimension, it.secondDimension) }
 
-
+    override fun slabsGroupedBySizeAndScaleboard(listOfSlabs: List<Slab>) =
+            listOfSlabs.groupBy { Pair(Dimension(it.firstDimension, it.secondDimension), it.scaleboard) }
 
     override fun getCutLength(listOfSlabs: List<Slab>): Int = (listOfSlabs.sumBy {
         2 *it.firstDimension + 2 * it.secondDimension

@@ -8,7 +8,6 @@ import model.FrontConfiguration;
 import model.Furniture;
 
 import static util.SlabSidePositionUtil.getLeftSideX;
-import static util.SlabSidePositionUtil.getRightSideX;
 
 class DrawerDrawer extends CuboidDrawer{
 
@@ -50,7 +49,6 @@ class DrawerDrawer extends CuboidDrawer{
         float leftWallStartX, leftWallStartY, leftWallStartZ;
         float leftWallWidth, leftWallHeight, leftWallDepth;
 
-        FrontConfiguration configuration = furniture.getFrontConfiguration();
         leftWallStartX =  drawer.getLeftWallX(start);
         leftWallStartY = (float) (start.getY() - topGap);
         leftWallStartZ = getStartZ(start, dimens);
@@ -102,7 +100,6 @@ class DrawerDrawer extends CuboidDrawer{
         float bottomStartX, bottomStartY, bottomStartZ;
         float bottomWidth, bottomHeight, bottomDepth;
 
-        FrontConfiguration configuration = furniture.getFrontConfiguration();
         bottomStartX = drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
         bottomStartY = (float) (start.getY() - dimens.getY() + Config.SLAB_THICKNESS + 12 + 2*Config.SLAB_THICKNESS) + (lastToTheBottom ? Config.SLAB_THICKNESS: 0);
         bottomStartZ = getStartZ(start, dimens);
