@@ -70,4 +70,5 @@ public class Config {
 
     public static final String LEFT_OF_DOUBLE_DOOR = "Lewe z podwójnych drzwi";
     public static final String RIGHT_OF_DOUBLE_DOOR = "Prawe z podwójnych drzwi";
+    public static final String DRAWER_FACE = "Czoło szuflady";
 }

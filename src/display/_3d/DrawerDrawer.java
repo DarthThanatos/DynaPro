@@ -36,10 +36,12 @@ class DrawerDrawer extends CuboidDrawer{
         //dimens: x and y are width and height coming from the front, z is the depth of the furniture
         drawFront(gl, start, dimens);
         drawBack(gl, start, dimens);
+        drawFace(gl, start, dimens);
         drawLeftWall(gl, start, dimens);
         drawRightWall(gl, start, dimens);
         drawBottom(gl, start, dimens);
     }
+
 
 
     private void drawLeftWall(GL2 gl, Point3D start, Point3D dimens){
@@ -123,7 +125,6 @@ class DrawerDrawer extends CuboidDrawer{
         float backStartX, backStartY, backStartZ;
         float backWidth, backHeight, backDepth;
 
-        FrontConfiguration configuration = furniture.getFrontConfiguration();
         backStartX =  drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
         backStartY = (float) (start.getY() - topGap);
         backStartZ = getStartZ(start, dimens);
@@ -141,6 +142,28 @@ class DrawerDrawer extends CuboidDrawer{
 
     }
 
+    private void drawFace(GL2 gl, Point3D start, Point3D dimens) {
+        float faceColor = 180 / 255f;
+        float faceStartX, faceStartY, faceStartZ;
+        float faceWidth, faceHeight, faceDepth;
+
+        faceStartX =  drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
+        faceStartY = (float) (start.getY() - topGap);
+        faceStartZ = (float) (start.getZ() - Config.SLAB_THICKNESS);
+
+        faceWidth = drawer.getFaceSlabSecondDimension();
+        faceHeight = drawer.getFaceSlabFirstDimension();
+        faceDepth = Config.SLAB_THICKNESS;
+
+        drawCuboid(gl,
+                new Point3D(faceStartX,faceStartY,faceStartZ),
+                new Point3D(faceWidth,faceHeight,faceDepth),
+                faceColor,
+                false
+        );
+
+    }
+
     private void drawFront(GL2 gl, Point3D start, Point3D dimens){
         float frontColor = 0 / 255f;
         float frontStartX, frontStartY, frontStartZ;
@@ -150,8 +173,8 @@ class DrawerDrawer extends CuboidDrawer{
         frontStartY = (float) start.getY();
         frontStartZ = (float) start.getZ();
 
-        frontWidth = drawer.getFrontSlabSecondDimension();
-        frontHeight = drawer.getFrontSlabFirstDimension();
+        frontWidth = drawer.getWidth();
+        frontHeight = drawer.getHeight();
         frontDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,

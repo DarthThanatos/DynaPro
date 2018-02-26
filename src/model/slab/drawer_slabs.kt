@@ -22,6 +22,22 @@ class DrawerLeftWallSlab(private val drawer: Drawer) : Slab {
         get() = drawer.getTTrackEndDepth().toInt()
 }
 
+
+class DrawerFaceSlab(private val drawer: Drawer): Slab {
+    override val name: String = Config.DRAWER_FACE
+
+    override val scaleboard: ArrayList<Boolean> =  arrayListOf(false, firstDimension > secondDimension, secondDimension >= firstDimension, false)
+
+    override val firstDimension: Int
+        get() {
+            val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
+            return (drawer.height - Config.SLAB_THICKNESS - 10 - (2 * Config.SLAB_THICKNESS) - 12) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+        }
+    override val secondDimension: Int
+        get() = (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0) - Config.SLAB_THICKNESS).toInt()
+
+}
+
 class DrawerRightWallSlab(private val drawer: Drawer): Slab {
 
     override val name: String = Config.DRAWER_RIGHT

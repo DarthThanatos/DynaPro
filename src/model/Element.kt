@@ -215,9 +215,9 @@ class Drawer(
 
     fun getBackSlabFirstDimension(): Int = DrawerBackSlab(this).firstDimension
 
-    fun getFrontSlabFirstDimension(): Int = DrawerFrontSlab(this).firstDimension
+    fun getFaceSlabSecondDimension(): Int = DrawerFaceSlab(this).secondDimension
 
-    fun getFrontSlabSecondDimension(): Int = DrawerFrontSlab(this).secondDimension
+    fun getFaceSlabFirstDimension(): Int = DrawerFaceSlab(this).firstDimension
 
     fun getShelfSlabSecondDimension(): Int = DrawerShelfSlab(this).secondDimension
 
@@ -226,7 +226,7 @@ class Drawer(
     override fun listOfSlabs(): List<Slab> {
         val res =   listOf(
                 DrawerLeftWallSlab(this), DrawerRightWallSlab(this), DrawerBottomSlab(this),
-                DrawerBackSlab(this), DrawerFrontSlab(this)
+                DrawerBackSlab(this), DrawerFrontSlab(this), DrawerFaceSlab(this)
         )
         return if(shelvesNumber > 0)  res + DrawerShelfSlab(this) else res
     }
