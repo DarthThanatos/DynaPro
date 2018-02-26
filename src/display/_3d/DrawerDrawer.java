@@ -179,9 +179,9 @@ class DrawerDrawer extends CuboidDrawer{
         shelfStartY = (float) (start.getY() - dimens.getY() + 8);
         shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
 
-        shelfWidth = drawer.getShelfSlabSecondDimension();
+        shelfWidth = drawer.getShelfSlabFirstDimension();
         shelfHeight = Config.SLAB_THICKNESS;
-        shelfDepth = drawer.getShelfSlabFirstDimension();
+        shelfDepth = drawer.getShelfSlabSecondDimension();
 
         drawCuboid(gl,
                 new Point3D(shelfStartX,shelfStartY,shelfStartZ),

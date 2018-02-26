@@ -78,19 +78,19 @@ class DrawerFrontSlab(private val drawer: Drawer): FrontSlab {
     override val firstDimension: Int
         get() = if(drawer.growthRingVerticallyOriented)drawer.height else drawer.width
     override val secondDimension: Int
-        get() = if(drawer.growthRingVerticallyOriented)drawer.height else drawer.width
+        get() = if(drawer.growthRingVerticallyOriented)drawer.width else drawer.height
 
 }
 
 class DrawerShelfSlab(private val drawer: Drawer): Slab{
     override val name: String = Config.DRAWER_SHELF
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
     override val firstDimension: Int
-        get() = SlabSidePositionUtil.calculateElementMaxDepth(drawer.parentConfig.parentFurniture.depth.toDouble(), drawer.parentConfig.parentFurniture.backInserted).toInt()
-    override val secondDimension: Int
-        get() {
+        get()  {
             val isLastToTheRight = drawer.parentConfig.isElemWithIdLastToTheRight(drawer.id)
             val lastToTheLeft = drawer.parentConfig.isElemWithIdLastToTheLeft(drawer.id)
             return (SlabSidePositionUtil.getRightSideX(0, drawer.width, isLastToTheRight) - SlabSidePositionUtil.getLeftSideX(0, lastToTheLeft) - (2 * Config.SLAB_THICKNESS)).toInt()
         }
+    override val secondDimension: Int
+        get()= SlabSidePositionUtil.calculateElementMaxDepth(drawer.parentConfig.parentFurniture.depth.toDouble(), drawer.parentConfig.parentFurniture.backInserted).toInt()
 }

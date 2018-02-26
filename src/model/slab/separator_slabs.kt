@@ -22,13 +22,13 @@ class ColumnOrientedAggregateSeparatorSlab(private val parentAggregate: Arrangem
         }
 
     override val name: String = Config.SEPARATOR + index
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
 }
 
 class ColumnOrientedElementSeparatorSlab(private val parentAggregate: ArrangementAggregate, index: Int) : Slab {
     override val name: String = Config.SEPARATOR + index
 
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false,false, true, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false,secondDimension > firstDimension, firstDimension > secondDimension, false)
 
     override val firstDimension: Int
         get(){
@@ -48,7 +48,7 @@ class ColumnOrientedElementSeparatorSlab(private val parentAggregate: Arrangemen
 
 class RowOrientedAggregateSeparatorSlab(private val parentAggregate: ArrangementAggregate, index: Int): Slab {
     override val name: String = Config.SEPARATOR + index
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, true, false, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
     override val firstDimension: Int
         get(){
             val absoluteStartX = 0
@@ -65,7 +65,7 @@ class RowOrientedAggregateSeparatorSlab(private val parentAggregate: Arrangement
 class RowOrientedElementSeparatorSlab(private val parentAggregate: ArrangementAggregate, index: Int) : Slab {
     override val name: String = Config.SEPARATOR + index
 
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, true, false, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
 
     override val firstDimension: Int
         get() {

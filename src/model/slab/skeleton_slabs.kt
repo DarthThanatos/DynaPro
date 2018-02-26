@@ -18,7 +18,7 @@ class RoofSlab(private val furniture: Furniture) : Slab {
 
 class LeftSkeletonWallSlab(private val furniture: Furniture) : Slab {
     override val name: String = Config.LEFT_SKELETON_WALL
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, (secondDimension > firstDimension) ,  (firstDimension > secondDimension), false)
     override val firstDimension: Int
         get() = (furniture.height - (if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) 0 else if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS))
     override val secondDimension: Int
@@ -28,7 +28,7 @@ class LeftSkeletonWallSlab(private val furniture: Furniture) : Slab {
 
 class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
     override val name: String = Config.RIGHT_SKELETON_WALL
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, true, false)
+    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, secondDimension > firstDimension, firstDimension > secondDimension, false)
     override val firstDimension: Int
         get() = (furniture.height - (if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS) - (if (furniture.hasPedestal) 0 else if (furniture.roofInserted) 0 else Config.SLAB_THICKNESS))
     override val secondDimension: Int
