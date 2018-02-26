@@ -76,9 +76,9 @@ class DrawerFrontSlab(private val drawer: Drawer): FrontSlab {
     override val name: String = Config.DRAWER_FRONT
     override val scaleboard: ArrayList<Boolean> = arrayListOf(true, true, true, true)
     override val firstDimension: Int
-        get() = drawer.height
+        get() = if(drawer.growthRingVerticallyOriented)drawer.height else drawer.width
     override val secondDimension: Int
-        get() = drawer.width
+        get() = if(drawer.growthRingVerticallyOriented)drawer.height else drawer.width
 
 }
 

@@ -176,10 +176,13 @@ class Drawer(
 
     fun getShelfSlabFirstDimension(): Int = DrawerShelfSlab(this).firstDimension
 
-    override fun listOfSlabs(): List<Slab> = listOf(
-            DrawerLeftWallSlab(this), DrawerRightWallSlab(this), DrawerBottomSlab(this),
-            DrawerBackSlab(this), DrawerFrontSlab(this), DrawerShelfSlab(this)
-    )
+    override fun listOfSlabs(): List<Slab> {
+        val res =   listOf(
+                DrawerLeftWallSlab(this), DrawerRightWallSlab(this), DrawerBottomSlab(this),
+                DrawerBackSlab(this), DrawerFrontSlab(this)
+        )
+        return if(shelvesNumber > 0)  res + DrawerShelfSlab(this) else res
+    }
 
     override fun toString(): String = print(this)
 
@@ -187,6 +190,7 @@ class Drawer(
 
         slabTree.actualSlabTree = this
     }
+
 }
 
 interface PrintableElement{
