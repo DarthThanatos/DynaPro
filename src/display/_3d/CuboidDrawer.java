@@ -36,7 +36,7 @@ class CuboidDrawer {
         gl.glVertex3f(ox, moy, moz); // Bottom Right Of The Quad
         gl.glEnd();
 
-        gl.glEnable(GL_BLEND);
+//        gl.glEnable(GL_BLEND);
         gl.glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_COLOR);
         gl.glBegin(GL2ES3.GL_QUADS);
         gl.glColor4f(color, color, color, 0.5f);
