@@ -21,6 +21,7 @@ class DynProSwingEngine extends SwingEngine {
         getTaglib().registerTag("frontconfigurationdisplayer", FrontConfigurationDisplayer.class);
         getTaglib().registerTag("furnitureperspective", FurniturePerspective.class);
         getTaglib().registerTag("furnituredisembowelmentdisplay", FurnitureDisembowelmentDisplay.class);
+        getTaglib().registerTag("drevitdisembowelmentdisplay", DrevitDisembowelment.class);
         DEBUG_MODE = true;
     }
 
@@ -87,12 +88,23 @@ class DynProSwingEngine extends SwingEngine {
         moveToFurniturePerspectiveAction = new MoveToFurniturePerspectiveAction(dynProMain);
         moveToFurnitureDisembowelmentAction = new MoveToFurnitureDisembowelmentAction(dynProMain);
         moveToProjectDisembowelmentAction = new MoveToProjectDisembowelmentAction(dynProMain);
+        switchDisembowelmentAction = new SwitchDisembowelmentAction(dynProMain);
     }
 
     private void injectDisembowelmentDisplay(){
         moveToFurnitureDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
+        moveToFurnitureDisembowelmentAction.setDisembowelmentSwitcher(disembowelmentSwitcher);
+        moveToFurnitureDisembowelmentAction.setDisembowelmentContainer(disembowelmentContainer);
+
         moveToProjectDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
+        moveToProjectDisembowelmentAction.setDisembowelmentContainer(disembowelmentContainer);
+        moveToProjectDisembowelmentAction.setDisembowelmentSwitcher(disembowelmentSwitcher);
+
         printDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
+
+        switchDisembowelmentAction.setDisembowelmentContainer(disembowelmentContainer);
+        switchDisembowelmentAction.setDrevitDisembowelment(drevitDisembowelmentDisplay);
+        switchDisembowelmentAction.setFurnitureDisembowelmentDisplay(furnitureDisembowelmentDisplay);
     }
 
     private void initFurnitureActions(){

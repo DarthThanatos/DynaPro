@@ -58,7 +58,11 @@ public class DynProMain implements DynProContract.View {
     static JCheckBox heightBlocker, widthBlocker, growthRingOrientationDisplayer;
     static JTextField assessmentDisplay, scaleBoardLengthDisplay, cutLengthDisplay;
 
+    @SuppressWarnings({"unused", "WeakerAccess"}) static JPanel disembowelmentContainer;
     @SuppressWarnings({"unused", "WeakerAccess"}) static FurnitureDisembowelmentDisplay furnitureDisembowelmentDisplay;
+    @SuppressWarnings({"unused", "WeakerAccess"}) static DrevitDisembowelment drevitDisembowelmentDisplay;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static SwitchDisembowelmentAction switchDisembowelmentAction;
+    @SuppressWarnings({"unused", "WeakerAccess"}) static JButton disembowelmentSwitcher;
 
     public static void main(String args[]) throws Exception {
         renderer.initActions();

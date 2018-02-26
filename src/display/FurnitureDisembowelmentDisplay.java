@@ -23,6 +23,7 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
 
     private JTextField assessmentDisplay, scaleBoardLengthDisplay, cutLengthDisplay;
 
+
     public void displayFurnitureSlabs(Furniture furniture){
         init();
         displayFurnitureTree(furniture, 0);

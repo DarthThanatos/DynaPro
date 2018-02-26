@@ -1,16 +1,14 @@
 package actions
 
 import config.Config
-import display.FrontConfigViewElem
-import display.FrontConfigurationDisplayer
-import display.FurnitureDisembowelmentDisplay
-import display.ProjectTree
+import display.*
 import display._3d.FurniturePerspective
 import main.DynProMain
 import model.Element
 import java.awt.CardLayout
 import java.awt.event.ActionEvent
 import javax.swing.AbstractAction
+import javax.swing.JButton
 import javax.swing.JPanel
 
 
@@ -153,21 +151,26 @@ class MoveToFurniturePerspectiveAction(private val dynProMain: DynProMain): Move
 
 abstract class MoveToDisembowelmentAction(private val dynProMain: DynProMain): MoveToAction(){
     override val childPanelId: String = "outputDisembowelment"
+
     lateinit var furnitureDisembowelmentDisplay: FurnitureDisembowelmentDisplay
+    lateinit var disembowelmentSwitcher: JButton
+    lateinit var disembowelmentContainer: JPanel
+
     abstract val disembowelAction : (FurnitureDisembowelmentDisplay ) -> Unit
 
     override fun actionPerformed(e: ActionEvent?) {
+        (disembowelmentContainer.layout as CardLayout).show(disembowelmentContainer, "forUser")
         disembowelAction(furnitureDisembowelmentDisplay)
         super.actionPerformed(e)
     }
 }
 
 class MoveToProjectDisembowelmentAction(dynProMain: DynProMain): MoveToDisembowelmentAction(dynProMain){
-    override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject())}
+    override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject() ); disembowelmentSwitcher.setEnabled(true)}
 }
 
 class MoveToFurnitureDisembowelmentAction(dynProMain: DynProMain): MoveToDisembowelmentAction(dynProMain){
-    override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayFurnitureSlabs(dynProMain.presenter.model.getFurnitureByName(dynProMain.presenter.getCurrentDisplayedFurnitureName()))}
+    override val disembowelAction: (FurnitureDisembowelmentDisplay) -> Unit = {it.displayFurnitureSlabs(dynProMain.presenter.model.getFurnitureByName(dynProMain.presenter.getCurrentDisplayedFurnitureName())); ; disembowelmentSwitcher.setEnabled(false)}
 
 }
 
@@ -176,4 +179,18 @@ class PrintDisembowelmentAction: AbstractAction() {
     override fun actionPerformed(e: ActionEvent?) {
         furnitureDisembowelmentDisplay.printComponent()
     }
+}
+
+class SwitchDisembowelmentAction(private val dynProMain: DynProMain): AbstractAction(){
+    lateinit var furnitureDisembowelmentDisplay: FurnitureDisembowelmentDisplay
+    lateinit var drevitDisembowelment: DrevitDisembowelment
+
+    lateinit var disembowelmentContainer: JPanel
+
+    override fun actionPerformed(e: ActionEvent?) {
+        drevitDisembowelment.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject())
+        furnitureDisembowelmentDisplay.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject())
+        (disembowelmentContainer.layout as CardLayout).next(disembowelmentContainer)
+    }
+
 }

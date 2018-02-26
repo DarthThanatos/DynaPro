@@ -8,13 +8,21 @@
         <label text="Wycena (bez uwzględnienia okleiny) [zł]:"/>
         <textfield id="assessmentDisplay" preferredsize="150,25" enabled="false"/>
         <button text="Drukuj" action="printDisembowelmentAction"/>
+        <button text="Przełącz widok" action="switchDisembowelmentAction" id="disembowelmentSwitcher"/>
         <button text="Cofnij" action="moveToMainMenuAction"/>
     </panel>
 
     <scrollpane>
-        <furnituredisembowelmentdisplay
+        <panel  layout="CardLayout" id="disembowelmentContainer" constraints="BorderLayout.CENTER">
+            <furnituredisembowelmentdisplay
                 id="furnitureDisembowelmentDisplay"
-                constraints="BorderLayout.CENTER"
+                constraints="forUser"
                 layout="GridBagLayout"/>
+            <drevitdisembowelmentdisplay
+                id="drevitDisembowelmentDisplay"
+                constraints="forDrevit"
+                layout="GridBagLayout"
+            />
+        </panel>
     </scrollpane>
 </panel>
