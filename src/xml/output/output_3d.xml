@@ -3,7 +3,9 @@
     <panel constraints="BorderLayout.SOUTH">
         <button text="Cofnij" action="moveToMainMenuAction"/>
         <label text="Rysuj pokrywę"/>
-        <checkbox />
+        <checkbox id="showSkeletonChecker" selected="true"/>
+        <label text="Rysuj fronty"/>
+        <checkbox id="showFrontsChecker" selected="true"/>
     </panel>
 
     <furnitureperspective constraints="BorderLayout.CENTER" id="furniturePerspective"/>

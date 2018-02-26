@@ -12,8 +12,8 @@ import static util.SlabSidePositionUtil.*;
 
 class RowPerspectiveDrawer extends AggregatePerspectiveDrawer {
 
-    RowPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture) {
-        super(drawerTexture, leftDoorTexture, rightDoorTexture);
+    RowPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture, boolean showFronts) {
+        super(drawerTexture, leftDoorTexture, rightDoorTexture, showFronts);
     }
 
     @Override

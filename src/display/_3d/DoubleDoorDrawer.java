@@ -11,27 +11,30 @@ class DoubleDoorDrawer extends ShelfDrawer{
     private final int rightDoorTexture;
     private DoubleDoor element;
     private boolean isLastToTheRight;
+    private final boolean showFronts;
 
-    DoubleDoorDrawer(DoubleDoor element, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight, int leftDoorTexture, int rightDoorTexture) {
+    DoubleDoorDrawer(DoubleDoor element, boolean backInserted, boolean isLastToTheLeft, boolean isLastToTheRight, int leftDoorTexture, int rightDoorTexture, boolean showFronts) {
         super(element, backInserted, isLastToTheLeft);
         this.element = element;
         this.isLastToTheRight = isLastToTheRight;
         this.leftDoorTexture = leftDoorTexture;
         this.rightDoorTexture = rightDoorTexture;
+        this.showFronts = showFronts;
     }
 
     void drawDoubleDrawer(GL2 gl, Point3D currentPointWithOffsets, Point3D dimens) {
-                drawSingleDoor(gl,
-                currentPointWithOffsets,
-                new Point3D(element.getSingleDoorWidth(), dimens.getY(), dimens.getZ()),
-                leftDoorTexture
-        );
-        drawSingleDoor(gl,
-                new Point3D(currentPointWithOffsets.getX() + element.getSingleDoorWidth() + Config.BETWEEN_ELEMENTS_VERTICAL_GAP / 2, currentPointWithOffsets.getY(), currentPointWithOffsets.getZ()),
-                new Point3D(element.getSingleDoorWidth(), dimens.getY(), dimens.getZ()),
-                rightDoorTexture
-        );
-
+        if(showFronts) {
+            drawSingleDoor(gl,
+                    currentPointWithOffsets,
+                    new Point3D(element.getSingleDoorWidth(), dimens.getY(), dimens.getZ()),
+                    leftDoorTexture
+            );
+            drawSingleDoor(gl,
+                    new Point3D(currentPointWithOffsets.getX() + element.getSingleDoorWidth() + Config.BETWEEN_ELEMENTS_VERTICAL_GAP / 2, currentPointWithOffsets.getY(), currentPointWithOffsets.getZ()),
+                    new Point3D(element.getSingleDoorWidth(), dimens.getY(), dimens.getZ()),
+                    rightDoorTexture
+            );
+        }
         for(int i = 0; i < element.getShelvesNumber(); i++){
             drawShelf(gl, currentPointWithOffsets, dimens, i);
         }

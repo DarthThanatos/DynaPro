@@ -11,10 +11,12 @@ import static util.SlabSidePositionUtil.getRightSideX;
 abstract class DoorDrawer extends ShelfDrawer {
 
     private final SingleDoor door;
+    private final boolean showFronts;
 
-    DoorDrawer(SingleDoor door, boolean backInserted, boolean isLastToTheLeft){
+    DoorDrawer(SingleDoor door, boolean backInserted, boolean isLastToTheLeft, boolean showFronts){
         super(door, backInserted, isLastToTheLeft);
         this.door = door;
+        this.showFronts = showFronts;
     }
 
     void drawDoor(GL2 gl, Point3D start, Point3D dimens){
@@ -31,6 +33,7 @@ abstract class DoorDrawer extends ShelfDrawer {
         frontHeight = door.getHeight();
         frontDepth = Config.SLAB_THICKNESS;
 
+        if(showFronts)
         drawCuboid(gl,
                 new Point3D(frontStartX,frontStartY,frontStartZ),
                 new Point3D(frontWidth,frontHeight,frontDepth),

@@ -13,8 +13,8 @@ import static util.SlabSidePositionUtil.*;
 
 class ColumnPerspectiveDrawer extends AggregatePerspectiveDrawer{
 
-    ColumnPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture) {
-        super(drawerTexture, leftDoorTexture, rightDoorTexture);
+    ColumnPerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture, boolean showFronts) {
+        super(drawerTexture, leftDoorTexture, rightDoorTexture, showFronts);
     }
 
     @Override

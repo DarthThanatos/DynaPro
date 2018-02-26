@@ -8,8 +8,10 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureIO;
 import config.Config;
 import javafx.geometry.Point3D;
+import main.JCheckBoxBinder;
 import model.Furniture;
 
+import javax.swing.*;
 import java.awt.event.*;
 import java.io.File;
 
@@ -24,6 +26,9 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
     private float rotationX, rotationY, buttonX, glButtonY, translationZ;
     private int drawerTexture, leftDoorTexture, rightDoorTexture;
     private Furniture furniture;
+
+    private JCheckBoxBinder showSkeletonCheckerBinder, showFrontsCheckerBinder;
+    private boolean showSkeleton = true, showFronts = true;
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -89,15 +94,16 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
         float furnitureStartX = - furnitureWidth / (2), furnitureStartY = -5 * Config.MESH_UNIT + furnitureHeight , furnitureStartZ = - furnitureDepth / (2);
         Point3D furnitureStart = new Point3D(furnitureStartX, furnitureStartY, furnitureStartZ);
         Point3D furnitureDimens = new Point3D(furnitureWidth, furnitureHeight, furnitureDepth );
-//        new ModuleSkeletonDrawer(furniture).drawModuleSkeleton(
-//                gl,
-//                furnitureStart,
-//                furnitureDimens
-//        );
+        if(showSkeleton)
+            new ModuleSkeletonDrawer(furniture).drawModuleSkeleton(
+                    gl,
+                    furnitureStart,
+                    furnitureDimens
+            );
         if(furniture.getFrontConfiguration().getColumnOriented())
-            new ColumnPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
+            new ColumnPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture, showFronts).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
         else
-            new RowPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
+            new RowPerspectiveDrawer(drawerTexture, leftDoorTexture, rightDoorTexture, showFronts).drawFurniture(gl, furniture, furnitureStart, furnitureDimens);
 
         new MeshDrawer().drawMesh(gl, new Point3D(-5,-5,-5), new Point3D(10,10,10));
         gl.glFlush();
@@ -177,5 +183,15 @@ public class FurniturePerspective extends  GLCanvas implements GLEventListener, 
 
     public void setFurniture(Furniture furniture) {
         this.furniture = furniture;
+    }
+
+    public void setShowSkeletonCheckerBinder(JCheckBoxBinder showSkeletonCheckerBinder) {
+        this.showSkeletonCheckerBinder = showSkeletonCheckerBinder;
+        showSkeletonCheckerBinder.registerSubscriber("FURNITURE_PERSPECTIVE", value -> showSkeleton = (boolean)value);
+    }
+
+    public void setShowFrontsCheckerBinder(JCheckBoxBinder showFrontsCheckerBinder) {
+        this.showFrontsCheckerBinder = showFrontsCheckerBinder;
+        showFrontsCheckerBinder.registerSubscriber("FURNITURE_PERSPECTIVE", value -> showFronts = (boolean)value);
     }
 }

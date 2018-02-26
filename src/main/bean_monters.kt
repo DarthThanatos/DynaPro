@@ -3,10 +3,8 @@ package main
 import display.FrontConfigViewElem
 import display.FrontConfigurationDisplayer
 import display.ProjectTree
-import java.awt.event.KeyEvent
-import java.awt.event.KeyListener
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
+import java.awt.event.*
+import javax.swing.JCheckBox
 import javax.swing.JComboBox
 import javax.swing.JSpinner
 import javax.swing.JSpinner.DefaultEditor
@@ -100,6 +98,16 @@ class FrontConfigurationDisplayBinder(private val frontConfigurationDisplayer: F
             override fun mouseExited(e: MouseEvent?) {}
 
             override fun mousePressed(e: MouseEvent?) {}
+        })
+    }
+}
+
+class JCheckBoxBinder(private val checkBox: JCheckBox): Binder(){
+    init {
+        checkBox.addItemListener(object: ItemListener{
+            override fun itemStateChanged(e: ItemEvent?) {
+                notifyChange(checkBox.isSelected)
+            }
         })
     }
 }

@@ -10,11 +10,13 @@ import java.util.Iterator;
 abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
 
     private int drawerTexture, leftDoorTexture, rightDoorTexture;
+    private boolean showFronts;
 
-    AggregatePerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture){
+    AggregatePerspectiveDrawer(int drawerTexture, int leftDoorTexture, int rightDoorTexture, boolean showFronts){
         this.drawerTexture = drawerTexture;
         this.leftDoorTexture = leftDoorTexture;
         this.rightDoorTexture = rightDoorTexture;
+        this.showFronts = showFronts;
     }
 
     void drawFurniture(GL2 gl, Furniture furniture, Point3D start, Point3D dimens){
@@ -55,7 +57,8 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     configuration.isElemWithIdLastToTheLeft(element.getId()),
                     configuration.isElemWithIdLastToTheRight(element.getId()),
                     leftDoorTexture,
-                    rightDoorTexture
+                    rightDoorTexture,
+                    showFronts
 
             ).drawDoubleDrawer(
                     gl,
@@ -105,7 +108,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     configuration.isElemWithIdLastToTheRight(element.getId()),
                     configuration.isElemWithIdLastToTheBottom(element.getId()),
                     element.getShelvesNumber(),
-                    furniture
+                    furniture, showFronts
             ).drawDrawer(
                     gl,
                     currentPointWithOffsets,
@@ -126,7 +129,8 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     (LeftDoor) element,
                     leftDoorTexture,
                     furniture.getBackInserted(),
-                    configuration.isElemWithIdLastToTheLeft(element.getId())
+                    configuration.isElemWithIdLastToTheLeft(element.getId()),
+                    showFronts
             ).drawDoor(
                     gl,
                     currentPointWithOffsets,
@@ -146,7 +150,7 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
                     (RightDoor)element,
                     rightDoorTexture,
                     furniture.getBackInserted(),
-                    configuration.isElemWithIdLastToTheLeft(element.getId())
+                    configuration.isElemWithIdLastToTheLeft(element.getId()), showFronts
             ).drawDoor(
                     gl,
                     currentPointWithOffsets,

@@ -54,6 +54,12 @@ class DynProSwingEngine extends SwingEngine {
         setupFrontConfigDisplayer();
         setupProjectTree();
         setupFurnitureDisembowelmentDisplay();
+        setupFurniturePerspective();
+    }
+
+    private void setupFurniturePerspective(){
+        furniturePerspective.setShowFrontsCheckerBinder(new JCheckBoxBinder(showFrontsChecker));
+        furniturePerspective.setShowSkeletonCheckerBinder(new JCheckBoxBinder(showSkeletonChecker));
     }
 
     private void setupFurnitureDisembowelmentDisplay() {

@@ -64,6 +64,8 @@ public class DynProMain implements DynProContract.View {
     @SuppressWarnings({"unused", "WeakerAccess"}) public static SwitchDisembowelmentAction switchDisembowelmentAction;
     @SuppressWarnings({"unused", "WeakerAccess"}) static JButton disembowelmentSwitcher;
 
+    @SuppressWarnings({"unused", "WeakerAccess"}) static JCheckBox showFrontsChecker, showSkeletonChecker;
+
     public static void main(String args[]) throws Exception {
         renderer.initActions();
         renderer.render("xml/dyn_pro_main.xml").setVisible(true);

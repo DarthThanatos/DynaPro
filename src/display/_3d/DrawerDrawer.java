@@ -11,6 +11,7 @@ import static util.SlabSidePositionUtil.getLeftSideX;
 
 class DrawerDrawer extends CuboidDrawer{
 
+    private final boolean showFronts;
     private boolean backInserted, lastToTheLeft, isLastToTheRight;
     private float topGap = 10;
     private boolean lastToTheBottom;
@@ -19,7 +20,7 @@ class DrawerDrawer extends CuboidDrawer{
     private int drawerTexture;
     private Furniture furniture;
 
-    DrawerDrawer(Drawer drawer, int drawerTexture, boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber, Furniture furniture){
+    DrawerDrawer(Drawer drawer, int drawerTexture, boolean backInserted, boolean lastToTheLeft, boolean lastToTheRight, boolean lastToTheBottom, int shelvesAtFrontBottomNumber, Furniture furniture, boolean showFronts){
         this.backInserted = backInserted;
         this.lastToTheLeft = lastToTheLeft;
         this.isLastToTheRight = lastToTheRight;
@@ -28,6 +29,7 @@ class DrawerDrawer extends CuboidDrawer{
         this.drawer = drawer;
         this.drawerTexture = drawerTexture;
         this.furniture = furniture;
+        this.showFronts = showFronts;
     }
 
     void drawDrawer(GL2 gl, Point3D start, Point3D dimens){
@@ -174,14 +176,16 @@ class DrawerDrawer extends CuboidDrawer{
         frontHeight = drawer.getHeight();
         frontDepth = Config.SLAB_THICKNESS;
 
-        drawCuboid(gl,
-                new Point3D(frontStartX,frontStartY,frontStartZ),
-                new Point3D(frontWidth,frontHeight,frontDepth),
-                frontColor,
-                true
-        );
+        if(showFronts) {
+            drawCuboid(gl,
+                    new Point3D(frontStartX, frontStartY, frontStartZ),
+                    new Point3D(frontWidth, frontHeight, frontDepth),
+                    frontColor,
+                    true
+            );
 
-        drawTexturedFront(gl, start, dimens, drawerTexture);
+            drawTexturedFront(gl, start, dimens, drawerTexture);
+        }
 
         if(shelvesAtFrontBottomNumber > 0){
             drawShelfAtBottom(gl, start, dimens);

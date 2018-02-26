@@ -7,15 +7,17 @@ import model.RightDoor;
 class RightDoorDrawer extends DoorDrawer {
 
     private int rightDoorTexture;
+    private boolean showFronts;
 
-    RightDoorDrawer(RightDoor rightDoor, int rightDoorTexture, boolean backInserted, boolean isLastToTheLeft) {
-        super(rightDoor, backInserted, isLastToTheLeft);
+    RightDoorDrawer(RightDoor rightDoor, int rightDoorTexture, boolean backInserted, boolean isLastToTheLeft, boolean showFronts) {
+        super(rightDoor, backInserted, isLastToTheLeft, showFronts);
         this.rightDoorTexture = rightDoorTexture;
+        this.showFronts = showFronts;
     }
 
     @Override
     void drawDoor(GL2 gl, Point3D start, Point3D dimens) {
         super.drawDoor(gl, start, dimens);
-        drawTexturedFront(gl, start, dimens, rightDoorTexture);
+        if(showFronts) drawTexturedFront(gl, start, dimens, rightDoorTexture);
     }
 }

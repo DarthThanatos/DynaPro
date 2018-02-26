@@ -128,20 +128,18 @@ public class DrevitDisembowelment extends JPanel {
         pj.setPrintable ((pg, pf, pageNum) -> {
             double scaleFactor = 0.7;
             Component[] components = DrevitDisembowelment.this.getComponents();
-            int blockHeight = (int) ((components[0].getHeight() + components[1].getHeight()) * scaleFactor);
+            int blockHeight = (int) ((components[0].getHeight()) * scaleFactor);
             int blocksOnPage = (int) (pf.getImageableHeight() / blockHeight);
-            if((pageNum) * blocksOnPage > components.length/2){return Printable.NO_SUCH_PAGE;}
+            if((pageNum) * blocksOnPage > components.length){return Printable.NO_SUCH_PAGE;}
             Graphics2D g2 = (Graphics2D) pg;
-            g2.scale( pf.getImageableWidth()/DrevitDisembowelment.this.getComponents()[1].getWidth(), scaleFactor);
+            g2.scale( pf.getImageableWidth()/DrevitDisembowelment.this.getComponents()[0].getWidth(), scaleFactor);
             g2.translate(pf.getImageableX() + 2, pf.getImageableY() + 2);
-            g2.drawRect(0,4, components[1].getWidth() - 2, (int)pf.getImageableHeight()/10);
+            g2.drawRect(0,4, components[0].getWidth() - 4, (int)pf.getImageableHeight()/10);
             g2.translate(0, pf.getImageableHeight()/10 + 4);
-            for (int i = pageNum * blocksOnPage * 2; i < Math.min(pageNum * blocksOnPage * 2 + 2 * blocksOnPage, components.length); i+=2) {
-                g2.translate(components[i+1].getWidth()/2 - components[i].getWidth()/2,0);
+            g2.scale( 0.4, 1);
+            for (int i = pageNum * blocksOnPage; i < Math.min(pageNum * blocksOnPage  +  blocksOnPage, components.length); i++) {
                 components[i].printAll(g2);
-                g2.translate(-components[i+1].getWidth()/2 + components[i].getWidth()/2,components[i].getHeight());
-                components[i+1].printAll(g2);
-                g2.translate(0,components[i+1].getHeight());
+                g2.translate(0,components[i].getHeight());
             }
             return Printable.PAGE_EXISTS;
         });
