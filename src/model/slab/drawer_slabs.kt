@@ -49,7 +49,7 @@ class DrawerBottomSlab(private val drawer: Drawer): Slab{
     //        bottomStartY = (float) (start.getY() - dimens.getY() + Config.SLAB_THICKNESS + 12 + 2*Config.SLAB_THICKNESS) + (lastToTheBottom ? Config.SLAB_THICKNESS: 0) + (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
 
     override val secondDimension: Int
-        get() = (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0) - Config.SLAB_THICKNESS).toInt();
+        get() = (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0) - Config.SLAB_THICKNESS).toInt()
 
 }
 
@@ -72,7 +72,7 @@ class DrawerBackSlab(private val drawer: Drawer): Slab{
 }
 
 
-class DrawerFrontSlab(private val drawer: Drawer): Slab {
+class DrawerFrontSlab(private val drawer: Drawer): FrontSlab {
     override val name: String = Config.DRAWER_FRONT
     override val scaleboard: ArrayList<Boolean> = arrayListOf(true, true, true, true)
     override val firstDimension: Int

@@ -38,13 +38,13 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     }
 
     private void displayFurnitureSummary(SlabTree furnitureSlabTree){
-        displayAssessment(furnitureSlabTree.getAssessment(furnitureSlabTree.getTreeSlabList()));
+        displayAssessment(furnitureSlabTree.getAssessment(((Furniture)furnitureSlabTree).getFrontUnitPrice(), ((Furniture)furnitureSlabTree).getElementUnitPrice(),furnitureSlabTree.getTreeSlabList()));
         displayCutLength(furnitureSlabTree.getCutLength(furnitureSlabTree.getTreeSlabList()));
         displayScaleBoardLength(furnitureSlabTree.getScaleBoardLength(furnitureSlabTree.getTreeSlabList()));
     }
 
     private void displayProjectSummary(SlabTree projectSlabTree){
-        displayAssessment(projectSlabTree.getAssessment(projectSlabTree.getTreeSlabList()));
+        displayAssessment(((Project)projectSlabTree).getProjectAssessment());
         displayCutLength(projectSlabTree.getCutLength(projectSlabTree.getTreeSlabList()));
         displayScaleBoardLength(projectSlabTree.getScaleBoardLength(projectSlabTree.getTreeSlabList()));
     }

@@ -28,9 +28,11 @@ interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     fun addMultiFrontConfigElementAggregateNextTo(furnitureName: String, elementId: String)
     fun addOneFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
     fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
+    fun getProjectAssessment() : Int
 }
 
 class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree()) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by defaultSlabTree{
+
 
     override val factoriesChain: FactoriesChain<FurnitureFactory> = AllFurnitureTypesChain(this)
 
@@ -154,6 +156,9 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaul
     override fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String) {
         getFurnitureByName(furnitureName)?.frontConfiguration?.addMultiElementAggregateBefore(elementId)
     }
+
+    override fun getProjectAssessment() : Int =
+            furnituresList.sumBy { it.getAssessment(it.frontUnitPrice, it.elementUnitPrice, it.getTreeSlabList()) }
 
     init {
         defaultSlabTree.actualSlabTree = this

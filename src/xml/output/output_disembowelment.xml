@@ -1,11 +1,11 @@
 <panel id="outputDisembowelment" Layout="BorderLayout">
 
     <panel constraints="BorderLayout.SOUTH">
-        <label text="Długość cięcia"/>
+        <label text="Długość cięcia [mm]:"/>
         <textfield id="cutLengthDisplay" preferredsize="150,25" enabled="false"/>
-        <label text="Długość okleiny"/>
+        <label text="Długość okleiny [mm]:"/>
         <textfield id="scaleBoardLengthDisplay" preferredsize="150,25" enabled="false"/>
-        <label text="Wycena (bez uwzględnienia okleiny)"/>
+        <label text="Wycena (bez uwzględnienia okleiny) [zł]:"/>
         <textfield id="assessmentDisplay" preferredsize="150,25" enabled="false"/>
         <button text="Drukuj" action="printDisembowelmentAction"/>
         <button text="Cofnij" action="moveToMainMenuAction"/>

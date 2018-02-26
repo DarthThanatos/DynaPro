@@ -19,6 +19,6 @@ class ShelfSlab(private val element: Element) : Slab {
     override val secondDimension: Int
         get() {
             val furniture: Furniture = element.parentConfig.parentFurniture
-            return (furniture.depth - if (furniture.backInserted) Config.SLAB_THICKNESS else 0).toInt()
+            return (furniture.depth - if (furniture.backInserted) Config.SLAB_THICKNESS else 0)
         }
 }

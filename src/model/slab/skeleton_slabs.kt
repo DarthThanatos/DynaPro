@@ -38,7 +38,7 @@ class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
 
 class BottomOfSkeletonSlab(private val furniture: Furniture): Slab{
     override val name: String = Config.BOTTOM_OF_SKELETON
-    override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
+    override val scaleboard: ArrayList<Boolean> = if(furniture.hasPedestal) arrayListOf(false, false, false, false) else if (furniture.roofInserted) arrayListOf(false, false, false, false) else  arrayListOf(true, true, true, true)
     override val firstDimension: Int
         get() =
             if (furniture.hasPedestal)
@@ -57,7 +57,7 @@ class PedestalSlab( private val furniture: Furniture): Slab{
     override val firstDimension: Int
         get() = (furniture.width - 2 * Config.SLAB_THICKNESS)
     override val secondDimension: Int
-        get() = furniture.pedestalHeight;
+        get() = furniture.pedestalHeight
 
 }
 

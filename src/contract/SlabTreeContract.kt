@@ -1,5 +1,6 @@
 package contract
 
+import model.slab.FrontSlab
 import model.slab.Slab
 import java.awt.Dimension
 
@@ -15,9 +16,9 @@ interface SlabTree{
     fun slabsGroupedBySize(listOfSlabs: List<Slab>): Map<Dimension, List<Slab>>
     fun changeChildId(oldId: String, newId: String)
     var children: MutableMap<String, SlabTree>
-    fun getAssessment(listOfSlabs : List<Slab>): Int
     fun getCutLength(listOfSlabs: List<Slab>): Int
     fun getScaleBoardLength(listOfSlabs: List<Slab>): Int
+    fun getAssessment(frontPrice: Int, commonSlabPrice: Int, listOfSlabs: List<Slab>): Int
 }
 
 open class DefaultSlabTree: SlabTree {
@@ -60,17 +61,29 @@ open class DefaultSlabTree: SlabTree {
             listOfSlabs.groupBy { Dimension(it.firstDimension, it.secondDimension) }
 
 
-    override fun getAssessment(listOfSlabs: List<Slab>): Int = 0
 
     override fun getCutLength(listOfSlabs: List<Slab>): Int = (listOfSlabs.sumBy {
         2 *it.firstDimension + 2 * it.secondDimension
     } * 0.8).toInt()
 
-    override fun getScaleBoardLength(listOfSlabs: List<Slab>): Int = (listOfSlabs.sumBy {
-        val northFirstDimension = it.firstDimension >= it.secondDimension
-        (if(it.scaleboard[0]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension +
-        (if(it.scaleboard[1]) 1 else 0) * if(northFirstDimension) it.secondDimension else it.firstDimension +
-        (if(it.scaleboard[2]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension +
-        (if(it.scaleboard[3]) 1 else 0) * if(northFirstDimension)it.secondDimension else it.firstDimension } * 0.8).toInt()
+    override fun getScaleBoardLength(listOfSlabs: List<Slab>): Int =
+            (listOfSlabs.sumBy {
+                val northFirstDimension = it.firstDimension >= it.secondDimension
+
+                val res =
+                        ((if(it.scaleboard[0]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension) +
+                                ((if(it.scaleboard[1]) 1 else 0) * if(northFirstDimension) it.secondDimension else it.firstDimension) +
+                                ((if(it.scaleboard[2]) 1 else 0) * if(northFirstDimension)it.firstDimension else it.secondDimension) +
+                                ((if(it.scaleboard[3]) 1 else 0) * if(northFirstDimension)it.secondDimension else it.firstDimension)
+
+                println("Scaleboard slab ${it.name}: $res")
+                res
+            } * 0.8).toInt()
+
+
+    override fun getAssessment(frontPrice: Int, commonSlabPrice: Int, listOfSlabs: List<Slab>): Int {
+        val (fronts, commonSlabs) = listOfSlabs.partition { it is FrontSlab }
+        return (fronts.sumBy { it.firstDimension * it.secondDimension } * frontPrice + commonSlabs.sumBy { it.firstDimension * it.secondDimension } * commonSlabPrice) / (1000 * 1000)
+    }
 
 }

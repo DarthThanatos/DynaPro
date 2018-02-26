@@ -1,6 +1,5 @@
 package model.slab
 
-import model.Element
 import java.util.ArrayList
 
 
@@ -10,3 +9,5 @@ interface Slab{
     val firstDimension: Int
     val secondDimension: Int
 }
+
+interface FrontSlab: Slab
