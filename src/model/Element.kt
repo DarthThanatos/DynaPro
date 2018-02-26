@@ -82,6 +82,43 @@ class EmptySpace(
     }
 }
 
+interface DoubleDoorSlabTree: SlabTree, ShelfSlabFurnitureTree{
+    fun geDoorCommonFirstDimension()
+    fun getDoorCommonSecondDimension()
+}
+
+
+class DefaultDoubleDoorSlabTree: DoubleDoorSlabTree, DefaultShelfSlabFurnitureTree(){
+    override fun geDoorCommonFirstDimension() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getDoorCommonSecondDimension() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun listOfSlabs(): List<Slab> {
+        return super.listOfSlabs()
+    }
+
+}
+
+class DoubleDoor(
+        override var name: String = Config.DOUBLE_DOOR,
+        override val type: String = Config.DOUBLE_DOOR,
+        override var parentConfig: FrontConfiguration, private val defaultDoubleDoorSlabTree: DefaultDoubleDoorSlabTree = DefaultDoubleDoorSlabTree()
+)
+:Element, DoubleDoorSlabTree by defaultDoubleDoorSlabTree, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
+
+    override fun getTreeShelvesNumber(): Int = shelvesNumber
+
+    init {
+        defaultDoubleDoorSlabTree.actualSlabTree = this
+        defaultDoubleDoorSlabTree.element = this
+    }
+
+}
+
 interface SingleDoorSlabTree : SlabTree, ShelfSlabFurnitureTree{
     fun getDoorSlabSecondDimension() :Int
     fun getDoorSlabFirstDimension() : Int

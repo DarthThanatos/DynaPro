@@ -5,7 +5,7 @@ import contract.FactoriesChain
 import contract.TypedFactory
 
 class AllFrontElementFactoriesChain: FactoriesChain<FrontElemFactory>{
-    override fun getChain(): List<FrontElemFactory> = listOf(LeftDoorFactory(), RightDoorFactory(),DrawerFactory(), EmptySpaceFactory())
+    override fun getChain(): List<FrontElemFactory> = listOf(LeftDoorFactory(), RightDoorFactory(),DrawerFactory(), EmptySpaceFactory(), DoubleDoorFactory())
 
 }
 
@@ -52,7 +52,7 @@ class RightDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFr
     override fun createFrontElem(oldElem: Element): Element = copied(RightDoor(parentConfig = oldElem.parentConfig), oldElem)
 }
 
-class EmptySpaceFactory : FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
+class EmptySpaceFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
 
     override fun typeCorrect(type: String): Boolean = type == Config.EMPTY_SPACE
 
@@ -68,5 +68,15 @@ class DrawerFactory : FrontElemFactory, FrontElemPropertiesSetter by DefaultFron
     override fun createFrontElem(parentConfig : FrontConfiguration): Element = Drawer(parentConfig = parentConfig)
 
     override fun createFrontElem(oldElem: Element): Element = copied(Drawer(parentConfig = oldElem.parentConfig), oldElem)
+
+}
+
+class DoubleDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter(){
+
+    override fun createFrontElem(parentConfig: FrontConfiguration): Element = DoubleDoor(parentConfig = parentConfig)
+
+    override fun createFrontElem(oldElem: Element): Element = copied(DoubleDoor(parentConfig = oldElem.parentConfig), oldElem)
+
+    override fun typeCorrect(type: String): Boolean = type == Config.DOUBLE_DOOR
 
 }

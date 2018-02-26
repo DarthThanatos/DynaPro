@@ -51,6 +51,7 @@ public class Config {
     public static String SEPARATOR = "Separator";
 
     public static final String ROOF = "Dach";
+    public static final String DOUBLE_DOOR = "Podwójne drzwiczki";
     public static final String LEFT_SKELETON_WALL = "Lewa ściana korpusu";
     public static final String RIGHT_SKELETON_WALL = "Prawa ściana korpusu";
     public static final String BOTTOM_OF_SKELETON = "Spód korpusu";

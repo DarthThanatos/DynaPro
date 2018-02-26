@@ -41,7 +41,30 @@ abstract class AggregatePerspectiveDrawer extends CuboidDrawer{
             tryDrawingLeftDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             tryDrawingRightDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             tryDrawingEmptySpace(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
+            tryDrawingDoubleDoor(gl, furniture, element, currentPointWithOffsets, furnitureDimens, !elementsIter.hasNext(), aggregate);
             currentPoint = calculateNextElementPosition(element, currentPoint);
+        }
+    }
+
+    private void tryDrawingDoubleDoor(GL2 gl, Furniture furniture, Element element, Point3D currentPointWithOffsets, Point3D furnitureDimens, boolean isTheLastOne, ArrangementAggregate currentAggregate) {
+        if(element.getType().equals(Config.DOUBLE_DOOR)){
+            FrontConfiguration configuration = furniture.getFrontConfiguration();
+            new DoubleDoorDrawer(
+                    (DoubleDoor) element,
+                    furniture.getBackInserted(),
+                    configuration.isElemWithIdLastToTheLeft(element.getId()),
+                    configuration.isElemWithIdLastToTheRight(element.getId()),
+                    leftDoorTexture,
+                    rightDoorTexture
+
+            ).drawDoubleDrawer(
+                    gl,
+                    currentPointWithOffsets,
+                    new Point3D(element.getWidth(), element.getHeight(), furnitureDimens.getZ())
+            );
+            if(!isTheLastOne){
+                drawElementSeparator(gl, currentPointWithOffsets, furnitureDimens, element, currentAggregate,  furniture);
+            }
         }
     }
 
