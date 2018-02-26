@@ -27,8 +27,8 @@ abstract class DoorDrawer extends ShelfDrawer {
         frontStartY = (float) start.getY();
         frontStartZ = (float) start.getZ();
 
-        frontWidth = door.getDoorSlabSecondDimension();
-        frontHeight = door.getDoorSlabFirstDimension();
+        frontWidth = door.getWidth();
+        frontHeight = door.getHeight();
         frontDepth = Config.SLAB_THICKNESS;
 
         drawCuboid(gl,

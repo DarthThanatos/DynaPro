@@ -83,24 +83,21 @@ class EmptySpace(
 }
 
 interface DoubleDoorSlabTree: SlabTree, ShelfSlabFurnitureTree{
-    fun geDoorCommonFirstDimension()
-    fun getDoorCommonSecondDimension()
+    fun geDoorCommonFirstDimension() : Int
+    fun getDoorCommonSecondDimension() : Int
 }
 
 
 class DefaultDoubleDoorSlabTree: DoubleDoorSlabTree, DefaultShelfSlabFurnitureTree(){
-    override fun geDoorCommonFirstDimension() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun getDoorCommonSecondDimension() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun geDoorCommonFirstDimension() : Int = DoubleDoorSingleSlab(this.element as DoubleDoor, "").firstDimension
 
-    override fun listOfSlabs(): List<Slab> {
-        return super.listOfSlabs()
-    }
+    override fun getDoorCommonSecondDimension() : Int = DoubleDoorSingleSlab(this.element as DoubleDoor, "").secondDimension
 
+    override fun listOfSlabs(): List<Slab> = listOf<Slab>(
+        DoubleDoorSingleSlab(this.element as DoubleDoor, Config.LEFT_OF_DOUBLE_DOOR),
+        DoubleDoorSingleSlab(this.element as DoubleDoor, Config.RIGHT_OF_DOUBLE_DOOR)
+    ) + super.listOfSlabs()
 }
 
 class DoubleDoor(
@@ -111,6 +108,8 @@ class DoubleDoor(
 :Element, DoubleDoorSlabTree by defaultDoubleDoorSlabTree, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
 
     override fun getTreeShelvesNumber(): Int = shelvesNumber
+
+    fun getSingleDoorWidth(): Int = ((width - Config.BETWEEN_ELEMENTS_VERTICAL_GAP) / 2)
 
     init {
         defaultDoubleDoorSlabTree.actualSlabTree = this
