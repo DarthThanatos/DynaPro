@@ -476,7 +476,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
     override fun setAggregatesTo(aggregates: ArrayList<ArrangementAggregate>){
         resetChildren()
         this.aggregates.removeAll{true}
-        aggregates.forEach { this.aggregates.add(it) }
+        aggregates.forEach { this.aggregates.add(it); addChild(it.id, it) }
     }
 
     override fun restoreState(frontConfigSave: FrontConfigSave) {

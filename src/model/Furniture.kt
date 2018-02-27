@@ -32,6 +32,7 @@ interface Furniture : SlabTree{
     fun getBackSkeletonSlabSecondDimension(): Int
     fun getBackSkeletonSlabFirstDimension(): Int
     fun savedState():FurnitureSave
+    fun getHdfsList(): List<Slab>
 }
 
 interface FurnitureSlabTree : SlabTree {
@@ -49,6 +50,7 @@ interface FurnitureSlabTree : SlabTree {
     fun getPedestalSlabSecondDimension(): Int
     fun getBackSkeletonSlabSecondDimension(): Int
     fun getBackSkeletonSlabFirstDimension(): Int
+    fun getHdfsList(): List<Slab>
 }
 
 class DefaultFurnitureSlabTree : SlabTree by DefaultSlabTree(), FurnitureSlabTree{
@@ -78,6 +80,8 @@ class DefaultFurnitureSlabTree : SlabTree by DefaultSlabTree(), FurnitureSlabTre
     override fun getBackSkeletonSlabSecondDimension(): Int = BackSkeletonSlab(furniture).secondDimension
 
     override fun getBackSkeletonSlabFirstDimension(): Int  = BackSkeletonSlab(furniture).firstDimension
+
+    override fun getHdfsList(): List<Slab> = if(!furniture.backInserted) listOf(BackSkeletonSlab(furniture)) else listOf()
 
     override fun listOfSlabs(): List<Slab> {
         val listOfSlabs = listOf(

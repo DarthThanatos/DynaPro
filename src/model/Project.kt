@@ -2,6 +2,7 @@ package model
 
 import config.Config
 import contract.*
+import model.slab.Slab
 import kotlin.properties.Delegates
 
 interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
@@ -30,12 +31,15 @@ interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     fun addOneFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
     fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
     fun getProjectAssessment() : Int
-    fun addChildrenFurnitures(furnitures: List<Furniture>)
+    fun setChildrenFurnitures(furnitures: List<Furniture>)
     fun restoreState(projectSave: ProjectSave)
+    fun getHdfsList(): List<Slab>
 }
 
 class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree(), private val restorableProject: RestorableProject = DefaultRestorableProject())
     : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by defaultSlabTree, RestorableProject by restorableProject{
+
+    override fun getHdfsList(): List<Slab> = furnituresList.map { it.getHdfsList() }.flatMap { it }
 
     override fun restoreState(projectSave: ProjectSave) {
         restorableProject.restore(projectSave, this)
@@ -70,10 +74,11 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaul
         return false
     }
 
-    override fun addChildrenFurnitures(furnitures: List<Furniture>) {
+    override fun setChildrenFurnitures(furnitures: List<Furniture>) {
+        furnituresList.removeAll{true}
         furnitures.forEach {
             if(furnitureNotExist( it.name)){
-                furnituresList.add(it);
+                furnituresList.add(it)
                 addChild(it.name, it)
                 presenter?.onFurnitureAdded(it.name)
             }

@@ -1,5 +1,7 @@
 package contract
 
+import model.Furniture
+import model.slab.BackSlab
 import model.slab.FrontSlab
 import model.slab.Slab
 import java.awt.Dimension

@@ -27,6 +27,7 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     public void displayFurnitureSlabs(Furniture furniture){
         init();
         displayFurnitureTree(furniture, 0);
+        if(!furniture.getBackInserted()) displayHdf(furniture.getHdfsList().get(0), 2, 0);
         displayFurnitureSummary(furniture);
     }
 
@@ -35,10 +36,47 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         int gridy = 0;
         for(SlabTree slabTree: project.getChildren().values()){
             displayFurnitureTree(slabTree, gridy);
-            gridy += 2;
+            gridy += 1;
         }
+        displayHdfs(project, 2* gridy);
         displayProjectSummary(project);
     }
+
+
+    private void displayHdfs(Project project, int gridy) {
+        List<Slab> hdfsList = project.getHdfsList();
+        for (int i = 0; i < hdfsList.size(); i++){
+            Slab backSlab = hdfsList.get(i);
+            displayHdf(backSlab, gridy++, i);
+        }
+    }
+
+    private void displayHdf(Slab backSlab, int gridy, int i){
+        JPanel slabTreePanel = newSlabTreePanel();
+        slabTreePanel.add(new NoBorderJTextField("HDF" + i, true), newRowElementConstraints(0));
+        slabTreePanel.add(new NoBorderJTextField(" ("), newRowElementConstraints(1));
+        displayDimension(new Dimension(backSlab.getFirstDimension(), backSlab.getSecondDimension()), slabTreePanel);
+        slabTreePanel.add(new NoBorderJTextField(") "), newRowElementConstraints(5));
+        add(slabTreePanel, newRowConstraints(gridy));
+
+    }
+
+    private void displayDimension(Dimension dimension, JPanel slabTreePanel){
+        slabTreePanel.add(new NoBorderJTextField(mmToCmText(dimension.width)), newRowElementConstraints(2));
+        slabTreePanel.add(new NoBorderJTextField("x"), newRowElementConstraints(3));
+        slabTreePanel.add(new NoBorderJTextField(mmToCmText(dimension.height)), newRowElementConstraints(4));
+    }
+
+
+    private GridBagConstraints newRowElementConstraints(int gridx){
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = gridx;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.LINE_END;
+        gridBagConstraints.fill = GridBagConstraints.NONE;
+        return gridBagConstraints;
+    }
+
 
     private void displayFurnitureSummary(SlabTree furnitureSlabTree){
         displayAssessment(furnitureSlabTree.getAssessment(((Furniture)furnitureSlabTree).getFrontUnitPrice(), ((Furniture)furnitureSlabTree).getElementUnitPrice(),furnitureSlabTree.getTreeSlabList()));
@@ -199,6 +237,10 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         NoBorderJTextField(String text, int columns){
             super(text, columns);
             setHorizontalAlignment(JTextField.CENTER);
+        }
+        NoBorderJTextField(String text, boolean redColor){
+            this(text,  text.length() == 1 || text.length() == 2 ? text.length() : 6);
+            if(redColor) setForeground(Color.red);
         }
         @Override public void setBorder(Border border) { }
     }

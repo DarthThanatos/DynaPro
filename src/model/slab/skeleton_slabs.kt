@@ -36,7 +36,11 @@ class RightSkeletonWallSlab(private val furniture: Furniture): Slab {
 
 }
 
+
+interface BackSlab : Slab
+
 class BottomOfSkeletonSlab(private val furniture: Furniture): Slab{
+
     override val name: String = Config.BOTTOM_OF_SKELETON
 
     override val scaleboard: ArrayList<Boolean> =
@@ -67,7 +71,7 @@ class PedestalSlab( private val furniture: Furniture): Slab{
 
 }
 
-class BackSkeletonSlab( private val furniture: Furniture): Slab{
+class BackSkeletonSlab( private val furniture: Furniture): BackSlab{
     override val name: String = Config.BACK
     override val scaleboard: ArrayList<Boolean> = arrayListOf(false, false, false, false)
     override val firstDimension: Int

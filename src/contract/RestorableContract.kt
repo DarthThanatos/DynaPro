@@ -1,6 +1,5 @@
 package contract
 
-import config.Config
 import model.*
 
 
@@ -13,8 +12,8 @@ interface RestorableProject{
 
 class DefaultRestorableProject: RestorableProject, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(){
     override fun restore(projectSave: ProjectSave, project: Project) {
-        project.reset(Config.NEW_PROJECT_PL, project.presenter!!)
-        project.addChildrenFurnitures(projectSave.furnitureList.map {
+        project.reset(projectSave.projectName, project.presenter!!)
+        project.setChildrenFurnitures(projectSave.furnitureList.map {
             furnitureSave ->
                 var res : Furniture? = null
                 chooseFactoryTo(

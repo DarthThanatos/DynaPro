@@ -208,7 +208,8 @@ class SaveAction(private val dynProMain: DynProMain) : AbstractAction(){
         val showSaveDialog = jc.showSaveDialog(parent)
         if(showSaveDialog == JFileChooser.APPROVE_OPTION){
             val projectSave = dynProMain.presenter.model.getCurrentProject().savedState()
-            File(jc.selectedFile.absolutePath.toString()).writeText(JSONObject(Klaxon().toJsonString(projectSave)).toString(4))
+            File(jc.selectedFile.absolutePath.toString())
+                    .writeText(JSONObject(Klaxon().toJsonString(projectSave)).toString(4))
         }
     }
 
@@ -223,7 +224,7 @@ class OpenAction(private val dynProMain: DynProMain): AbstractAction(){
             println(jc.selectedFile.name)
             val projectSave = Klaxon().parse<ProjectSave>(file = File(jc.selectedFile.absoluteFile.toString()))!!
             dynProMain.presenter.model.getCurrentProject().restoreState(projectSave)
-
+            dynProMain.presenter.onNewProjectCreated()
         }
     }
 

@@ -26,11 +26,26 @@ public class DrevitDisembowelment extends JPanel {
         displayProjectSummary(project);
     }
 
+
     private void displaySlabs(Project project){
         int gridy = 0;
         for(Map.Entry<Pair<Dimension, ArrayList<Boolean>>, List<Slab>> slabtree: project.slabsGroupedBySizeAndScaleboard(project.getTreeSlabList()).entrySet()){
             JPanel slabTreePanel = newSlabTreePanel();
             mountSlabRow(slabtree.getKey().component1(), slabtree.getValue(), slabTreePanel);
+            add(slabTreePanel, newRowConstraints(gridy++));
+        }
+        displayHdfs(project, gridy);
+    }
+
+    private void displayHdfs(Project project, int gridy) {
+        List<Slab> hdfsList = project.getHdfsList();
+        for (int i = 0; i < hdfsList.size(); i++){
+            Slab backSlab = hdfsList.get(i);
+            JPanel slabTreePanel = newSlabTreePanel();
+            slabTreePanel.add(new NoBorderJTextField("HDF" + i, true), newRowElementConstraints(0));
+            slabTreePanel.add(new NoBorderJTextField(" ("), newRowElementConstraints(1));
+            displayDimension(new Dimension(backSlab.getFirstDimension(), backSlab.getSecondDimension()), slabTreePanel);
+            slabTreePanel.add(new NoBorderJTextField(") "), newRowElementConstraints(5));
             add(slabTreePanel, newRowConstraints(gridy++));
         }
     }
@@ -158,6 +173,11 @@ public class DrevitDisembowelment extends JPanel {
         NoBorderJTextField(String text){
             super(text, text.length() == 1 || text.length() == 2 ? text.length() : 6);
             setHorizontalAlignment(JTextField.CENTER);
+        }
+
+        NoBorderJTextField(String text, boolean redColor){
+            this(text);
+            if(redColor) setForeground(Color.red);
         }
         @Override public void setBorder(Border border) { }
     }
