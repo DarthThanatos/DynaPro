@@ -1,8 +1,7 @@
 package model
 
 import config.Config
-import contract.DefaultSlabTree
-import contract.SlabTree
+import contract.*
 import javafx.geometry.Point3D
 import model.slab.*
 import java.util.*
@@ -19,6 +18,7 @@ interface Element : SlabTree{
     var blockedWidth: Boolean
     var growthRingVerticallyOriented: Boolean
     var shelvesNumber: Int
+    fun savedState(): ElementSave
 }
 
 interface ElementCommonDefaultsSetter{
@@ -31,7 +31,13 @@ interface ElementCommonDefaultsSetter{
     var shelvesNumber: Int
 }
 
+abstract class DefaultElement(private val restorableElement: RestorableElement = DefaultRestorableElement()): RestorableElement by restorableElement, Element{
+
+    override fun savedState(): ElementSave = restorableElement.saveState(this)
+}
+
 class DefaultCommonsSetter: ElementCommonDefaultsSetter{
+
     override var height: Int = 50
     override var width: Int = 25
     override var id: String = UUID.randomUUID().toString()
@@ -39,7 +45,6 @@ class DefaultCommonsSetter: ElementCommonDefaultsSetter{
     override var blockedWidth: Boolean = false
     override var growthRingVerticallyOriented: Boolean= true
     override var shelvesNumber: Int = 0
-
 
 }
 
@@ -68,11 +73,13 @@ open class DefaultShelfSlabFurnitureTree(private val defaultSlabTree: DefaultSla
 
 }
 
+
 class EmptySpace(
         override var name: String = Config.EMPTY_SPACE,
         override val type: String = Config.EMPTY_SPACE, override var parentConfig: FrontConfiguration,
         private val defaultShelfSlabFurnitureTree: DefaultShelfSlabFurnitureTree = DefaultShelfSlabFurnitureTree()
-) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(), ShelfSlabFurnitureTree by defaultShelfSlabFurnitureTree {
+) : Element, PrintableElement by DefaultPrinter(), ElementCommonDefaultsSetter by DefaultCommonsSetter(), ShelfSlabFurnitureTree by defaultShelfSlabFurnitureTree, DefaultElement() {
+
     override fun getTreeShelvesNumber(): Int = shelvesNumber
     override fun toString(): String = print(this)
 
@@ -105,7 +112,8 @@ class DoubleDoor(
         override val type: String = Config.DOUBLE_DOOR,
         override var parentConfig: FrontConfiguration, private val defaultDoubleDoorSlabTree: DefaultDoubleDoorSlabTree = DefaultDoubleDoorSlabTree()
 )
-:Element, DoubleDoorSlabTree by defaultDoubleDoorSlabTree, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(){
+:Element, DoubleDoorSlabTree by defaultDoubleDoorSlabTree, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), DefaultElement(){
+
 
     override fun getTreeShelvesNumber(): Int = shelvesNumber
 
@@ -133,7 +141,7 @@ class DefaultSingleDoorSlabTree : SingleDoorSlabTree, DefaultShelfSlabFurnitureT
 }
 
 abstract class SingleDoor(private val defaultSingleDoorSlabTree: DefaultSingleDoorSlabTree = DefaultSingleDoorSlabTree())
-    : Element, SingleDoorSlabTree by defaultSingleDoorSlabTree{
+    : Element, SingleDoorSlabTree by defaultSingleDoorSlabTree, DefaultElement(){
 
 
     override fun getTreeShelvesNumber(): Int = shelvesNumber
@@ -148,7 +156,6 @@ class LeftDoor(
         override var name: String = Config.LEFT_DOOR_PL,
         override val type: String = Config.LEFT_DOOR_PL, override var parentConfig: FrontConfiguration
 ) : PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SingleDoor(){
-
 
     override fun toString(): String = print(this)
 }
@@ -165,7 +172,7 @@ class Drawer(
         override var name: String= Config.DRAWER_PL,
         override val type: String = Config.DRAWER_PL, override var parentConfig: FrontConfiguration,
         private val slabTree: DefaultSlabTree = DefaultSlabTree()
-): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by slabTree{
+): Element, PrintableElement by DefaultPrinter(),  ElementCommonDefaultsSetter by DefaultCommonsSetter(), SlabTree by slabTree, DefaultElement(){
 
     fun getTTrackRawDepth(): Int {
         val aroundGap = 3f

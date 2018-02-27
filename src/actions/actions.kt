@@ -1,15 +1,16 @@
 package actions
 
+import com.beust.klaxon.Klaxon
 import config.Config
 import display.*
 import display._3d.FurniturePerspective
 import main.DynProMain
 import model.Element
+import org.json.JSONObject
 import java.awt.CardLayout
 import java.awt.event.ActionEvent
-import javax.swing.AbstractAction
-import javax.swing.JButton
-import javax.swing.JPanel
+import java.io.File
+import javax.swing.*
 
 
 class NewFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() {
@@ -195,6 +196,30 @@ class SwitchDisembowelmentAction(private val dynProMain: DynProMain): AbstractAc
         drevitDisembowelment.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject())
         furnitureDisembowelmentDisplay.displayAllProjectSlabs(dynProMain.presenter.model.getCurrentProject())
         (disembowelmentContainer.layout as CardLayout).next(disembowelmentContainer)
+    }
+
+}
+
+class SaveAction(private val dynProMain: DynProMain) : AbstractAction(){
+    lateinit var parent: JFrame
+    override fun actionPerformed(e: ActionEvent?) {
+        val jc = JFileChooser()
+        val showSaveDialog = jc.showSaveDialog(parent)
+        if(showSaveDialog == JFileChooser.APPROVE_OPTION){
+            val projectSave = dynProMain.presenter.model.getCurrentProject().savedState()
+            File(jc.selectedFile.absolutePath.toString()).writeText(JSONObject(Klaxon().toJsonString(projectSave)).toString(4))
+        }
+    }
+
+}
+
+class OpenAction(dynProMain: DynProMain): AbstractAction(){
+    lateinit var parent: JFrame
+    override fun actionPerformed(e: ActionEvent?) {
+        val jc = JFileChooser()
+        val openDialog = jc.showOpenDialog(parent)
+        if(openDialog == JFileChooser.APPROVE_OPTION)
+            println(jc.selectedFile.name)
     }
 
 }

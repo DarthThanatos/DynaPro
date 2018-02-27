@@ -1,0 +1,49 @@
+{
+    "furnitureList": [{
+        "backInserted": false,
+        "pedestalHeight": 0,
+        "depth": 500,
+        "frontConfig": {
+            "columnOriented": true,
+            "aggregates": [
+                {
+                    "elements": [{
+                        "blockedWidth": false,
+                        "name": "lewe drzwiczki",
+                        "shelvesNumber": 0,
+                        "width": 747,
+                        "growthRingVerticallyOriented": true,
+                        "blockedHeight": false,
+                        "id": "1644afb2-8f4e-4d8f-a872-6ee00a6eca08",
+                        "type": "lewe drzwiczki",
+                        "height": 997
+                    }],
+                    "id": "e657ff5c-6011-4f77-921f-490f659d3a6f"
+                },
+                {
+                    "elements": [{
+                        "blockedWidth": false,
+                        "name": "prawe drzwiczki",
+                        "shelvesNumber": 0,
+                        "width": 747,
+                        "growthRingVerticallyOriented": true,
+                        "blockedHeight": false,
+                        "id": "a6419537-2058-421d-8bed-6e8534d43733",
+                        "type": "prawe drzwiczki",
+                        "height": 997
+                    }],
+                    "id": "4906696a-a180-4c7d-bd57-47e241456596"
+                }
+            ]
+        },
+        "name": "Nowy górny korpus",
+        "width": 1500,
+        "frontElemUnitPrice": 100,
+        "roofInserted": false,
+        "hasPedestal": false,
+        "elemUnitPrice": 115,
+        "type": "Upper Module",
+        "height": 1000
+    }],
+    "projectName": "Nowy Projekt"
+}

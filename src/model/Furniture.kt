@@ -1,8 +1,7 @@
 package model
 
 import config.Config
-import contract.DefaultSlabTree
-import contract.SlabTree
+import contract.*
 import model.slab.*
 import kotlin.properties.Delegates
 
@@ -32,6 +31,7 @@ interface Furniture : SlabTree{
     fun getPedestalSlabSecondDimension(): Int
     fun getBackSkeletonSlabSecondDimension(): Int
     fun getBackSkeletonSlabFirstDimension(): Int
+    fun savedState():FurnitureSave
 }
 
 interface FurnitureSlabTree : SlabTree {
@@ -88,7 +88,11 @@ class DefaultFurnitureSlabTree : SlabTree by DefaultSlabTree(), FurnitureSlabTre
     }
 }
 
-class UpperModule(initialName: String, private val parentProject: Project, private val furnitureSlabTree: FurnitureSlabTree = DefaultFurnitureSlabTree()): Furniture, FurnitureSlabTree by furnitureSlabTree {
+class UpperModule(initialName: String, private val parentProject: Project, private val furnitureSlabTree: FurnitureSlabTree = DefaultFurnitureSlabTree(), private val restorableFurniture: RestorableFurniture = DefaultRestorableFurniture())
+    : Furniture, FurnitureSlabTree by furnitureSlabTree, RestorableFurniture by restorableFurniture {
+
+    override fun savedState(): FurnitureSave = restorableFurniture.saveState(this)
+
     override var pedestalHeight: Int = 0
 
     override val hasPedestal: Boolean = false
@@ -123,7 +127,10 @@ class UpperModule(initialName: String, private val parentProject: Project, priva
 
 }
 
-class BottomModule(initialName: String, private val parentProject: Project, private val furnitureSlabTree: FurnitureSlabTree = DefaultFurnitureSlabTree()): Furniture, FurnitureSlabTree by furnitureSlabTree{
+class BottomModule(initialName: String, private val parentProject: Project, private val furnitureSlabTree: FurnitureSlabTree = DefaultFurnitureSlabTree(), private val restorableFurniture: RestorableFurniture = DefaultRestorableFurniture())
+    : Furniture, FurnitureSlabTree by furnitureSlabTree, RestorableFurniture by restorableFurniture{
+
+    override fun savedState(): FurnitureSave = restorableFurniture.saveState(this)
 
     override val hasPedestal: Boolean = true
 

@@ -66,6 +66,10 @@ public class DynProMain implements DynProContract.View {
 
     @SuppressWarnings({"unused", "WeakerAccess"}) static JCheckBox showFrontsChecker, showSkeletonChecker;
 
+    static JFrame frame;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static SaveAction saveAction;
+    @SuppressWarnings({"unused", "WeakerAccess"}) public static OpenAction openAction;
+
     public static void main(String args[]) throws Exception {
         renderer.initActions();
         renderer.render("xml/dyn_pro_main.xml").setVisible(true);

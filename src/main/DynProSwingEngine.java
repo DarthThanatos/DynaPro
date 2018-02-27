@@ -40,6 +40,7 @@ class DynProSwingEngine extends SwingEngine {
         injectViewSwitcher();
         injectFurniturePerspective();
         injectDisembowelmentDisplay();
+        injectFrame();
     }
 
     private void injectViewSwitcher() {
@@ -129,11 +130,18 @@ class DynProSwingEngine extends SwingEngine {
     private void initProjectActions(){
         newProjectAction = new NewProjectAction(dynProMain);
         renameProjectAction = new RenameProjectAction(dynProMain);
+        saveAction = new SaveAction(dynProMain);
+        openAction = new OpenAction(dynProMain);
 
     }
 
     private void injectFurniturePerspective(){
         moveToFurniturePerspectiveAction.setFurniturePerspective(furniturePerspective);
+    }
+
+    private void injectFrame(){
+        saveAction.setParent(frame);
+        openAction.setParent(frame);
     }
 
     private void initFrontConfigActions(){

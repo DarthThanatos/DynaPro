@@ -1,10 +1,7 @@
 package model
 
 import config.Config
-import contract.DefaultFactoryChooser
-import contract.DefaultSlabTree
-import contract.SlabTree
-import contract.TypedFactoryChooser
+import contract.*
 import model.slab.*
 import java.awt.Dimension
 import java.util.*
@@ -40,6 +37,7 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>, SlabTree{
     fun isElemWithIdLastToTheRight(elementId: String): Boolean
     fun isElemWithIdLastToTheTop(elementId: String): Boolean
     fun isElemWithIdLastToTheBottom(elementId: String): Boolean
+    fun savedState(): FrontConfigSave
 }
 
 interface ArrangementAggregate : MutableList<Element>, SlabTree{
@@ -51,10 +49,13 @@ interface ArrangementAggregate : MutableList<Element>, SlabTree{
     fun getAggregateSeparatorSecondDimension(): Int
     fun getElementSeparatorFirstDimension(): Int
     fun getElementSeparatorSecondDimension(): Int
+    fun savedState(): AggregateSave
 }
 
-class Aggregate(vararg elements: Element, override val parentConfiguration: FrontConfiguration, private val arrayDefaultDelegate: ArrayList<Element>  = ArrayList(), private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree()):
-        ArrangementAggregate, MutableList<Element> by arrayDefaultDelegate, SlabTree by slabTreeDefaultDelegate{
+class Aggregate(vararg elements: Element, override val parentConfiguration: FrontConfiguration, private val arrayDefaultDelegate: ArrayList<Element>  = ArrayList(), private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree(), private val restorableAggregate: RestorableAggregate=DefaultRestorableAggregate()):
+        ArrangementAggregate, MutableList<Element> by arrayDefaultDelegate, SlabTree by slabTreeDefaultDelegate, RestorableAggregate by restorableAggregate{
+
+    override fun savedState(): AggregateSave = restorableAggregate.saveState(this)
 
     override fun getAggregateSeparatorFirstDimension(): Int {
         if(parentConfiguration.columnOriented) return ColumnOrientedAggregateSeparatorSlab(this, 0).firstDimension
@@ -129,12 +130,15 @@ class Aggregate(vararg elements: Element, override val parentConfiguration: Fron
     }
 }
 
-abstract class DynProFrontConfiguration(private val parentProject: Project, override var parentFurniture: Furniture, private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree()):
-        FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(), SlabTree by slabTreeDefaultDelegate {
+abstract class DynProFrontConfiguration(private val parentProject: Project, override var parentFurniture: Furniture, private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree(), private val restorableFrontConfig: RestorableFrontConfig = DefaultRestorableFrontConfig()):
+        FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(), SlabTree by slabTreeDefaultDelegate, RestorableFrontConfig by restorableFrontConfig{
 
     abstract protected var aggregates: ArrayList<ArrangementAggregate>
 
     private val factoriesChain = AllFrontElementFactoriesChain()
+
+
+    override fun savedState(): FrontConfigSave = restorableFrontConfig.saveState(this, aggregates)
 
     override fun listOfSlabs(): List<Slab>{
         val separators = mutableListOf<Slab>()

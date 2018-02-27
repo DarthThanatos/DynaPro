@@ -6,6 +6,7 @@ import kotlin.properties.Delegates
 
 interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     var presenter: DynProContract.Presenter?
+    fun savedState(): ProjectSave
     fun reset(name: String, presenter: DynProContract.Presenter)
     fun getName(): String
     fun rename(newProjectName: String) : Boolean
@@ -31,7 +32,8 @@ interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     fun getProjectAssessment() : Int
 }
 
-class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree()) : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by defaultSlabTree{
+class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree(), private val restorableProject: RestorableProject = DefaultRestorableProject())
+    : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by defaultSlabTree, RestorableProject by restorableProject{
 
 
     override val factoriesChain: FactoriesChain<FurnitureFactory> = AllFurnitureTypesChain(this)
@@ -46,7 +48,8 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaul
     private var projectName: String by Delegates.observable(initialName){property, oldValue, newValue -> presenter?.onProjectRenamed() }
 
     override var presenter: DynProContract.Presenter? = null
-    set(value) {
+
+     set(value) {
         field = value
         addChildFurniture(childName = Config.NEW_UPPER_MODULE_PL, childFurnitureType = Config.UPPER_MODULE)
     }
@@ -159,6 +162,9 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaul
 
     override fun getProjectAssessment() : Int =
             furnituresList.sumBy { it.getAssessment(it.frontUnitPrice, it.elementUnitPrice, it.getTreeSlabList()) }
+
+
+    override fun savedState(): ProjectSave = restorableProject.saveState(this)
 
     init {
         defaultSlabTree.actualSlabTree = this
