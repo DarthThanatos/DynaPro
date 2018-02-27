@@ -1,18 +1,32 @@
 package contract
 
+import config.Config
 import model.*
 
 
 data class ProjectSave(val projectName: String, val furnitureList: List<FurnitureSave>)
 
 interface RestorableProject{
-    fun restore(projectSave: ProjectSave)
+    fun restore(projectSave: ProjectSave, project: Project)
     fun saveState(project: Project): ProjectSave
 }
 
-class DefaultRestorableProject: RestorableProject{
-    override fun restore(projectSave: ProjectSave) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class DefaultRestorableProject: RestorableProject, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(){
+    override fun restore(projectSave: ProjectSave, project: Project) {
+        project.reset(Config.NEW_PROJECT_PL, project.presenter!!)
+        project.addChildrenFurnitures(projectSave.furnitureList.map {
+            furnitureSave ->
+                var res : Furniture? = null
+                chooseFactoryTo(
+                        furnitureSave.type,
+                        {
+                            res = it.createFurnitureChild(furnitureSave)
+
+                        },
+                        project.factoriesChain
+                )
+                res!!
+        })
     }
 
     override fun saveState(project: Project): ProjectSave =
@@ -40,13 +54,13 @@ data class FurnitureSave(
 
 
 interface RestorableFurniture{
-    fun restore(furnitureSave: FurnitureSave)
+    fun restore(furnitureSave: FurnitureSave) : Furniture
     fun saveState(furniture: Furniture): FurnitureSave
 }
 
 
 class DefaultRestorableFurniture: RestorableFurniture{
-    override fun restore(furnitureSave: FurnitureSave) {
+    override fun restore(furnitureSave: FurnitureSave) : Furniture {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -72,13 +86,21 @@ class DefaultRestorableFurniture: RestorableFurniture{
 data class FrontConfigSave(val columnOriented: Boolean, val aggregates: List<AggregateSave>)
 
 interface RestorableFrontConfig{
-    fun restore(frontConfigSave: FrontConfigSave)
+    fun restore(frontConfigSave: FrontConfigSave, frontConfiguration: FrontConfiguration)
     fun saveState(frontConfiguration: FrontConfiguration, aggregates: List<ArrangementAggregate>): FrontConfigSave
 }
 
 class DefaultRestorableFrontConfig: RestorableFrontConfig {
-    override fun restore(frontConfigSave: FrontConfigSave) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun restore(frontConfigSave: FrontConfigSave, frontConfiguration: FrontConfiguration) {
+        val aggregates : ArrayList<ArrangementAggregate> = arrayListOf()
+        frontConfigSave.aggregates.forEach{
+                val res = Aggregate(parentConfiguration = frontConfiguration)
+                res.restoreState(it)
+                aggregates.add(res)
+        }
+        frontConfiguration.setAggregatesTo(aggregates)
+        frontConfiguration.columnOriented = frontConfigSave.columnOriented
+        frontConfiguration.recalculateElementsDimens()
     }
 
     override fun saveState(frontConfiguration: FrontConfiguration, aggregates: List<ArrangementAggregate>): FrontConfigSave =
@@ -92,13 +114,20 @@ class DefaultRestorableFrontConfig: RestorableFrontConfig {
 data class AggregateSave(val id: String, val elements: List<ElementSave>)
 
 interface RestorableAggregate{
-    fun restore(aggregateSave: AggregateSave)
+    fun restore(aggregateSave: AggregateSave, aggregate: ArrangementAggregate)
     fun saveState(arrangementAggregate: ArrangementAggregate):AggregateSave
 }
 
-class DefaultRestorableAggregate: RestorableAggregate {
-    override fun restore(aggregateSave: AggregateSave) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class DefaultRestorableAggregate: RestorableAggregate, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser() {
+    override fun restore(aggregateSave: AggregateSave, aggregate: ArrangementAggregate) {
+        aggregate.setElementsTo(
+                aggregateSave.elements.map{
+                    elementSave ->
+                    var element: Element? = null
+                    chooseFactoryTo(elementSave.type, {element = it.createFrontElem(elementSave, aggregate.parentConfiguration)}, aggregate.parentConfiguration.factoriesChain)
+                    element!!
+                }
+        )
     }
 
     override fun saveState(arrangementAggregate: ArrangementAggregate): AggregateSave =

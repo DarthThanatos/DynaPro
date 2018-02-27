@@ -30,11 +30,16 @@ interface Project: TypedFactoryChooser<FurnitureFactory>, SlabTree{
     fun addOneFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
     fun addMultiFrontConfigElementAggregateBefore(furnitureName: String, elementId: String)
     fun getProjectAssessment() : Int
+    fun addChildrenFurnitures(furnitures: List<Furniture>)
+    fun restoreState(projectSave: ProjectSave)
 }
 
 class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaultSlabTree: DefaultSlabTree = DefaultSlabTree(), private val restorableProject: RestorableProject = DefaultRestorableProject())
     : Project, TypedFactoryChooser<FurnitureFactory> by DefaultFactoryChooser(), SlabTree by defaultSlabTree, RestorableProject by restorableProject{
 
+    override fun restoreState(projectSave: ProjectSave) {
+        restorableProject.restore(projectSave, this)
+    }
 
     override val factoriesChain: FactoriesChain<FurnitureFactory> = AllFurnitureTypesChain(this)
 
@@ -65,6 +70,15 @@ class DynProject(initialName: String = Config.NEW_PROJECT_PL, private val defaul
         return false
     }
 
+    override fun addChildrenFurnitures(furnitures: List<Furniture>) {
+        furnitures.forEach {
+            if(furnitureNotExist( it.name)){
+                furnituresList.add(it);
+                addChild(it.name, it)
+                presenter?.onFurnitureAdded(it.name)
+            }
+        }
+    }
 
     override fun getFurnitureWithChangedType(name: String, newType: String) : Furniture{
         val furnitureIndex = furnituresList.indexOf(furnituresList.filter { it.name == name }.single())

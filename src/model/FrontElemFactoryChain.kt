@@ -1,6 +1,7 @@
 package model
 
 import config.Config
+import contract.ElementSave
 import contract.FactoriesChain
 import contract.TypedFactory
 
@@ -12,11 +13,13 @@ class AllFrontElementFactoriesChain: FactoriesChain<FrontElemFactory>{
 interface FrontElemFactory: TypedFactory{
     fun createFrontElem(parentConfig: FrontConfiguration): Element
     fun createFrontElem(oldElem: Element) : Element
+    fun createFrontElem(elementSave: ElementSave, parentConfig: FrontConfiguration): Element
 }
 
 
 interface FrontElemPropertiesSetter{
     fun copied(newFrontElem: Element, oldFrontElem: Element) : Element
+    fun copied(elementSave: ElementSave, elementToSet: Element): Element
 }
 
 class DefaultFrontElemPropertiesSetter: FrontElemPropertiesSetter {
@@ -31,9 +34,23 @@ class DefaultFrontElemPropertiesSetter: FrontElemPropertiesSetter {
         newFrontElem.shelvesNumber = oldFrontElem.shelvesNumber
         return newFrontElem
     }
+
+    override fun copied(elementSave: ElementSave, elementToSet: Element): Element {
+        elementToSet.name = elementSave.name
+        elementToSet.width = elementSave.width
+        elementToSet.height = elementSave.height
+        elementToSet.id = elementSave.id
+        elementToSet.blockedWidth = elementSave.blockedWidth
+        elementToSet.blockedHeight = elementSave.blockedHeight
+        elementToSet.growthRingVerticallyOriented = elementSave.growthRingVerticallyOriented
+        elementToSet.shelvesNumber = elementSave.shelvesNumber
+        return elementToSet
+    }
 }
 
 class LeftDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter(){
+
+    override fun createFrontElem(elementSave: ElementSave, parentConfig: FrontConfiguration): Element = copied(elementSave, createFrontElem(parentConfig))
 
     override fun typeCorrect(type: String): Boolean = type == Config.LEFT_DOOR_PL
 
@@ -45,6 +62,8 @@ class LeftDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFro
 
 class RightDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
 
+    override fun createFrontElem(elementSave: ElementSave, parentConfig: FrontConfiguration): Element = copied(elementSave, createFrontElem(parentConfig))
+
     override fun typeCorrect(type: String): Boolean = type == Config.RIGHT_DOOR_PL
 
     override fun createFrontElem(parentConfig : FrontConfiguration): Element  = RightDoor(parentConfig = parentConfig)
@@ -53,6 +72,8 @@ class RightDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFr
 }
 
 class EmptySpaceFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
+
+    override fun createFrontElem(elementSave: ElementSave, parentConfig: FrontConfiguration): Element = copied(elementSave, createFrontElem(parentConfig))
 
     override fun typeCorrect(type: String): Boolean = type == Config.EMPTY_SPACE
 
@@ -63,6 +84,8 @@ class EmptySpaceFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultF
 
 class DrawerFactory : FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter() {
 
+    override fun createFrontElem(elementSave: ElementSave, parentConfig: FrontConfiguration): Element = copied(elementSave, createFrontElem(parentConfig))
+
     override fun typeCorrect(type: String): Boolean = type == Config.DRAWER_PL
 
     override fun createFrontElem(parentConfig : FrontConfiguration): Element = Drawer(parentConfig = parentConfig)
@@ -72,6 +95,8 @@ class DrawerFactory : FrontElemFactory, FrontElemPropertiesSetter by DefaultFron
 }
 
 class DoubleDoorFactory: FrontElemFactory, FrontElemPropertiesSetter by DefaultFrontElemPropertiesSetter(){
+
+    override fun createFrontElem(elementSave: ElementSave, parentConfig: FrontConfiguration): Element = copied(elementSave, createFrontElem(parentConfig))
 
     override fun createFrontElem(parentConfig: FrontConfiguration): Element = DoubleDoor(parentConfig = parentConfig)
 

@@ -11,6 +11,7 @@ import kotlin.properties.Delegates
 
 interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>, SlabTree{
     var parentFurniture: Furniture
+    val factoriesChain: FactoriesChain<FrontElemFactory>
     var columnOriented : Boolean
     val defaultElementBuilder: () -> Element
     fun getDefaultAggregates(): ArrayList<ArrangementAggregate>
@@ -38,6 +39,8 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>, SlabTree{
     fun isElemWithIdLastToTheTop(elementId: String): Boolean
     fun isElemWithIdLastToTheBottom(elementId: String): Boolean
     fun savedState(): FrontConfigSave
+    fun restoreState(frontConfigSave: FrontConfigSave)
+    fun setAggregatesTo(aggregates: ArrayList<ArrangementAggregate>)
 }
 
 interface ArrangementAggregate : MutableList<Element>, SlabTree{
@@ -50,10 +53,22 @@ interface ArrangementAggregate : MutableList<Element>, SlabTree{
     fun getElementSeparatorFirstDimension(): Int
     fun getElementSeparatorSecondDimension(): Int
     fun savedState(): AggregateSave
+    fun restoreState(aggregateSave: AggregateSave)
+    fun setElementsTo(elements: List<Element>)
 }
 
 class Aggregate(vararg elements: Element, override val parentConfiguration: FrontConfiguration, private val arrayDefaultDelegate: ArrayList<Element>  = ArrayList(), private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree(), private val restorableAggregate: RestorableAggregate=DefaultRestorableAggregate()):
         ArrangementAggregate, MutableList<Element> by arrayDefaultDelegate, SlabTree by slabTreeDefaultDelegate, RestorableAggregate by restorableAggregate{
+
+    override fun setElementsTo(elements: List<Element>) {
+        resetChildren()
+        removeAll{ true }
+        addAll(elements)
+    }
+
+    override fun restoreState(aggregateSave: AggregateSave) {
+        restorableAggregate.restore(aggregateSave, this)
+    }
 
     override fun savedState(): AggregateSave = restorableAggregate.saveState(this)
 
@@ -135,7 +150,7 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
 
     abstract protected var aggregates: ArrayList<ArrangementAggregate>
 
-    private val factoriesChain = AllFrontElementFactoriesChain()
+    override val factoriesChain = AllFrontElementFactoriesChain()
 
 
     override fun savedState(): FrontConfigSave = restorableFrontConfig.saveState(this, aggregates)
@@ -457,6 +472,17 @@ abstract class DynProFrontConfiguration(private val parentProject: Project, over
         return res
 
     }
+
+    override fun setAggregatesTo(aggregates: ArrayList<ArrangementAggregate>){
+        resetChildren()
+        this.aggregates.removeAll{true}
+        aggregates.forEach { this.aggregates.add(it) }
+    }
+
+    override fun restoreState(frontConfigSave: FrontConfigSave) {
+        restorableFrontConfig.restore(frontConfigSave, this)
+    }
+
     init {
         slabTreeDefaultDelegate.actualSlabTree = this
     }

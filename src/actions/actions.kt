@@ -2,6 +2,7 @@ package actions
 
 import com.beust.klaxon.Klaxon
 import config.Config
+import contract.ProjectSave
 import display.*
 import display._3d.FurniturePerspective
 import main.DynProMain
@@ -213,13 +214,17 @@ class SaveAction(private val dynProMain: DynProMain) : AbstractAction(){
 
 }
 
-class OpenAction(dynProMain: DynProMain): AbstractAction(){
+class OpenAction(private val dynProMain: DynProMain): AbstractAction(){
     lateinit var parent: JFrame
     override fun actionPerformed(e: ActionEvent?) {
         val jc = JFileChooser()
         val openDialog = jc.showOpenDialog(parent)
-        if(openDialog == JFileChooser.APPROVE_OPTION)
+        if(openDialog == JFileChooser.APPROVE_OPTION) {
             println(jc.selectedFile.name)
+            val projectSave = Klaxon().parse<ProjectSave>(file = File(jc.selectedFile.absoluteFile.toString()))!!
+            dynProMain.presenter.model.getCurrentProject().restoreState(projectSave)
+
+        }
     }
 
 }
