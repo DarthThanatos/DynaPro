@@ -10,9 +10,9 @@ class DrawerLeftWallSlab(private val drawer: Drawer) : Slab {
     override val scaleboard: ArrayList<Boolean> = arrayListOf(false, firstDimension > secondDimension, secondDimension >= firstDimension, false)
     override val firstDimension: Int
         get() {
-            val topGap = 10
+            val diff = (if(drawer.parentConfig.columnOriented and (drawer.parentConfig.getColumnElementAboveElementWithId(drawer.id) is Drawer)) 7 else 17) + (if (drawer.parentConfig.isElemWithIdLastToTheTop(drawer.id)) 9 else 0)
             val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
-            return (drawer.height - topGap - Config.SLAB_THICKNESS) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+            return (drawer.height - diff - Config.SLAB_THICKNESS) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
         }
     //        leftWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ?  Config.SLAB_THICKNESS : 0)- (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
     //        leftWallStartY = getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - Config.SLAB_THICKNESS - topGap;
@@ -31,7 +31,8 @@ class DrawerFaceSlab(private val drawer: Drawer): Slab {
     override val firstDimension: Int
         get() {
             val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
-            return (drawer.height - Config.SLAB_THICKNESS - 10 - (2 * Config.SLAB_THICKNESS) - 12) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+            val diff = (if(drawer.parentConfig.columnOriented and (drawer.parentConfig.getColumnElementAboveElementWithId(drawer.id) is Drawer)) 7 else 17) + (if (drawer.parentConfig.isElemWithIdLastToTheTop(drawer.id)) 9 else 0) + 12
+            return (drawer.height - 2*Config.SLAB_THICKNESS -Config.SLAB_THICKNESS- diff -  if (lastToTheBottom) Config.SLAB_THICKNESS else 0)
         }
     override val secondDimension: Int
         get() = (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0) - Config.SLAB_THICKNESS).toInt()
@@ -46,9 +47,10 @@ class DrawerRightWallSlab(private val drawer: Drawer): Slab {
 
     override val firstDimension: Int
         get() {
-            val topGap = 10
             val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
-            return (drawer.height - topGap - Config.SLAB_THICKNESS) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0}
+            val diff = (if(drawer.parentConfig.columnOriented and (drawer.parentConfig.getColumnElementAboveElementWithId(drawer.id) is Drawer)) 7 else 17) + (if (drawer.parentConfig.isElemWithIdLastToTheTop(drawer.id)) 9 else 0)
+            return (drawer.height - diff - Config.SLAB_THICKNESS) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+        }
     //        rightWallHeight = (float) (dimens.getY() - topGap - Config.SLAB_THICKNESS) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0) - (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
     //        rightWallStartY = getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - Config.SLAB_THICKNESS - topGap;
 
@@ -65,7 +67,7 @@ class DrawerBottomSlab(private val drawer: Drawer): Slab{
     //        bottomStartY = (float) (start.getY() - dimens.getY() + Config.SLAB_THICKNESS + 12 + 2*Config.SLAB_THICKNESS) + (lastToTheBottom ? Config.SLAB_THICKNESS: 0) + (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
 
     override val secondDimension: Int
-        get() = (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0) - Config.SLAB_THICKNESS).toInt()
+        get() = (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0)  - Config.SLAB_THICKNESS).toInt()
 
 }
 
@@ -75,14 +77,15 @@ class DrawerBackSlab(private val drawer: Drawer): Slab{
     override val firstDimension: Int
         get() {
             val lastToTheBottom = drawer.parentConfig.isElemWithIdLastToTheBottom(drawer.id)
-            return (drawer.height - Config.SLAB_THICKNESS - 10 - (2 * Config.SLAB_THICKNESS) - 12) - if (lastToTheBottom) Config.SLAB_THICKNESS else 0
+            val diff = (if(drawer.parentConfig.columnOriented and (drawer.parentConfig.getColumnElementAboveElementWithId(drawer.id) is Drawer)) 7 else 17) + (if (drawer.parentConfig.isElemWithIdLastToTheTop(drawer.id)) 9 else 0) + 12
+            return (drawer.height - 2*Config.SLAB_THICKNESS - diff - Config.SLAB_THICKNESS - if (lastToTheBottom) Config.SLAB_THICKNESS else 0)
         }
     //        backStartY = getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - Config.SLAB_THICKNESS - topGap;
     //        backHeight = (float) (dimens.getY() - Config.SLAB_THICKNESS - 10 - 2 *Config.SLAB_THICKNESS - 12) - (lastToTheBottom ? Config.SLAB_THICKNESS : 0) - (float) (getTopSlabY(start, configuration.isElemWithIdLastToTheTop(drawer.getId())) - start.getY());
 
     override val secondDimension: Int
         get() {
-            return (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0) - Config.SLAB_THICKNESS).toInt()
+            return (drawer.getRightWallX(0, drawer.width) - drawer.getLeftWallX(0)  - Config.SLAB_THICKNESS).toInt()
         }
 
 }

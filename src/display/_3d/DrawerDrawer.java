@@ -52,7 +52,7 @@ class DrawerDrawer extends CuboidDrawer{
         float leftWallWidth, leftWallHeight, leftWallDepth;
 
         leftWallStartX =  drawer.getLeftWallX(start);
-        leftWallStartY = (float) (start.getY() - topGap);
+        leftWallStartY = drawer.getTopY((int) start.getY());
         leftWallStartZ = getStartZ(start, dimens);
 
         leftWallWidth = Config.SLAB_THICKNESS;
@@ -79,9 +79,8 @@ class DrawerDrawer extends CuboidDrawer{
         float rightWallStartX, rightWallStartY, rightWallStartZ;
         float rightWallWidth, rightWallHeight, rightWallDepth;
 
-        FrontConfiguration configuration = furniture.getFrontConfiguration();
         rightWallStartX = drawer.getRightWallX(start, dimens);
-        rightWallStartY = (float) (start.getY() - topGap);
+        rightWallStartY = drawer.getTopY((int) start.getY());
         rightWallStartZ = getStartZ(start, dimens);
 
         rightWallWidth =  Config.SLAB_THICKNESS;
@@ -125,7 +124,7 @@ class DrawerDrawer extends CuboidDrawer{
         float backWidth, backHeight, backDepth;
 
         backStartX =  drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
-        backStartY = (float) (start.getY() - topGap);
+        backStartY = drawer.getTopY((int) start.getY());
         backStartZ = getStartZ(start, dimens);
 
         backWidth = drawer.getBackSlabSecondDimension();
@@ -147,7 +146,7 @@ class DrawerDrawer extends CuboidDrawer{
         float faceWidth, faceHeight, faceDepth;
 
         faceStartX =  drawer.getLeftWallX(start) + Config.SLAB_THICKNESS;
-        faceStartY = (float) (start.getY() - topGap);
+        faceStartY = drawer.getTopY((int) start.getY());
         faceStartZ = (float) (start.getZ() - Config.SLAB_THICKNESS);
 
         faceWidth = drawer.getFaceSlabSecondDimension();
@@ -200,7 +199,7 @@ class DrawerDrawer extends CuboidDrawer{
 
 
         shelfStartX = getLeftSideX(start, lastToTheLeft) + Config.SLAB_THICKNESS;
-        shelfStartY = (float) (start.getY() - dimens.getY() + 8);
+        shelfStartY = (float) (start.getY() - dimens.getY() + 8); //only if selected, practically only this positiong is logical
         shelfStartZ = (float) (start.getZ() - dimens.getZ() + (backInserted ? Config.SLAB_THICKNESS : 0));
 
         shelfWidth = drawer.getShelfSlabFirstDimension();

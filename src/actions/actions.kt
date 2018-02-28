@@ -76,7 +76,7 @@ class RenameProjectAction(private val dynProMain: DynProMain) : AbstractAction()
     }
 }
 
-abstract class FrontConfigAction(protected val dynProMain: DynProMain): AbstractAction(){
+abstract class FrontConfigAction(dynProMain: DynProMain): AbstractAction(){
     var frontConfigurationDisplayer: FrontConfigurationDisplayer? = null
     abstract val presenterAction: ((String, String)->Unit)
 

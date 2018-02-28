@@ -55,6 +55,11 @@ fun jsonParse2(){
 
 }
 
+fun retNul(): Any?{
+    return null
+}
+
 fun main(args:Array<String>){
     jsonParse2()
+    if(retNul() is String) println("String") else println("null")
 }

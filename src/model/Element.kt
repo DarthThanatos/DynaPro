@@ -4,6 +4,7 @@ import config.Config
 import contract.*
 import javafx.geometry.Point3D
 import model.slab.*
+import util.SlabSidePositionUtil
 import java.util.*
 
 
@@ -188,15 +189,23 @@ class Drawer(
         val lastToTheLeft = parentConfig.isElemWithIdLastToTheLeft(id)
         val distToLeftSide = (if (lastToTheLeft) Config.BETWEEN_ELEMENTS_VERTICAL_GAP else 10).toFloat()
         val leftSideX = (start.x - distToLeftSide).toFloat()
-        return leftSideX + Config.SLAB_THICKNESS.toFloat() + 6f
+        return leftSideX + Config.SLAB_THICKNESS + 6 + 21 + Config.SLAB_THICKNESS
     }
 
+
+    fun getTopY(startY: Int): Float {
+        val topGap = 10
+        if(parentConfig.columnOriented)
+            if(parentConfig.getColumnElementAboveElementWithId(id) is Drawer)
+                return (startY - topGap).toFloat()
+        return SlabSidePositionUtil.getTopSlabY(startY, parentConfig.isElemWithIdLastToTheTop(id)) - Config.SLAB_THICKNESS - topGap
+    }
 
     fun getRightWallX(start: Point3D, dimens: Point3D): Float {
         val isLastToTheRight = parentConfig.isElemWithIdLastToTheRight(id)
         val distToRightSide = (dimens.x + if (isLastToTheRight) Config.BETWEEN_ELEMENTS_VERTICAL_GAP else 10).toFloat()
         val rightSideX = (start.x + distToRightSide).toFloat()
-        return rightSideX - Config.SLAB_THICKNESS.toFloat() - 6 / Config.MESH_UNIT - Config.SLAB_THICKNESS.toFloat()
+        return rightSideX - Config.SLAB_THICKNESS.toFloat() - 6 - 21 - Config.SLAB_THICKNESS.toFloat()
     }
 
 

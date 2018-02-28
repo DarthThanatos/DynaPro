@@ -41,6 +41,7 @@ interface FrontConfiguration: TypedFactoryChooser<FrontElemFactory>, SlabTree{
     fun savedState(): FrontConfigSave
     fun restoreState(frontConfigSave: FrontConfigSave)
     fun setAggregatesTo(aggregates: ArrayList<ArrangementAggregate>)
+    fun getColumnElementAboveElementWithId(elementId: String) : Element?
 }
 
 interface ArrangementAggregate : MutableList<Element>, SlabTree{
@@ -147,6 +148,11 @@ class Aggregate(vararg elements: Element, override val parentConfiguration: Fron
 
 abstract class DynProFrontConfiguration(private val parentProject: Project, override var parentFurniture: Furniture, private val slabTreeDefaultDelegate: SlabTree = DefaultSlabTree(), private val restorableFrontConfig: RestorableFrontConfig = DefaultRestorableFrontConfig()):
         FrontConfiguration, TypedFactoryChooser<FrontElemFactory> by DefaultFactoryChooser(), SlabTree by slabTreeDefaultDelegate, RestorableFrontConfig by restorableFrontConfig{
+
+    override fun getColumnElementAboveElementWithId(elementId: String): Element?{
+        val elemAboveIndex = indexOfElementWithId(elementId) - 1
+        return if(elemAboveIndex < 0) null else aggregateContainingElementWithId(elementId)[elemAboveIndex]
+    }
 
     abstract protected var aggregates: ArrayList<ArrangementAggregate>
 
