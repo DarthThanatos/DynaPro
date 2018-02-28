@@ -23,11 +23,13 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
 
     private JTextField assessmentDisplay, scaleBoardLengthDisplay, cutLengthDisplay;
 
+    private int currentNumberOfCommonBlocks = 0;
 
     public void displayFurnitureSlabs(Furniture furniture){
         init();
         displayFurnitureTree(furniture, 0);
         if(!furniture.getBackInserted()) displayHdf(furniture.getHdfsList().get(0), 2, 0);
+        currentNumberOfCommonBlocks = 1;
         displayFurnitureSummary(furniture);
     }
 
@@ -38,6 +40,7 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
             displayFurnitureTree(slabTree, gridy);
             gridy += 1;
         }
+        currentNumberOfCommonBlocks = project.getChildren().size();
         displayHdfs(project, 2* gridy);
         displayProjectSummary(project);
     }
@@ -52,7 +55,7 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     }
 
     private void displayHdf(Slab backSlab, int gridy, int i){
-        JPanel slabTreePanel = newSlabTreePanel();
+        JPanel slabTreePanel = newSlabTreePanel(false);
         slabTreePanel.add(new NoBorderJTextField("HDF" + i, true), newRowElementConstraints(0));
         slabTreePanel.add(new NoBorderJTextField(" ("), newRowElementConstraints(1));
         displayDimension(new Dimension(backSlab.getFirstDimension(), backSlab.getSecondDimension()), slabTreePanel);
@@ -128,9 +131,9 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     }
 
 
-    private JPanel newSlabTreePanel(){
+    private JPanel newSlabTreePanel(boolean includeBorder){
         JPanel slabTreePanel = new JPanel(new GridBagLayout());
-        slabTreePanel.setBorder(new EtchedBorder());
+        if(includeBorder)slabTreePanel.setBorder(new EtchedBorder());
         slabTreePanel.setBackground(Color.WHITE);
         return  slabTreePanel;
     }
@@ -138,7 +141,7 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
     private void displayFurnitureTree(SlabTree furnitureSlabTree, int furniturePanelGridy){
         mountFurnitureNamePanel(furnitureSlabTree, 2*furniturePanelGridy);
         int gridy = 0;
-        JPanel slabTreePanel = newSlabTreePanel();
+        JPanel slabTreePanel = newSlabTreePanel(true);
         for(Map.Entry<Pair<Dimension, ArrayList<Boolean>>, List<Slab>> slabtree: furnitureSlabTree.slabsGroupedBySizeAndScaleboard(furnitureSlabTree.getTreeSlabList()).entrySet()){
             mountSlabRow(slabtree.getKey().component1(), slabtree.getValue(), slabTreePanel, gridy ++);
         }
@@ -184,31 +187,57 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         slabTreePanel.add(new NoBorderJTextField(Integer.toString(slabs.size())), newRowElementConstraints(7, gridy));
     }
 
-    public void printComponent(){
+    public void printComponent() {
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName(" Print Component ");
-        pj.setPrintable ((pg, pf, pageNum) -> {
+        pj.setPrintable((pg, pf, pageNum) -> {
             double scaleFactor = 0.7;
             Component[] components = FurnitureDisembowelmentDisplay.this.getComponents();
             int blockHeight = (int) ((components[0].getHeight() + components[1].getHeight()) * scaleFactor);
-            int blocksOnPage = (int) (pf.getImageableHeight() / blockHeight);
-            if((pageNum) * blocksOnPage > components.length/2){return Printable.NO_SUCH_PAGE;}
+            int blocksOnPage = (int) ((pf.getImageableHeight() - (int) pf.getImageableHeight() / 10) / blockHeight);
+
+            int hdfPanelHeight = (int) (components[2 * currentNumberOfCommonBlocks].getHeight() * scaleFactor);
+            int hdfPanelsOnEmptyPageNumber = (int) ((pf.getImageableHeight() - (int) pf.getImageableHeight() / 10) / hdfPanelHeight);
+            int spaceLeftOnBorderPage = (int) ((pf.getImageableHeight() - (int) pf.getImageableHeight() / 10 - (currentNumberOfCommonBlocks % blocksOnPage) * blockHeight));
+            int hdfBlocksOnBorderPage = spaceLeftOnBorderPage / hdfPanelHeight;
+            if (pageNum * blocksOnPage > currentNumberOfCommonBlocks && (hdfBlocksOnBorderPage + hdfPanelsOnEmptyPageNumber > components.length - 2 * currentNumberOfCommonBlocks)) {
+                return Printable.NO_SUCH_PAGE;
+            }
+
             Graphics2D g2 = (Graphics2D) pg;
-            g2.scale( pf.getImageableWidth()/FurnitureDisembowelmentDisplay.this.getComponents()[1].getWidth(), scaleFactor);
+            g2.scale(pf.getImageableWidth() / FurnitureDisembowelmentDisplay.this.getComponents()[1].getWidth(), scaleFactor);
             g2.translate(pf.getImageableX() + 2, pf.getImageableY() + 2);
-            g2.drawRect(0,4, components[1].getWidth() - 2, (int)pf.getImageableHeight()/10);
-            g2.translate(0, pf.getImageableHeight()/10 + 4);
-            for (int i = pageNum * blocksOnPage * 2; i < Math.min(pageNum * blocksOnPage * 2 + 2 * blocksOnPage, components.length); i+=2) {
-                g2.translate(components[i+1].getWidth()/2 - components[i].getWidth()/2,0);
+            g2.drawRect(0, 4, components[1].getWidth() - 2, (int) pf.getImageableHeight() / 10);
+            g2.translate(0, pf.getImageableHeight() / 10 + 4);
+
+            for (int i = pageNum * blocksOnPage * 2; i < Math.min(pageNum * blocksOnPage * 2 + 2 * blocksOnPage, 2 * currentNumberOfCommonBlocks); i += 2) {
+                g2.translate(components[i + 1].getWidth() / 2 - components[i].getWidth() / 2, 0);
                 components[i].printAll(g2);
-                g2.translate(-components[i+1].getWidth()/2 + components[i].getWidth()/2,components[i].getHeight());
-                components[i+1].printAll(g2);
-                g2.translate(0,components[i+1].getHeight());
+                g2.translate(-components[i + 1].getWidth() / 2 + components[i].getWidth() / 2, components[i].getHeight());
+                components[i + 1].printAll(g2);
+                g2.translate(0, components[i + 1].getHeight());
+            }
+
+            if ((pageNum + 1) * blocksOnPage > currentNumberOfCommonBlocks) {
+                int partlyEmptyPageNum = currentNumberOfCommonBlocks / blocksOnPage;
+                if (pageNum == partlyEmptyPageNum) {
+                    for (int i = 2 * currentNumberOfCommonBlocks; i < Math.min(components.length, 2 * currentNumberOfCommonBlocks + hdfBlocksOnBorderPage); i++) {
+                        components[i].printAll(g2);
+                        g2.translate(0, components[i].getHeight());
+                    }
+                } else {
+                    int startIndex = 2 * currentNumberOfCommonBlocks + hdfBlocksOnBorderPage + (pageNum - partlyEmptyPageNum) * hdfPanelsOnEmptyPageNumber;
+                    for (int i = startIndex; i < Math.min(components.length, startIndex + hdfPanelsOnEmptyPageNumber); i++) {
+                        components[i].printAll(g2);
+                        g2.translate(0, components[i].getHeight());
+                    }
+                }
             }
             return Printable.PAGE_EXISTS;
         });
-        if (!pj.printDialog())
+        if (!pj.printDialog()) {
             return;
+        }
 
         try {
             pj.print();

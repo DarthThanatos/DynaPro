@@ -221,7 +221,6 @@ class OpenAction(private val dynProMain: DynProMain): AbstractAction(){
         val jc = JFileChooser()
         val openDialog = jc.showOpenDialog(parent)
         if(openDialog == JFileChooser.APPROVE_OPTION) {
-            println(jc.selectedFile.name)
             val projectSave = Klaxon().parse<ProjectSave>(file = File(jc.selectedFile.absoluteFile.toString()))!!
             dynProMain.presenter.model.getCurrentProject().restoreState(projectSave)
             dynProMain.presenter.onNewProjectCreated()

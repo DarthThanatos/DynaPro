@@ -30,7 +30,7 @@ public class DrevitDisembowelment extends JPanel {
     private void displaySlabs(Project project){
         int gridy = 0;
         for(Map.Entry<Pair<Dimension, ArrayList<Boolean>>, List<Slab>> slabtree: project.slabsGroupedBySizeAndScaleboard(project.getTreeSlabList()).entrySet()){
-            JPanel slabTreePanel = newSlabTreePanel();
+            JPanel slabTreePanel = newSlabTreePanel(true);
             mountSlabRow(slabtree.getKey().component1(), slabtree.getValue(), slabTreePanel);
             add(slabTreePanel, newRowConstraints(gridy++));
         }
@@ -41,7 +41,7 @@ public class DrevitDisembowelment extends JPanel {
         List<Slab> hdfsList = project.getHdfsList();
         for (int i = 0; i < hdfsList.size(); i++){
             Slab backSlab = hdfsList.get(i);
-            JPanel slabTreePanel = newSlabTreePanel();
+            JPanel slabTreePanel = newSlabTreePanel(false);
             slabTreePanel.add(new NoBorderJTextField("HDF" + i, true), newRowElementConstraints(0));
             slabTreePanel.add(new NoBorderJTextField(" ("), newRowElementConstraints(1));
             displayDimension(new Dimension(backSlab.getFirstDimension(), backSlab.getSecondDimension()), slabTreePanel);
@@ -92,9 +92,9 @@ public class DrevitDisembowelment extends JPanel {
         return gridBagConstraints;
     }
 
-    private JPanel newSlabTreePanel(){
+    private JPanel newSlabTreePanel(boolean includeEtchedBorder){
         JPanel slabTreePanel = new JPanel(new GridBagLayout());
-        slabTreePanel.setBorder(new EtchedBorder());
+        if(includeEtchedBorder) slabTreePanel.setBorder(new EtchedBorder());
         slabTreePanel.setBackground(Color.WHITE);
         return  slabTreePanel;
     }
