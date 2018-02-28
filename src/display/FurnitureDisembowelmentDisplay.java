@@ -221,13 +221,13 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
             if ((pageNum + 1) * blocksOnPage > currentNumberOfCommonBlocks) {
                 int partlyEmptyPageNum = currentNumberOfCommonBlocks / blocksOnPage;
                 if (pageNum == partlyEmptyPageNum) {
-                    for (int i = 2 * currentNumberOfCommonBlocks; i < Math.min(components.length, 2 * currentNumberOfCommonBlocks + hdfBlocksOnBorderPage); i++) {
+                    for (int i = 2 * currentNumberOfCommonBlocks; i < Math.min(components.length, 2 * currentNumberOfCommonBlocks + hdfBlocksOnBorderPage + 1); i++) {
                         components[i].printAll(g2);
                         g2.translate(0, components[i].getHeight());
                     }
                 } else {
                     int startIndex = 2 * currentNumberOfCommonBlocks + hdfBlocksOnBorderPage + (pageNum - partlyEmptyPageNum) * hdfPanelsOnEmptyPageNumber;
-                    for (int i = startIndex; i < Math.min(components.length, startIndex + hdfPanelsOnEmptyPageNumber); i++) {
+                    for (int i = startIndex; i < Math.min(components.length, startIndex + hdfPanelsOnEmptyPageNumber + 1); i++) {
                         components[i].printAll(g2);
                         g2.translate(0, components[i].getHeight());
                     }
