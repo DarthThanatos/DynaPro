@@ -19,6 +19,7 @@ import java.util.Map;
 public class DrevitDisembowelment extends JPanel {
 
     private JTextField assessmentDisplay, scaleBoardLengthDisplay, cutLengthDisplay;
+    private int currentNumberOfCommonBlocks = 0;
 
     public void displayAllProjectSlabs(Project project){
         init();
@@ -29,9 +30,11 @@ public class DrevitDisembowelment extends JPanel {
 
     private void displaySlabs(Project project){
         int gridy = 0;
+        currentNumberOfCommonBlocks = project.slabsGroupedBySizeAndScaleboard(project.getTreeSlabList()).entrySet().size();
         for(Map.Entry<Pair<Dimension, ArrayList<Boolean>>, List<Slab>> slabtree: project.slabsGroupedBySizeAndScaleboard(project.getTreeSlabList()).entrySet()){
             JPanel slabTreePanel = newSlabTreePanel(true);
             mountSlabRow(slabtree.getKey().component1(), slabtree.getValue(), slabTreePanel);
+
             add(slabTreePanel, newRowConstraints(gridy++));
         }
         displayHdfs(project, gridy);
@@ -145,16 +148,37 @@ public class DrevitDisembowelment extends JPanel {
             Component[] components = DrevitDisembowelment.this.getComponents();
             int blockHeight = (int) ((components[0].getHeight()) * scaleFactor);
             int blocksOnPage = (int) ((pf.getImageableHeight() - (int)pf.getImageableHeight()/10) / blockHeight);
-            if((pageNum) * blocksOnPage > components.length){return Printable.NO_SUCH_PAGE;}
+            if((pageNum) * blocksOnPage > currentNumberOfCommonBlocks){return Printable.NO_SUCH_PAGE;}
             Graphics2D g2 = (Graphics2D) pg;
+
             g2.scale( pf.getImageableWidth()/DrevitDisembowelment.this.getComponents()[0].getWidth(), scaleFactor);
             g2.translate(pf.getImageableX() + 2, pf.getImageableY() + 2);
             g2.drawRect(0,4, components[0].getWidth() - 10, (int)pf.getImageableHeight()/10);
             g2.translate(0, pf.getImageableHeight()/10 + 4);
             g2.scale( 0.4, 1);
-            for (int i = pageNum * blocksOnPage; i < Math.min(pageNum * blocksOnPage  +  blocksOnPage, components.length); i++) {
+
+            int hdfsNumber = components.length - currentNumberOfCommonBlocks;
+            if(pageNum == 0){
+                g2.translate(
+                        components[0].getWidth() + pf.getImageableWidth() /4,
+                        (pf.getImageableHeight() * 9.0/10 - hdfsNumber * components[currentNumberOfCommonBlocks].getHeight())/ 2
+                );
+
+                g2.drawRect(0,0, components[currentNumberOfCommonBlocks].getWidth(), hdfsNumber * components[currentNumberOfCommonBlocks].getHeight());
+                for(int i = currentNumberOfCommonBlocks; i < currentNumberOfCommonBlocks + hdfsNumber; i++){
+                    components[i].printAll(g2);
+                    g2.translate(0,components[i].getHeight());
+                }
+                g2.translate(
+                        -components[0].getWidth() - pf.getImageableWidth() /4,
+                        - hdfsNumber * components[currentNumberOfCommonBlocks].getHeight() - (pf.getImageableHeight() * 9.0/10 - hdfsNumber * components[currentNumberOfCommonBlocks].getHeight())/ 2
+                );
+            }
+
+            for (int i = pageNum * blocksOnPage; i < Math.min(pageNum * blocksOnPage  +  blocksOnPage, currentNumberOfCommonBlocks); i++) {
                 components[i].printAll(g2);
                 g2.translate(0, components[i].getHeight());
+                System.out.println("Component " + i  + ": " + components.length + ", " + components[i]);
             }
             return Printable.PAGE_EXISTS;
         });
@@ -163,7 +187,7 @@ public class DrevitDisembowelment extends JPanel {
 
         try {
             pj.print();
-        } catch (PrinterException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }

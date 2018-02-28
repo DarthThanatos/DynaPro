@@ -32,7 +32,7 @@
                                 "height": 997
                             }
                         ],
-                        "id": "2145f5e9-bbc3-41cd-a635-f4dab0a0c5cd"
+                        "id": "cf1e581b-3641-4418-9f16-b3b32d6e51c5"
                     },
                     {
                         "elements": [
@@ -59,7 +59,7 @@
                                 "height": 997
                             }
                         ],
-                        "id": "ac77e18a-b0a1-4f48-acb9-0338e793899a"
+                        "id": "f3ed1ce7-0080-4e11-bca1-8bfd8d15c27d"
                     }
                 ]
             },
@@ -104,7 +104,7 @@
                                 "height": 747
                             }
                         ],
-                        "id": "56da5036-f498-4b5a-81a1-a8ff12f64fbb"
+                        "id": "66dbe36e-9a0b-44e1-bf96-e695698de59a"
                     },
                     {
                         "elements": [
@@ -131,7 +131,7 @@
                                 "height": 747
                             }
                         ],
-                        "id": "7e2666b3-404f-4f28-850b-29ed2d6a4aef"
+                        "id": "3df14a1e-e134-4e2e-9818-199df0963f7b"
                     }
                 ]
             },
@@ -176,7 +176,7 @@
                                 "height": 497
                             }
                         ],
-                        "id": "fbf48efc-8d95-490b-9dbf-406a7ff57bcb"
+                        "id": "4f04cce7-9297-4c65-9ea1-90491cec7f27"
                     },
                     {
                         "elements": [
@@ -203,7 +203,7 @@
                                 "height": 497
                             }
                         ],
-                        "id": "c5497be2-95ff-490e-8204-d18f534a58c9"
+                        "id": "640d0d87-1f53-4835-9a14-32254cf1f696"
                     }
                 ]
             },
@@ -248,7 +248,7 @@
                                 "height": 247
                             }
                         ],
-                        "id": "acde38f7-d270-4a4e-b6db-ffe9c14d5ece"
+                        "id": "574ef7b4-e9f6-43fc-94ff-7a160c57195c"
                     },
                     {
                         "elements": [
@@ -275,7 +275,7 @@
                                 "height": 247
                             }
                         ],
-                        "id": "74a92af5-0549-4303-8e02-23b65ee2e4b2"
+                        "id": "6c40c4d9-1206-467a-8d0e-b4318aacd449"
                     }
                 ]
             },
@@ -307,7 +307,7 @@
                             "type": "szuflada",
                             "height": 497
                         }],
-                        "id": "4ee5f561-30c1-4240-80f2-58393ff4226c"
+                        "id": "8e5571cc-4fef-43ed-92e2-1ae7897d5e47"
                     },
                     {
                         "elements": [{
@@ -321,7 +321,7 @@
                             "type": "szuflada",
                             "height": 497
                         }],
-                        "id": "c1279bb0-3e3e-41fd-af0b-45db7c9f6e03"
+                        "id": "f0ef4922-9549-4d3c-b8ec-3b8edc80d162"
                     }
                 ]
             },
@@ -347,7 +347,7 @@
                                 "blockedWidth": false,
                                 "name": "szuflada",
                                 "shelvesNumber": 0,
-                                "width": 497,
+                                "width": 747,
                                 "growthRingVerticallyOriented": true,
                                 "blockedHeight": true,
                                 "id": "bc188ae8-1358-4445-b245-e280ad10dc6a",
@@ -358,7 +358,7 @@
                                 "blockedWidth": false,
                                 "name": "lewe drzwiczki",
                                 "shelvesNumber": 0,
-                                "width": 497,
+                                "width": 747,
                                 "growthRingVerticallyOriented": true,
                                 "blockedHeight": false,
                                 "id": "0943d8db-de54-4f4e-a6de-30094a27c7fa",
@@ -366,7 +366,7 @@
                                 "height": 444
                             }
                         ],
-                        "id": "ee92f968-5981-4a60-87ab-1c6a0089fe6e"
+                        "id": "46168516-3484-4c9a-99f9-6fedcf51d4e1"
                     },
                     {
                         "elements": [
@@ -374,34 +374,7 @@
                                 "blockedWidth": false,
                                 "name": "szuflada",
                                 "shelvesNumber": 0,
-                                "width": 497,
-                                "growthRingVerticallyOriented": true,
-                                "blockedHeight": true,
-                                "id": "dc6c84c1-b33a-4c5f-9049-6f36c9585b53",
-                                "type": "lewe drzwiczki",
-                                "height": 600
-                            },
-                            {
-                                "blockedWidth": false,
-                                "name": "szuflada",
-                                "shelvesNumber": 0,
-                                "width": 497,
-                                "growthRingVerticallyOriented": true,
-                                "blockedHeight": false,
-                                "id": "0a4429c7-d134-494d-bd79-9ae1f193944b",
-                                "type": "prawe drzwiczki",
-                                "height": 394
-                            }
-                        ],
-                        "id": "75ff30f3-a2ad-4c1e-8024-00c6e85d7efe"
-                    },
-                    {
-                        "elements": [
-                            {
-                                "blockedWidth": false,
-                                "name": "szuflada",
-                                "shelvesNumber": 0,
-                                "width": 497,
+                                "width": 747,
                                 "growthRingVerticallyOriented": true,
                                 "blockedHeight": false,
                                 "id": "6391fd27-fb52-4971-9f3a-048551592d4b",
@@ -412,7 +385,7 @@
                                 "blockedWidth": false,
                                 "name": "prawe drzwiczki",
                                 "shelvesNumber": 0,
-                                "width": 497,
+                                "width": 747,
                                 "growthRingVerticallyOriented": true,
                                 "blockedHeight": false,
                                 "id": "d743b76a-de42-4672-9cba-c78e613d2801",
@@ -420,7 +393,7 @@
                                 "height": 497
                             }
                         ],
-                        "id": "7af858f7-027a-4e35-b3c3-5d5b16a12057"
+                        "id": "7a209859-1f75-4e5c-b223-6b82706aa2c9"
                     }
                 ]
             },

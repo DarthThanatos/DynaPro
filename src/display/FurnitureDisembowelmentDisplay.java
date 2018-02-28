@@ -13,9 +13,8 @@ import java.awt.*;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class FurnitureDisembowelmentDisplay extends JPanel {
 
@@ -187,13 +186,18 @@ public class FurnitureDisembowelmentDisplay extends JPanel {
         slabTreePanel.add(new NoBorderJTextField(Integer.toString(slabs.size())), newRowElementConstraints(7, gridy));
     }
 
+
+    private int maxComponentHeight(){
+        return Arrays.stream(getComponents()).map(Component::getHeight).max(Comparator.naturalOrder()).get();
+    }
+
     public void printComponent() {
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName(" Print Component ");
         pj.setPrintable((pg, pf, pageNum) -> {
             double scaleFactor = 0.7;
             Component[] components = FurnitureDisembowelmentDisplay.this.getComponents();
-            int blockHeight = (int) ((components[0].getHeight() + components[1].getHeight()) * scaleFactor);
+            int blockHeight = (int) ((components[0].getHeight() + maxComponentHeight()) * scaleFactor);
             int blocksOnPage = (int) ((pf.getImageableHeight() - (int) pf.getImageableHeight() / 10) / blockHeight);
 
             int hdfPanelHeight = (int) (components[2 * currentNumberOfCommonBlocks].getHeight() * scaleFactor);
