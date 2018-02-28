@@ -12,6 +12,7 @@ import java.awt.CardLayout
 import java.awt.event.ActionEvent
 import java.io.File
 import javax.swing.*
+import javax.swing.filechooser.FileNameExtensionFilter
 
 
 class NewFurnitureAction(private val dynProMain: DynProMain) : AbstractAction() {
@@ -205,6 +206,8 @@ class SaveAction(private val dynProMain: DynProMain) : AbstractAction(){
     lateinit var parent: JFrame
     override fun actionPerformed(e: ActionEvent?) {
         val jc = JFileChooser()
+        jc.fileFilter = FileNameExtensionFilter("DYNA PRO","dyn")
+        jc.currentDirectory = File(System.getProperty("user.dir")+ "//projects")
         val showSaveDialog = jc.showSaveDialog(parent)
         if(showSaveDialog == JFileChooser.APPROVE_OPTION){
             val projectSave = dynProMain.presenter.model.getCurrentProject().savedState()
@@ -219,6 +222,8 @@ class OpenAction(private val dynProMain: DynProMain): AbstractAction(){
     lateinit var parent: JFrame
     override fun actionPerformed(e: ActionEvent?) {
         val jc = JFileChooser()
+        jc.fileFilter = FileNameExtensionFilter("DYNA PRO","dyn")
+        jc.currentDirectory = File(System.getProperty("user.dir") + "//projects")
         val openDialog = jc.showOpenDialog(parent)
         if(openDialog == JFileChooser.APPROVE_OPTION) {
             val projectSave = Klaxon().parse<ProjectSave>(file = File(jc.selectedFile.absoluteFile.toString()))!!

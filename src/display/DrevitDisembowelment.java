@@ -154,7 +154,7 @@ public class DrevitDisembowelment extends JPanel {
             g2.scale( 0.4, 1);
             for (int i = pageNum * blocksOnPage; i < Math.min(pageNum * blocksOnPage  +  blocksOnPage, components.length); i++) {
                 components[i].printAll(g2);
-                g2.translate(0,components[i].getHeight());
+                g2.translate(0, components[i].getHeight());
             }
             return Printable.PAGE_EXISTS;
         });

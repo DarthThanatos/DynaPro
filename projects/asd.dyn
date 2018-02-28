@@ -1,0 +1,438 @@
+{
+    "furnitureList": [
+        {
+            "backInserted": false,
+            "pedestalHeight": 0,
+            "depth": 2000,
+            "frontConfig": {
+                "columnOriented": true,
+                "aggregates": [
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 997,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "1be3252e-592c-4ed7-98c8-262c3d505937",
+                                "type": "szuflada",
+                                "height": 997
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "lewe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 997,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "6e7c8310-bd28-4982-bba1-495db3ce8ab9",
+                                "type": "szuflada",
+                                "height": 997
+                            }
+                        ],
+                        "id": "2145f5e9-bbc3-41cd-a635-f4dab0a0c5cd"
+                    },
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "prawe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 997,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "89b3fba1-6944-4747-90b8-cc0d8b757eec",
+                                "type": "szuflada",
+                                "height": 997
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 997,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "dd4b1454-62a8-4df4-82c0-9d6b26ae9dd1",
+                                "type": "szuflada",
+                                "height": 997
+                            }
+                        ],
+                        "id": "ac77e18a-b0a1-4f48-acb9-0338e793899a"
+                    }
+                ]
+            },
+            "name": "Nowy górny korpus",
+            "width": 2000,
+            "frontElemUnitPrice": 2000,
+            "roofInserted": false,
+            "hasPedestal": false,
+            "elemUnitPrice": 2000,
+            "type": "Upper Module",
+            "height": 2000
+        },
+        {
+            "backInserted": false,
+            "pedestalHeight": 0,
+            "depth": 1500,
+            "frontConfig": {
+                "columnOriented": true,
+                "aggregates": [
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "lewe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 747,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "cc2e4f90-367d-4ffc-9ed8-c46466b1ec88",
+                                "type": "szuflada",
+                                "height": 747
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 747,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "99f0a61a-d950-44c4-9231-72b9c000ba87",
+                                "type": "szuflada",
+                                "height": 747
+                            }
+                        ],
+                        "id": "56da5036-f498-4b5a-81a1-a8ff12f64fbb"
+                    },
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "prawe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 747,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "c957573f-0f65-42a6-b2b6-3f334984e9fa",
+                                "type": "szuflada",
+                                "height": 747
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 747,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "30995024-79cf-4292-9cfe-b04a067b3126",
+                                "type": "szuflada",
+                                "height": 747
+                            }
+                        ],
+                        "id": "7e2666b3-404f-4f28-850b-29ed2d6a4aef"
+                    }
+                ]
+            },
+            "name": "Nowy mebel 1",
+            "width": 1500,
+            "frontElemUnitPrice": 1500,
+            "roofInserted": false,
+            "hasPedestal": false,
+            "elemUnitPrice": 1500,
+            "type": "Upper Module",
+            "height": 1500
+        },
+        {
+            "backInserted": false,
+            "pedestalHeight": 0,
+            "depth": 1000,
+            "frontConfig": {
+                "columnOriented": true,
+                "aggregates": [
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "282bfdd5-ae12-42e3-837e-574d35b67dc7",
+                                "type": "szuflada",
+                                "height": 497
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "lewe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "cf9755fe-da68-4b39-9212-20f2ed9d4425",
+                                "type": "szuflada",
+                                "height": 497
+                            }
+                        ],
+                        "id": "fbf48efc-8d95-490b-9dbf-406a7ff57bcb"
+                    },
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "a5840760-a2ad-4a52-bd40-33adcd1cd385",
+                                "type": "szuflada",
+                                "height": 497
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "prawe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "67b452d9-ccb5-4aa3-9319-a9108f82027f",
+                                "type": "szuflada",
+                                "height": 497
+                            }
+                        ],
+                        "id": "c5497be2-95ff-490e-8204-d18f534a58c9"
+                    }
+                ]
+            },
+            "name": "asd",
+            "width": 1000,
+            "frontElemUnitPrice": 1000,
+            "roofInserted": false,
+            "hasPedestal": false,
+            "elemUnitPrice": 1000,
+            "type": "Upper Module",
+            "height": 1000
+        },
+        {
+            "backInserted": false,
+            "pedestalHeight": 0,
+            "depth": 500,
+            "frontConfig": {
+                "columnOriented": true,
+                "aggregates": [
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 247,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "d59473ec-8130-4daa-8fe5-68e8c8239d09",
+                                "type": "szuflada",
+                                "height": 247
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "lewe drzwiczki",
+                                "shelvesNumber": 1,
+                                "width": 247,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "1afcd4f0-8317-4768-ad1e-c537947c000a",
+                                "type": "szuflada",
+                                "height": 247
+                            }
+                        ],
+                        "id": "acde38f7-d270-4a4e-b6db-ffe9c14d5ece"
+                    },
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 247,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "e284b8f0-8e10-4bb9-8a23-3474153acd74",
+                                "type": "szuflada",
+                                "height": 247
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "prawe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 247,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "75159d2a-483f-4450-8d59-7e135aaadf62",
+                                "type": "szuflada",
+                                "height": 247
+                            }
+                        ],
+                        "id": "74a92af5-0549-4303-8e02-23b65ee2e4b2"
+                    }
+                ]
+            },
+            "name": "Nowy mebel 2",
+            "width": 500,
+            "frontElemUnitPrice": 500,
+            "roofInserted": false,
+            "hasPedestal": false,
+            "elemUnitPrice": 500,
+            "type": "Upper Module",
+            "height": 500
+        },
+        {
+            "backInserted": false,
+            "pedestalHeight": 0,
+            "depth": 500,
+            "frontConfig": {
+                "columnOriented": false,
+                "aggregates": [
+                    {
+                        "elements": [{
+                            "blockedWidth": false,
+                            "name": "lewe drzwiczki",
+                            "shelvesNumber": 0,
+                            "width": 1496,
+                            "growthRingVerticallyOriented": true,
+                            "blockedHeight": false,
+                            "id": "001ea14c-9156-45d0-a522-088d279561d8",
+                            "type": "szuflada",
+                            "height": 497
+                        }],
+                        "id": "4ee5f561-30c1-4240-80f2-58393ff4226c"
+                    },
+                    {
+                        "elements": [{
+                            "blockedWidth": false,
+                            "name": "prawe drzwiczki",
+                            "shelvesNumber": 0,
+                            "width": 1496,
+                            "growthRingVerticallyOriented": true,
+                            "blockedHeight": false,
+                            "id": "fabd7d64-25cd-471f-bd6d-19e222b90d2d",
+                            "type": "szuflada",
+                            "height": 497
+                        }],
+                        "id": "c1279bb0-3e3e-41fd-af0b-45db7c9f6e03"
+                    }
+                ]
+            },
+            "name": "Nowy mebel 3",
+            "width": 1500,
+            "frontElemUnitPrice": 100,
+            "roofInserted": false,
+            "hasPedestal": false,
+            "elemUnitPrice": 115,
+            "type": "Upper Module",
+            "height": 1000
+        },
+        {
+            "backInserted": false,
+            "pedestalHeight": 0,
+            "depth": 502,
+            "frontConfig": {
+                "columnOriented": true,
+                "aggregates": [
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": true,
+                                "id": "bc188ae8-1358-4445-b245-e280ad10dc6a",
+                                "type": "lewe drzwiczki",
+                                "height": 550
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "lewe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "0943d8db-de54-4f4e-a6de-30094a27c7fa",
+                                "type": "lewe drzwiczki",
+                                "height": 444
+                            }
+                        ],
+                        "id": "ee92f968-5981-4a60-87ab-1c6a0089fe6e"
+                    },
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": true,
+                                "id": "dc6c84c1-b33a-4c5f-9049-6f36c9585b53",
+                                "type": "lewe drzwiczki",
+                                "height": 600
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "0a4429c7-d134-494d-bd79-9ae1f193944b",
+                                "type": "prawe drzwiczki",
+                                "height": 394
+                            }
+                        ],
+                        "id": "75ff30f3-a2ad-4c1e-8024-00c6e85d7efe"
+                    },
+                    {
+                        "elements": [
+                            {
+                                "blockedWidth": false,
+                                "name": "szuflada",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "6391fd27-fb52-4971-9f3a-048551592d4b",
+                                "type": "prawe drzwiczki",
+                                "height": 497
+                            },
+                            {
+                                "blockedWidth": false,
+                                "name": "prawe drzwiczki",
+                                "shelvesNumber": 0,
+                                "width": 497,
+                                "growthRingVerticallyOriented": true,
+                                "blockedHeight": false,
+                                "id": "d743b76a-de42-4672-9cba-c78e613d2801",
+                                "type": "prawe drzwiczki",
+                                "height": 497
+                            }
+                        ],
+                        "id": "7af858f7-027a-4e35-b3c3-5d5b16a12057"
+                    }
+                ]
+            },
+            "name": "Nowy mebel 4",
+            "width": 1500,
+            "frontElemUnitPrice": 100,
+            "roofInserted": false,
+            "hasPedestal": false,
+            "elemUnitPrice": 115,
+            "type": "Upper Module",
+            "height": 1000
+        }
+    ],
+    "projectName": "asda"
+}
